@@ -1,3 +1,3 @@
-# Welcome to Our Project
-To install and run our project here are the steps required:
-1. _Fill this in as you work on your project_
+# Ghost App Game
+
+1. If using <Flutter> Android Studio, don't forget to set your Flutter SDK Path
