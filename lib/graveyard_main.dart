@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class GraveyardMain extends StatelessWidget {
   /// The app wide preferences.
   final SharedPreferences _prefs;
+
   /// Called as a function when a ghost is chosen.
   final VoidCallback _ghostChosen;
 

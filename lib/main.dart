@@ -24,9 +24,7 @@ class App extends StatelessWidget {
         accentColor: Colors.green,
         textTheme: TextTheme(body1: TextStyle(color: Colors.purple)),
       ),
-      home: Material(
-        child: RootPage()
-      ),
+      home: Material(child: RootPage()),
     );
   }
 }
@@ -51,8 +49,10 @@ class RootPage extends StatefulWidget {
 class _RootPageState extends State<RootPage> {
   /// Displays splash screen when false. True when assets are loaded.
   bool _assetsLoaded = false;
+
   /// Instance of app preferences. Is passed to children.
   SharedPreferences _prefs;
+
   /// Determines the container rendered.
   bool _hasGhost;
 
@@ -63,37 +63,37 @@ class _RootPageState extends State<RootPage> {
       _loadAssets();
 
       return Center(
-          child: Container(
-            // TODO: Replace with an image/set style in theme.
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  'Ghost App',
-                  textAlign: TextAlign.center,
-                  textDirection: TextDirection.ltr,
-                  style: TextStyle(
-                    color: Colors.blueGrey,
-                    fontSize: 60.0,
-                  ),
+        child: Container(
+          // TODO: Replace with an image/set style in theme.
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'Ghost App',
+                textAlign: TextAlign.center,
+                textDirection: TextDirection.ltr,
+                style: TextStyle(
+                  color: Colors.blueGrey,
+                  fontSize: 60.0,
                 ),
-                // TODO: Remove this button when it's no longer needed.
-                FlatButton(
-                  color: Colors.blue,
-                  textColor: Colors.white,
-                  onPressed: () {
-                    setState(() {
-                      _prefs.setBool('has_ghost', true);
-                    });
-                  },
-                  child: Text(
-                    "Set has_ghost = true",
-                  ),
+              ),
+              // TODO: Remove this button when it's no longer needed.
+              FlatButton(
+                color: Colors.blue,
+                textColor: Colors.white,
+                onPressed: () {
+                  setState(() {
+                    _prefs.setBool('has_ghost', true);
+                  });
+                },
+                child: Text(
+                  "Set has_ghost = true",
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
+        ),
       );
     }
 
