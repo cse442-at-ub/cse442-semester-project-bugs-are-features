@@ -24,20 +24,55 @@ class _GhostMainState extends State<GhostMain> {
   final VoidCallback _ghostReleased;
 
   var options = ["Hello", "What is your name?", "Blah", "Foo"];
+  var response = ["Hi", "Ghost", "Bloo", "Bar"];
+  var currentResponse = "Temporary";
+
+  void buttonHandler(int id) {
+    setState(() {
+      currentResponse = response[id];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        margin: EdgeInsets.only(top: 180),
+        margin: EdgeInsets.only(top: 100),
         child: Column(
           children: <Widget>[
-            Button(options[0]),
-            Button(options[1]),
-            Button(options[2]),
-            Button(options[3]),
+            Text(
+              currentResponse,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.brown,
+                fontSize: 42,
+              ),
+            ),
+            GridView.count(
+              shrinkWrap: true,
+              crossAxisCount: 2,
+              children: <Widget>[
+                RaisedButton(
+                  onPressed: () => buttonHandler(0),
+                  child: Text(options[0]),
+                ),
+                RaisedButton(
+                  onPressed: () => buttonHandler(1),
+                  child: Text(options[1]),
+                ),
+                RaisedButton(
+                  onPressed: () => buttonHandler(2),
+                  child: Text(options[2]),
+                ),
+                RaisedButton(
+                  onPressed: () => buttonHandler(3),
+                  child: Text(options[3]),
+                ),
+              ],
+            ),
           ],
         ),
+
         /*        
         child: Text(
           "GhostMain",
