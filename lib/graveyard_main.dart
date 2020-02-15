@@ -17,7 +17,7 @@ class GraveyardMain extends StatelessWidget {
         child: GridView.count(
       shrinkWrap: true,
       crossAxisCount: 3,
-      padding: EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(8.0),
       children: <Widget>[
         makeGhostPicker(1),
         makeGhostPicker(2),
@@ -31,22 +31,27 @@ class GraveyardMain extends StatelessWidget {
       ],
     ));
   }
-}
 
-RaisedButton makeGhostPicker(int num) {
-  return RaisedButton(
-    color: Colors.blue,
-    textColor: Colors.white,
-    disabledColor: Colors.grey,
-    disabledTextColor: Colors.black,
-    padding: EdgeInsets.all(16.0),
-    splashColor: Colors.blueAccent,
-    onPressed: () {
-      //TODO open ghost_main
-    },
-    child: Text(
-      "Ghost " + num.toString(),
-      style: TextStyle(fontSize: 20.0),
-    ),
-  );
+  Container makeGhostPicker(int id) {
+    return Container(
+        padding: EdgeInsets.all(4.0),
+        child: RaisedButton(
+          color: Colors.blue,
+          textColor: Colors.white,
+          disabledColor: Colors.grey,
+          disabledTextColor: Colors.black,
+          splashColor: Colors.blueAccent,
+          shape: new ContinuousRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0)),
+          onPressed: () {
+            _prefs.setInt("ghost_id", id);
+            _prefs.reload();
+            _ghostChosen();
+          },
+          child: Text(
+            "Ghost " + id.toString(),
+            style: TextStyle(fontSize: 20.0),
+          ),
+        ));
+  }
 }
