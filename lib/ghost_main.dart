@@ -72,23 +72,7 @@ class _GhostMainState extends State<GhostMain> {
             ),
           ],
         ),
-
-        /*        
-        child: Text(
-          "GhostMain",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.blueGrey,
-            fontSize: 60.0,
-          ),
-          */
       ),
     );
   }
-  /*
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-  */
 }
