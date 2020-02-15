@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ghost_app/ghost_button.dart';
 
 class GhostMain extends StatefulWidget {
   /// The app wide preferences.
