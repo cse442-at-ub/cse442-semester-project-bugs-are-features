@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ghost_main.dart';
 import 'graveyard_main.dart';
+import 'settings.dart';
 
 /// Entry-point for the app.
 void main() => runApp(App());
@@ -12,7 +13,7 @@ void main() => runApp(App());
 /// The base of the app.
 ///
 /// This base widget is kept stateless for simplicity. The colors and styles
-/// for our theme are set that this point and contextually passed down to all
+/// for our theme are set at this point and contextually passed down to all
 /// children widgets. It designates [RootPage] as the home route.
 class App extends StatelessWidget {
   @override
@@ -33,7 +34,7 @@ class App extends StatelessWidget {
 ///
 /// This widget renders the two secondary main screens, [GraveyardMain] or the
 /// [GhostMain], based upon preference values in SavedPreferences. In particular,
-/// if the preferences show [_has_ghost] to be `true`, this widget will render
+/// if the preferences show [hasGhost] to be `true`, this widget will render
 /// the [GhostMain] container. otherwise it will render [GraveyardMain].
 ///
 /// It also displays a splash screen when the app is opened and is home to the
@@ -57,11 +58,20 @@ class _RootPageState extends State<RootPage> {
   bool _hasGhost;
 
   @override
+  initState() {
+    super.initState();
+    _loadAssets();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // Display splash screen until assets are loaded.
     if (!_assetsLoaded) {
-      _loadAssets();
-
       return Center(
         child: Container(
           // TODO: Replace with an image/set style in theme.
@@ -83,13 +93,17 @@ class _RootPageState extends State<RootPage> {
                 color: Colors.blue,
                 textColor: Colors.white,
                 onPressed: () {
-                  setState(() {
-                    _prefs.setBool('has_ghost', true);
-                  });
+                  _ghostChosen();
                 },
-                child: Text(
-                  "Set has_ghost = true",
-                ),
+                child: Text("Set has_ghost = true"),
+              ),
+              FlatButton(
+                color: Colors.blue,
+                textColor: Colors.white,
+                onPressed: () {
+                  _ghostReleased();
+                },
+                child: Text("Set has_ghost = false"),
               ),
             ],
           ),
@@ -97,18 +111,44 @@ class _RootPageState extends State<RootPage> {
       );
     }
 
+    // THe settings button displayed in the top right corner
+    Container settingsBtn = Container(
+      margin: EdgeInsets.only(right: 10.0, top: 35.0),
+      alignment: Alignment.topRight,
+      child: FlatButton(
+        color: Colors.blue,
+        textColor: Colors.white,
+        child: Text("Settings"),
+        onPressed: () {
+          // TODO: Open modal
+          print("Pressed");
+        }
+      ),
+    );
+
+    _hasGhost = _prefs.getBool('has_ghost');
     // Select our main view container.
     if (_hasGhost) {
-      return GhostMain(_prefs, ghostReleased);
+      GhostMain ghost = GhostMain(_prefs, _ghostReleased);
+      return Stack(
+        children: <Widget>[
+          ghost,
+          settingsBtn,
+        ]
+      );
     } else {
-      return GraveyardMain(_prefs, ghostChosen);
+      GraveyardMain graveyard = GraveyardMain(_prefs, _ghostChosen);
+      return Stack(
+        children: <Widget>[
+          graveyard,
+          settingsBtn,
+        ]
+      );
     }
   }
 
   _loadAssets() async {
-    // Currently the only asset.
     _readPrefs();
-
     // Hold splash screen.
     Timer(Duration(seconds: 2), () {
       setState(() {
@@ -124,11 +164,6 @@ class _RootPageState extends State<RootPage> {
     if (_prefs.getBool('first_launch') ?? true) {
       _initPrefs();
     }
-
-    // Force a re-render to display ghost or graveyard.
-    setState(() {
-      _hasGhost = _prefs.getBool('has_ghost');
-    });
   }
 
   /// Initialize all needed preferences at first launch with defaults.
@@ -139,16 +174,16 @@ class _RootPageState extends State<RootPage> {
   }
 
   /// Call from [GraveyardMain] when a ghost is select to render [GhostMain].
-  ghostChosen() {
+  _ghostChosen() {
     setState(() {
-      _prefs.setBool('has_ghost', true);
+      this._prefs.setBool('has_ghost', true);
     });
   }
 
   /// Call from [GhostMain] when a ghost is select to render [GraveyardMain].
-  ghostReleased() {
+  _ghostReleased() {
     setState(() {
-      _prefs.setBool('has_ghost', false);
+      this._prefs.setBool('has_ghost', false);
     });
   }
 }
