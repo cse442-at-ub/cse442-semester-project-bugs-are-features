@@ -15,11 +15,13 @@ class GhostMain extends StatelessWidget {
     return Center(
       child: Container(
         child: Text(
-          "GhostMain",
+          _prefs.getBool("has_ghost")
+              ? "Your ghost is: " + _prefs.getInt("ghost_id").toString()
+              : "No ghost selected, how'd you get here?",
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.blueGrey,
-            fontSize: 60.0,
+            fontSize: 20.0,
           ),
         ),
       ),
