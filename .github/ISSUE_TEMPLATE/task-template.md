@@ -4,7 +4,6 @@ about: Template for creating tasks based on user stories
 title: Code/Write/Update the FooBar
 labels: Task
 assignees: ''
-
 ---
 
 Tasks should be able to be completed by one person.

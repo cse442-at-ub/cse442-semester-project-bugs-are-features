@@ -4,7 +4,6 @@ about: Template for creating user stories
 title: As a (role), I want (action) so I (testable reward)
 labels: User story
 assignees: ''
-
 ---
 
 **As a** (role), 
