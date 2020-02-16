@@ -34,7 +34,7 @@ class App extends StatelessWidget {
 ///
 /// This widget renders the two secondary main screens, [GraveyardMain] or the
 /// [GhostMain], based upon preference values in SavedPreferences. In particular,
-/// if the preferences show [hasGhost] to be `true`, this widget will render
+/// if the preferences show [has_ghost] to be `true`, this widget will render
 /// the [GhostMain] container. otherwise it will render [GraveyardMain].
 ///
 /// It also displays a splash screen when the app is opened and is home to the
@@ -88,30 +88,13 @@ class _RootPageState extends State<RootPage> {
                   fontSize: 60.0,
                 ),
               ),
-              // TODO: Remove this button when it's no longer needed.
-              FlatButton(
-                color: Colors.blue,
-                textColor: Colors.white,
-                onPressed: () {
-                  _ghostChosen();
-                },
-                child: Text("Set has_ghost = true"),
-              ),
-              FlatButton(
-                color: Colors.blue,
-                textColor: Colors.white,
-                onPressed: () {
-                  _ghostReleased();
-                },
-                child: Text("Set has_ghost = false"),
-              ),
             ],
           ),
         ),
       );
     }
 
-    // THe settings button displayed in the top right corner
+    /// The settings button displayed in the top right corner
     Container settingsBtn = Container(
       margin: EdgeInsets.only(right: 10.0, top: 35.0),
       alignment: Alignment.topRight,
@@ -120,9 +103,30 @@ class _RootPageState extends State<RootPage> {
         textColor: Colors.white,
         child: Text("Settings"),
         onPressed: () {
-          // TODO: Open modal
-          print("Pressed");
-        }
+          showGeneralDialog(
+            barrierColor: Colors.black.withOpacity(0.5),
+            transitionBuilder: (context, a1, a2, widget) {
+              return AnimatedOpacity(
+                opacity: 1.0,
+                duration: Duration(milliseconds: 350),
+                child: Opacity(
+                  opacity: a1.value,
+                  child: Center(
+                    child: Material(
+                      child: Settings(_prefs, _ghostReleased, _ghostChosen),
+                    ),
+                  ),
+                ),
+              );
+            },
+            transitionDuration: Duration(milliseconds: 350),
+            barrierDismissible: true,
+            barrierLabel: 'Settings',
+            context: context,
+            // pageBuilder isn't needed because we used transitionBuilder
+            // However, it's still required by the showGeneralDialog widget
+            pageBuilder: (context, animation1, animation2) => null);
+        } // onPressed
       ),
     );
 
@@ -147,6 +151,7 @@ class _RootPageState extends State<RootPage> {
     }
   }
 
+  /// For all future image, sound, and startup database calls.
   _loadAssets() async {
     _readPrefs();
     // Hold splash screen.
@@ -157,6 +162,7 @@ class _RootPageState extends State<RootPage> {
     });
   }
 
+  /// Grabs our instance of SharedPreferences to pass to children.
   _readPrefs() async {
     _prefs = await SharedPreferences.getInstance();
 
