@@ -24,7 +24,9 @@ class _GhostMainState extends State<GhostMain> {
 
   var options = ["Hello", "What is your name?", "Blah", "Foo"];
   var response = ["Hi", "Ghost", "Bloo", "Bar"];
-  var currentResponse = "Temporary";
+  var currentResponse = _prefs.getBool("has_ghost")
+              ? "Your ghost is: " + _prefs.getInt("ghost_id").toString()
+              : "No ghost selected, how'd you get here?";
 
   void buttonHandler(int id) {
     setState(() {
