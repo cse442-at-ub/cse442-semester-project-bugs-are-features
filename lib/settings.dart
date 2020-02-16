@@ -16,7 +16,7 @@ class Settings extends StatelessWidget {
   /// Called as a function when a ghost is released.
   final VoidCallback _ghostReleased;
 
-  Settings(this._prefs, this._ghostChosen, this._ghostReleased);
+  Settings(this._prefs, this._ghostReleased, this._ghostChosen);
 
   @override
   Widget build(BuildContext context) {
