@@ -24,7 +24,7 @@ class _GhostMainState extends State<GhostMain> {
 
   var options = ["Hello", "What is your name?", "Blah", "Foo"];
   var response = ["Hi", "Ghost", "Bloo", "Bar"];
-  var currentResponse = "Your ghost comes here";
+  var currentResponse = "Touch an option to change";
 
   void buttonHandler(int id) {
     setState(() {
@@ -39,37 +39,28 @@ class _GhostMainState extends State<GhostMain> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Image(
-            alignment: Alignment.topCenter,
-            image: AssetImage("assets/ghost1.png"),
+            image: AssetImage("assets/ghosts/ghost1.png"),
           ),
           Text(
             currentResponse,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.brown,
-              fontSize: 42,
+              fontSize: 20,
             ),
           ),
-          ButtonBar(
-            alignment: MainAxisAlignment.center,
+          GridView.count(
+            shrinkWrap: true,
+            crossAxisCount: 2,
             children: <Widget>[
               RaisedButton(
-                child: Text(options[0]),
-                color: Colors.red,
-                textColor: Colors.yellow,
-                padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                splashColor: Colors.grey,
                 onPressed: () => buttonHandler(0),
+                child: Text(options[0]),
               ),
               RaisedButton(
                 onPressed: () => buttonHandler(1),
                 child: Text(options[1]),
               ),
-            ],
-          ),
-          ButtonBar(
-            alignment: MainAxisAlignment.center,
-            children: <Widget>[
               RaisedButton(
                 onPressed: () => buttonHandler(2),
                 child: Text(options[2]),
@@ -79,7 +70,7 @@ class _GhostMainState extends State<GhostMain> {
                 child: Text(options[3]),
               ),
             ],
-          )
+          ),
         ],
       ),
     );
