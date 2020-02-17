@@ -1,6 +1,10 @@
-language: generic
+language: android
 os:
   - linux
+android:
+  components:
+    - build-tools-29.0.3
+    - android-29
 addons:
   apt:
     # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
@@ -8,13 +12,14 @@ addons:
       - ubuntu-toolchain-r-test # if we don't specify this, the libstdc++6 we get is the wrong version
     packages:
       - libstdc++6
-      - fonts-droid-fallback
+      - fonts-droid
 before_script:
   - git clone https://github.com/flutter/flutter.git
   - ./flutter/bin/flutter doctor
 script:
+  - echo Running flutter analyze at $PWD
   - ./flutter/bin/flutter analyze
-  - ./flutter/bin/flutter build
+  - ./flutter/bin/flutter build apk
 
 after_script:
   - ./flutter/bin/flutter clean
