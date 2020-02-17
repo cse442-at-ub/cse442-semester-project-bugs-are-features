@@ -23,7 +23,7 @@ script:
   - ../flutter/bin/flutter build apk
 
 after_script:
-  - ./flutter/bin/flutter clean
+  - ../flutter/bin/flutter clean
 
 cache:
   directories:
