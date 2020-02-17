@@ -6,8 +6,12 @@ android:
     - build-tools-29.0.3
     - build-tools-28.0.3
     - android-29
+    - platform-tools
+    - platforms-android-28
+    - platforms-android-29
+    - tools
   licenses:
-    - 'android-sdk-license-e6a904e8'
+    - 'android-sdk-license-.+'
 addons:
   apt:
     # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
@@ -19,13 +23,14 @@ addons:
 before_script:
   - git clone https://github.com/flutter/flutter.git
   - export PATH="$PATH:`pwd`/flutter/bin"
-  - echo y | flutter doctor --android-licenses
+  - flutter doctor -v
+  - yes | sdkmanager --licenses
 script:
   - flutter pub get
     #- flutter precache
   - cd ./lib/
   - flutter analyze
-    #- flutter build apk
+  - flutter build apk
 
 after_script:
   - flutter clean
