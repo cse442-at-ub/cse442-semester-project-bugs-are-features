@@ -4,6 +4,7 @@ os:
 android:
   components:
     - build-tools-29.0.3
+    - build-tools-28.0.3
     - android-29
   licenses:
     - 'android-sdk-license-e6a904e8'
@@ -20,9 +21,7 @@ before_script:
   - export PATH="$PATH:`pwd`/flutter/bin"
   - flutter doctor
 script:
-  - cd ./lib/ #Specifying the source directory for analyze
   - flutter pub get
-  - flutter pub upgrade
   - flutter precache
   - flutter analyze
   - flutter build apk
