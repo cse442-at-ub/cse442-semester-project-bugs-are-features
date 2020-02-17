@@ -21,48 +21,45 @@ class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(
-          maxHeight: 300.0,
-          maxWidth: 250.0,
-          minWidth: 250.0,
-          minHeight: 150.0
-      ),
-      color: Colors.white,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          // TODO: Styling & make dev-only section
-          Padding(
-            padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
-            child: Text(
-              "Settings",
-              textAlign: TextAlign.center,
-              textDirection: TextDirection.ltr,
-              style: TextStyle(
-                color: Colors.blueGrey,
-                fontSize: 35.0,
+        constraints: BoxConstraints(
+            maxHeight: 300.0,
+            maxWidth: 250.0,
+            minWidth: 250.0,
+            minHeight: 150.0),
+        color: Colors.white,
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              // TODO: Styling & make dev-only section
+              Padding(
+                padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
+                child: Text(
+                  "Settings",
+                  textAlign: TextAlign.center,
+                  textDirection: TextDirection.ltr,
+                  style: TextStyle(
+                    color: Colors.blueGrey,
+                    fontSize: 35.0,
+                  ),
+                ),
               ),
-            ),
-          ),
-          FlatButton(
-            color: Colors.blue,
-            textColor: Colors.white,
-            onPressed: () {
-              _ghostChosen();
-            },
-            child: Text("Set has_ghost = true"),
-          ),
-          FlatButton(
-            color: Colors.blue,
-            textColor: Colors.white,
-            onPressed: () {
-              _ghostReleased();
-            },
-            child: Text("Set has_ghost = false"),
-          ),
-        ]
-      )
-    );
+              FlatButton(
+                color: Colors.blue,
+                textColor: Colors.white,
+                onPressed: () {
+                  _ghostChosen();
+                },
+                child: Text("Set has_ghost = true"),
+              ),
+              FlatButton(
+                color: Colors.blue,
+                textColor: Colors.white,
+                onPressed: () {
+                  _ghostReleased();
+                },
+                child: Text("Set has_ghost = false"),
+              ),
+            ]));
   }
 }

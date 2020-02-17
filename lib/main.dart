@@ -96,58 +96,55 @@ class _RootPageState extends State<RootPage> {
 
     /// The settings button displayed in the top right corner
     Container settingsBtn = Container(
-      margin: EdgeInsets.only(right: 10.0, top: 35.0),
+      margin:
+          EdgeInsets.only(right: 10, top: MediaQuery.of(context).padding.top),
       alignment: Alignment.topRight,
       child: FlatButton(
-        color: Colors.blue,
-        textColor: Colors.white,
-        child: Text("Settings"),
-        onPressed: () {
-          showGeneralDialog(
-            barrierColor: Colors.black.withOpacity(0.5),
-            transitionBuilder: (context, a1, a2, widget) {
-              return AnimatedOpacity(
-                opacity: 1.0,
-                duration: Duration(milliseconds: 350),
-                child: Opacity(
-                  opacity: a1.value,
-                  child: Center(
-                    child: Material(
-                      child: Settings(_prefs, _ghostReleased, _ghostChosen),
+          color: Colors.blue,
+          textColor: Colors.white,
+          child: Text("Settings"),
+          onPressed: () {
+            showGeneralDialog(
+                barrierColor: Colors.black.withOpacity(0.5),
+                transitionBuilder: (context, a1, a2, widget) {
+                  return AnimatedOpacity(
+                    opacity: 1.0,
+                    duration: Duration(milliseconds: 350),
+                    child: Opacity(
+                      opacity: a1.value,
+                      child: Center(
+                        child: Material(
+                          child: Settings(_prefs, _ghostReleased, _ghostChosen),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              );
-            },
-            transitionDuration: Duration(milliseconds: 350),
-            barrierDismissible: true,
-            barrierLabel: 'Settings',
-            context: context,
-            // pageBuilder isn't needed because we used transitionBuilder
-            // However, it's still required by the showGeneralDialog widget
-            pageBuilder: (context, animation1, animation2) => null);
-        } // onPressed
-      ),
+                  );
+                },
+                transitionDuration: Duration(milliseconds: 350),
+                barrierDismissible: true,
+                barrierLabel: 'Settings',
+                context: context,
+                // pageBuilder isn't needed because we used transitionBuilder
+                // However, it's still required by the showGeneralDialog widget
+                pageBuilder: (context, animation1, animation2) => null);
+          } // onPressed
+          ),
     );
 
     _hasGhost = _prefs.getBool('has_ghost');
     // Select our main view container.
     if (_hasGhost) {
       GhostMain ghost = GhostMain(_prefs, _ghostReleased);
-      return Stack(
-        children: <Widget>[
-          ghost,
-          settingsBtn,
-        ]
-      );
+      return Stack(children: <Widget>[
+        ghost,
+        settingsBtn,
+      ]);
     } else {
       GraveyardMain graveyard = GraveyardMain(_prefs, _ghostChosen);
-      return Stack(
-        children: <Widget>[
-          graveyard,
-          settingsBtn,
-        ]
-      );
+      return Stack(children: <Widget>[
+        graveyard,
+        settingsBtn,
+      ]);
     }
   }
 

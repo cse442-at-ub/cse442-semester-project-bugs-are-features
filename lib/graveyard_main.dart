@@ -13,22 +13,15 @@ class GraveyardMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: GridView.count(
-      shrinkWrap: true,
-      crossAxisCount: 3,
-      padding: EdgeInsets.all(8.0),
-      children: <Widget>[
-        makeGhostPicker(1),
-        makeGhostPicker(2),
-        makeGhostPicker(3),
-        makeGhostPicker(4),
-        makeGhostPicker(5),
-        makeGhostPicker(6),
-        makeGhostPicker(7),
-        makeGhostPicker(8),
-        makeGhostPicker(9)
-      ],
+    return Scaffold(
+        body: Center(
+      child: GridView.count(
+          shrinkWrap: true,
+          crossAxisCount: 3,
+          padding: EdgeInsets.all(8.0),
+          children: List.generate(9, (index) {
+            return makeGhostPicker(index + 1);
+          })),
     ));
   }
 
