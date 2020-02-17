@@ -5,6 +5,8 @@ android:
   components:
     - build-tools-29.0.3
     - android-29
+  licenses:
+    - 'android-sdk-license-e6a904e8'
 addons:
   apt:
     # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
@@ -15,15 +17,18 @@ addons:
       - fonts-droid
 before_script:
   - git clone https://github.com/flutter/flutter.git
-  - ./flutter/bin/flutter doctor
+  - export PATH="$PATH:`pwd`/flutter/bin"
+  - flutter doctor
 script:
   - cd ./lib/ #Specifying the source directory for analyze
-  - echo Running flutter analyze at $PWD
-  - ../flutter/bin/flutter analyze
-  - ../flutter/bin/flutter build apk
+  - flutter pub get
+  - flutter pub upgrade
+  - flutter precache
+  - flutter analyze
+  - flutter build apk
 
 after_script:
-  - ../flutter/bin/flutter clean
+  - flutter clean
 
 cache:
   directories:
