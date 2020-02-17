@@ -23,6 +23,7 @@ before_script:
 script:
   - flutter pub get
   - flutter precache
+  - cd ./lib/
   - flutter analyze
   - flutter build apk
 
