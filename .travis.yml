@@ -3,8 +3,8 @@ os:
   - linux
 android:
   components:
-    - build-tools-29.0.3
     - build-tools-28.0.3
+    - build-tools-29.0.3
     - android-29
     - platform-tools
     - platforms-android-28
@@ -21,16 +21,16 @@ addons:
       - libstdc++6
       - fonts-droid
 before_script:
-  - git clone https://github.com/flutter/flutter.git
+  - if [[ ! -d flutter ]] ; then git clone https://github.com/flutter/flutter.git; fi
   - export PATH="$PATH:`pwd`/flutter/bin"
   - flutter doctor -v
-  - yes | sdkmanager --licenses
+  - sdkmanager --list
 script:
   - flutter pub get
     #- flutter precache
   - cd ./lib/
   - flutter analyze
-  - flutter build apk
+    #- flutter build apk
 
 after_script:
   - flutter clean
