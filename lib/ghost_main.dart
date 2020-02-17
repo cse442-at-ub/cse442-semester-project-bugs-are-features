@@ -24,7 +24,7 @@ class _GhostMainState extends State<GhostMain> {
 
   var options = ["Hello", "What is your name?", "Blah", "Foo"];
   var response = ["Hi", "Ghost", "Bloo", "Bar"];
-  var currentResponse = "Touch an option to change";
+  var currentResponse = "Touch a button to change";
 
   void buttonHandler(int id) {
     setState(() {
@@ -34,8 +34,8 @@ class _GhostMainState extends State<GhostMain> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
+    return Scaffold(
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           // TODO: Fix the ghost image alignemnt
@@ -51,29 +51,32 @@ class _GhostMainState extends State<GhostMain> {
             ),
           ),
           GridView.count(
-            shrinkWrap: true,
-            crossAxisCount: 2,
-            children: <Widget>[
-              RaisedButton(
-                onPressed: () => buttonHandler(0),
-                child: Text(options[0]),
-              ),
-              RaisedButton(
-                onPressed: () => buttonHandler(1),
-                child: Text(options[1]),
-              ),
-              RaisedButton(
-                onPressed: () => buttonHandler(2),
-                child: Text(options[2]),
-              ),
-              RaisedButton(
-                onPressed: () => buttonHandler(3),
-                child: Text(options[3]),
-              ),
-            ],
-          ),
+              shrinkWrap: true,
+              crossAxisCount: 2,
+              children: List.generate(4, (index) {
+                return makeGhostPicker(index);
+              })),
         ],
       ),
     );
+  }
+
+  Container makeGhostPicker(int id) {
+    return Container(
+        padding: EdgeInsets.all(4.0),
+        child: RaisedButton(
+          color: Colors.blue,
+          textColor: Colors.white,
+          disabledColor: Colors.grey,
+          disabledTextColor: Colors.black,
+          splashColor: Colors.blueAccent,
+          shape: new ContinuousRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0)),
+          onPressed: () => buttonHandler(id),
+          child: Text(
+            options[id],
+            style: TextStyle(fontSize: 20.0),
+          ),
+        ));
   }
 }
