@@ -38,6 +38,7 @@ class _GhostMainState extends State<GhostMain> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+          // TODO: Fix the ghost image alignemnt
           Image(
             image: AssetImage("assets/ghosts/ghost1.png"),
           ),
