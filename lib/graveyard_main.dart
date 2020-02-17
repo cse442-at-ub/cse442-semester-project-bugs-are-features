@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,17 +13,38 @@ class GraveyardMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        child: Text(
-          "GraveyardMain",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.blueGrey,
-            fontSize: 60.0,
+    return Scaffold(
+        body: Center(
+      child: GridView.count(
+          shrinkWrap: true,
+          crossAxisCount: 3,
+          padding: EdgeInsets.all(8.0),
+          children: List.generate(9, (index) {
+            return makeGhostPicker(index + 1);
+          })),
+    ));
+  }
+
+  Container makeGhostPicker(int id) {
+    return Container(
+        padding: EdgeInsets.all(4.0),
+        child: RaisedButton(
+          color: Colors.blue,
+          textColor: Colors.white,
+          disabledColor: Colors.grey,
+          disabledTextColor: Colors.black,
+          splashColor: Colors.blueAccent,
+          shape: new ContinuousRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0)),
+          onPressed: () {
+            _prefs.setInt("ghost_id", id);
+            _prefs.reload();
+            _ghostChosen();
+          },
+          child: Text(
+            "Ghost " + id.toString(),
+            style: TextStyle(fontSize: 20.0),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
