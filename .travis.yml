@@ -25,12 +25,13 @@ before_script:
   - export PATH="$PATH:`pwd`/flutter/bin"
   - flutter doctor -v
   - sdkmanager --list
+  - sdkmanager --update
 script:
   - flutter pub get
     #- flutter precache
   - cd ./lib/
   - flutter analyze
-    #- flutter build apk
+  - flutter build apk
 
 after_script:
   - flutter clean
