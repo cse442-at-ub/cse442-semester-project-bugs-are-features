@@ -19,6 +19,7 @@ addons:
 before_script:
   - git clone https://github.com/flutter/flutter.git
   - export PATH="$PATH:`pwd`/flutter/bin"
+  - yes | sdkmanager --licenses
   - flutter doctor
 script:
   - flutter pub get
