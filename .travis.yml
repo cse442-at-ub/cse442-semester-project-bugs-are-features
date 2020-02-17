@@ -17,7 +17,7 @@ addons:
       - libstdc++6
       - fonts-droid
 before_script:
-  - git clone https://github.com/flutter/flutter.git
+  - if [[ ! -d flutter ]]; then git clone https://github.com/flutter/flutter.git; fi
   - export PATH="$PATH:`pwd`/flutter/bin"
   - flutter doctor
 script:
@@ -25,11 +25,12 @@ script:
   - flutter precache
   - cd ./lib/
   - flutter analyze
-  - flutter build apk --stacktrace
+    #- flutter build apk
 
 after_script:
   - flutter clean
 
 cache:
   directories:
+    - flutter
     - $HOME/.pub-cache
