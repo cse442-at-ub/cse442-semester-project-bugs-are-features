@@ -19,14 +19,13 @@ addons:
 before_script:
   - git clone https://github.com/flutter/flutter.git
   - export PATH="$PATH:`pwd`/flutter/bin"
-  - sdkmanager --version
   - flutter doctor
 script:
   - flutter pub get
   - flutter precache
   - cd ./lib/
   - flutter analyze
-  - flutter build apk
+  - flutter build apk --stacktrace
 
 after_script:
   - flutter clean
