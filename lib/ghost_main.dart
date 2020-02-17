@@ -24,7 +24,7 @@ class _GhostMainState extends State<GhostMain> {
 
   var options = ["Hello", "What is your name?", "Blah", "Foo"];
   var response = ["Hi", "Ghost", "Bloo", "Bar"];
-  var currentResponse = "Your ghost comes here";
+  var currentResponse = "Touch a button to change";
 
   void buttonHandler(int id) {
     setState(() {
@@ -34,44 +34,49 @@ class _GhostMainState extends State<GhostMain> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        margin: EdgeInsets.only(top: 100),
-        child: Column(
-          children: <Widget>[
-            Text(
-              currentResponse,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.brown,
-                fontSize: 42,
-              ),
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          // TODO: Fix the ghost image alignemnt
+          Image(
+            image: AssetImage("assets/ghosts/ghost1.png"),
+          ),
+          Text(
+            currentResponse,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.brown,
+              fontSize: 20,
             ),
-            GridView.count(
+          ),
+          GridView.count(
               shrinkWrap: true,
               crossAxisCount: 2,
-              children: <Widget>[
-                RaisedButton(
-                  onPressed: () => buttonHandler(0),
-                  child: Text(options[0]),
-                ),
-                RaisedButton(
-                  onPressed: () => buttonHandler(1),
-                  child: Text(options[1]),
-                ),
-                RaisedButton(
-                  onPressed: () => buttonHandler(2),
-                  child: Text(options[2]),
-                ),
-                RaisedButton(
-                  onPressed: () => buttonHandler(3),
-                  child: Text(options[3]),
-                ),
-              ],
-            ),
-          ],
-        ),
+              children: List.generate(4, (index) {
+                return makeGhostPicker(index);
+              })),
+        ],
       ),
     );
+  }
+
+  Container makeGhostPicker(int id) {
+    return Container(
+        padding: EdgeInsets.all(4.0),
+        child: RaisedButton(
+          color: Colors.blue,
+          textColor: Colors.white,
+          disabledColor: Colors.grey,
+          disabledTextColor: Colors.black,
+          splashColor: Colors.blueAccent,
+          shape: new ContinuousRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0)),
+          onPressed: () => buttonHandler(id),
+          child: Text(
+            options[id],
+            style: TextStyle(fontSize: 20.0),
+          ),
+        ));
   }
 }
