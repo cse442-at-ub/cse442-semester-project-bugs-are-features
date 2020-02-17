@@ -1,6 +1,11 @@
-language: generic
+language: android
 os:
   - linux
+dist: trusty
+android:
+  components:
+    - build-tools-29.0.3
+    - android-29
 addons:
   apt:
     # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
@@ -13,10 +18,9 @@ before_script:
   - git clone https://github.com/flutter/flutter.git
   - ./flutter/bin/flutter doctor
 script:
-  - echo $PWD
-  - echo "RUnning analyze"
-  - ./flutter/bin/flutter analyze .
-  - ./flutter/bin/flutter build .
+  - echo Running flutter analyze at $PWD
+  - ./flutter/bin/flutter analyze
+  - ./flutter/bin/flutter build apk
 
 after_script:
   - ./flutter/bin/flutter clean
