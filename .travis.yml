@@ -23,9 +23,9 @@ addons:
 before_script:
   - git clone https://github.com/flutter/flutter.git
   - export PATH="$PATH:`pwd`/flutter/bin"
-  - flutter doctor -v
-  - sdkmanager --list
+    #- sdkmanager --list
   - echo y | sdkmanager --update
+  - flutter doctor -v
 script:
   - flutter pub get
     #- flutter precache
