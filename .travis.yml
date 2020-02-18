@@ -7,8 +7,6 @@ android:
     - build-tools-29.0.3
     - android-29
     - platform-tools
-    - platforms-android-28
-    - platforms-android-29
     - tools
   licenses:
     - 'android-sdk-license-.+'
@@ -23,15 +21,16 @@ addons:
 before_script:
   - git clone https://github.com/flutter/flutter.git
   - export PATH="$PATH:`pwd`/flutter/bin"
-    #- sdkmanager --list
+  - sdkmanager --list
   - echo y | sdkmanager --update
   - flutter doctor -v
+  - flutter doctor --android-licenses
 script:
   - flutter pub get
     #- flutter precache
   - cd ./lib/
   - flutter analyze
-  - flutter build apk
+    #- flutter build apk
 
 after_script:
   - flutter clean
