@@ -22,9 +22,9 @@ before_script:
   - git clone https://github.com/flutter/flutter.git
   - export PATH="$PATH:`pwd`/flutter/bin"
   - sdkmanager --list
-  - yes | sdkmanager --update
+  - ech y | sdkmanager --update
   - flutter doctor -v
-  - yes | flutter doctor --android-licenses
+  - ( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | flutter doctor --android-licenses
 script:
   - flutter pub get
     #- flutter precache
