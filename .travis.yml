@@ -19,9 +19,9 @@ before_script:
   - git clone https://github.com/flutter/flutter.git
   - export PATH="$PATH:`pwd`/flutter/bin"
   - sdkmanager --list
-  - echo y | sdkmanager --update
+  - yes | sdkmanager --update
+  - yes | flutter doctor --android-licenses
   - flutter doctor -v
-  - echo y | flutter doctor --android-licenses
 script:
   - cd ./lib/ #Specifying the source directory for analyze
   - flutter pub get
