@@ -15,10 +15,9 @@ addons:
     packages:
       - libstdc++6
       - fonts-droid
-before_script:
+before_install:
   - git clone https://github.com/flutter/flutter.git
   - export PATH="$PATH:`pwd`/flutter/bin"
-  - sdkmanager --list
   - yes | sdkmanager --update
   - yes | flutter doctor --android-licenses
   - flutter doctor -v
