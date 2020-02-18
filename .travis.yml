@@ -24,7 +24,7 @@ before_script:
   - sdkmanager --list
   - echo y | sdkmanager --update
   - flutter doctor -v
-  - flutter doctor --android-licenses
+  - echo y | flutter doctor --android-licenses
 script:
   - flutter pub get
     #- flutter precache
