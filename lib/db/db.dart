@@ -29,7 +29,7 @@ class DB {
     await db.execute(
         "CREATE TABLE ghost ("
             "id INTEGER PRIMARY KEY,"
-            "nature INTEGER,"   // 0 = Friendly, 1 = Neutral, 3 = Angry
+            "nature INTEGER,"   // 0 = Friendly, 1 = Neutral, 2 = Angry
             "level INTEGER,"    // Difficulty
             "progress INTEGER," // 0-10 Story Progress
             "score INTEGER,"    // Accumulated Points
