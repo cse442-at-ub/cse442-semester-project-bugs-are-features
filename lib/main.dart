@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:ghost_app/db/db.dart';
+
 import 'ghost_main.dart';
 import 'graveyard_main.dart';
 import 'settings.dart';
@@ -48,6 +50,9 @@ class RootPage extends StatefulWidget {
 
 /// The state widget of [RootPage].
 class _RootPageState extends State<RootPage> {
+  /// The Database instance
+  DB database = DB();
+
   /// Displays splash screen when false. True when assets are loaded.
   bool _assetsLoaded = false;
 
@@ -65,6 +70,7 @@ class _RootPageState extends State<RootPage> {
 
   @override
   void dispose() {
+    database.close();
     super.dispose();
   }
 
@@ -151,6 +157,8 @@ class _RootPageState extends State<RootPage> {
   /// For all future image, sound, and startup database calls.
   _loadAssets() async {
     _readPrefs();
+    database.init();
+
     // Hold splash screen.
     Timer(Duration(seconds: 2), () {
       setState(() {
