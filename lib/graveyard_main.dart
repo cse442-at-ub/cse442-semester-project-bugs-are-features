@@ -13,15 +13,26 @@ class GraveyardMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-        body: Center(
-      child: GridView.count(
-          shrinkWrap: true,
-          crossAxisCount: 3,
-          padding: EdgeInsets.all(8.0),
-          children: List.generate(9, (index) {
-            return makeGhostPicker(index + 1);
-          })),
+        body: Stack(
+      children: <Widget>[
+        new Image.asset(
+          'assets/misc/Graveyard.png',
+          width: size.width,
+          height: size.height,
+          fit: BoxFit.fill,
+        ),
+        Center(
+          child: GridView.count(
+              shrinkWrap: true,
+              crossAxisCount: 3,
+              padding: EdgeInsets.all(8.0),
+              children: List.generate(9, (index) {
+                return makeGhostPicker(index + 1);
+              })),
+        ),
+      ],
     ));
   }
 
