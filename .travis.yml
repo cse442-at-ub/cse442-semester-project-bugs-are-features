@@ -22,6 +22,12 @@ addons:
       - libstdc++6
       - fonts-droid
 
+branches:
+  only:
+    - master
+    - development
+    - travis-ci-config
+
 stages:
   - name: deploy
     if: branch = master
@@ -44,8 +50,8 @@ before_deploy:
 
 deploy:
   provider: releases
-  skip_cleanup: true
-  api_key:
+  edge: true
+  token:
     secure: m1+zsTWwOj5on//qdLoXzl4lWWixqk0eg410iXBbkKpPebAg1Wlo/A46qvzUvr+uqmxefsiFJQ5kPlL/SS3nS01p/7b4lGV857zP8DGgPPsoYx1aE1UDrlG7EWaJ4TVMymKyPbdfQDpKJJmTt8mB5xmm8TTRti52nJnpjGZBKTh3xhh7dwbbFQJcDII1iYUGFWxDYzSCgOaxYT/iFe2kR9hsQijjtRhxah7xcAqfoV2d0qzvLKe4sePBlL8qzAbaSAp+qVzsvfMNCK7OCyQuUo+muMRzQByH0O+8CuTb238N7J7Gi46KKBBGyOG5/wZONP3bst/OVK9OSPf3x4OiLTI9pT0HZIVb9/qYw+xmKgzDry13da3XMW6sGOZx/2MWbXyHtyZ/45X2feMYBm5rYn/IeuAUmbGkyuoopYCsXYHp4wVi50bbcn5033mfLfsyVsSySD+KKcerTXz06PdW4l5VU+1afdiyPxkGgfFp5DO/cbd0PR8Hk7/h0V+Oq9mvjuu4wp5WXq9ScJTBvOjux2bDdde6X59mbKjraOM5z3SaUjgaoACMvHG7PQHYvbvnCEmhtxM/zzFUeWjeU6CVSEoDBIv2fAz7qNpXxHFELT8EAgNp5x++Vx/C9IdsGPBdM3HI1vhwWXYCJp6q8Ad4q2tzRPcFuWRAkkO5lzNSXkE=
   file: build/app/outputs/apk/release/app-release.apk
 
