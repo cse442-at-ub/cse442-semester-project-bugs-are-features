@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,7 +39,6 @@ class GraveyardMain extends StatelessWidget {
               borderRadius: BorderRadius.circular(32.0)),
           onPressed: () {
             _prefs.setInt("ghost_id", id);
-            _prefs.reload();
             _ghostChosen();
           },
           child: Text(
