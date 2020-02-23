@@ -162,7 +162,6 @@ class _RootPageState extends State<RootPage> {
   /// Grabs our instance of SharedPreferences to pass to children.
   _readPrefs() async {
     _prefs = await SharedPreferences.getInstance();
-
     // Check if this is our first app launch so we can init preferences.
     if (_prefs.getBool('first_launch') ?? true) {
       _initPrefs();
