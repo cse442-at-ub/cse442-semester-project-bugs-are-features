@@ -95,15 +95,10 @@ class _RootPageState extends State<RootPage> {
     }
 
     /// The settings button displayed in the top right corner
-    Container settingsBtn = Container(
-      margin:
-          EdgeInsets.only(right: 10, top: MediaQuery.of(context).padding.top),
-      alignment: Alignment.topRight,
-      child: FlatButton(
-          color: Colors.blue,
-          textColor: Colors.white,
-          child: Text("Settings"),
-          onPressed: () {
+    var settingsBtn = Align(
+        alignment: Alignment.topRight,
+        child: GestureDetector(
+          onTap: () {
             showGeneralDialog(
                 barrierColor: Colors.black.withOpacity(0.5),
                 transitionBuilder: (context, a1, a2, widget) {
@@ -127,9 +122,23 @@ class _RootPageState extends State<RootPage> {
                 // pageBuilder isn't needed because we used transitionBuilder
                 // However, it's still required by the showGeneralDialog widget
                 pageBuilder: (context, animation1, animation2) => null);
-          } // onPressed
+          },
+          child: Container(
+            margin: EdgeInsets.only(
+                top: MediaQuery.of(context).padding.top - 20, right: 60),
+            // color: Colors.black,
+            // decoration: BoxDecoration(
+            //     image: DecorationImage(
+            //         image: AssetImage("assets/misc/GrimReaper.png"),
+            //         fit: BoxFit.cover)),
+            width: 70,
+            height: 150,
+            child: Image.asset(
+              "assets/misc/GrimReaper.png",
+              fit: BoxFit.fitHeight,
+            ),
           ),
-    );
+        ));
 
     _hasGhost = _prefs.getBool('has_ghost');
     // Select our main view container.
