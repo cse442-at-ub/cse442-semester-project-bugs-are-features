@@ -98,19 +98,19 @@ class _GhostMainState extends State<GhostMain> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             // TODO: Fix the ghost image alignemnt
-            Image(
-              image: AssetImage(
-                  "assets/ghosts/ghost${_prefs.getInt("ghost_id").toString()}.png"),
-            ),
+            Image.asset(
+                "assets/ghosts/ghost${_prefs.getInt("ghost_id").toString()}.png"),
             Text(
               currentResponse,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.brown,
-                fontSize: 20,
+                color: Colors.white,
+                fontSize: 30,
               ),
+              textAlign: TextAlign.center,
             ),
             GridView.count(
+                childAspectRatio: 2,
                 shrinkWrap: true,
                 crossAxisCount: 2,
                 children: List.generate(4, (index) {
@@ -126,11 +126,9 @@ class _GhostMainState extends State<GhostMain> {
     return Container(
         padding: EdgeInsets.all(4.0),
         child: RaisedButton(
-          color: Colors.blue,
-          textColor: Colors.white,
-          disabledColor: Colors.grey,
-          disabledTextColor: Colors.black,
-          splashColor: Colors.blueAccent,
+          textColor: Colors.black,
+          color: Colors.green,
+          splashColor: Colors.white,
           shape: new ContinuousRectangleBorder(
               borderRadius: BorderRadius.circular(32.0)),
           onPressed: () => buttonHandler(id),

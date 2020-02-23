@@ -26,7 +26,8 @@ class GraveyardMain extends StatelessWidget {
         Center(
           child: GridView.count(
               shrinkWrap: true,
-              crossAxisCount: 3,
+              crossAxisCount: 2,
+              childAspectRatio: 3,
               padding: EdgeInsets.all(8.0),
               children: List.generate(2, (index) {
                 return makeGhostPicker(index + 1);
@@ -40,17 +41,16 @@ class GraveyardMain extends StatelessWidget {
     return Container(
         padding: EdgeInsets.all(4.0),
         child: RaisedButton(
-          color: Colors.blue,
-          textColor: Colors.white,
+          color: Colors.green,
+          textColor: Colors.black,
           disabledColor: Colors.grey,
           disabledTextColor: Colors.black,
-          splashColor: Colors.blueAccent,
+          splashColor: Colors.white,
           shape: new ContinuousRectangleBorder(
               borderRadius: BorderRadius.circular(32.0)),
           onPressed: () {
             print(id);
             _prefs.setInt("ghost_id", id);
-            // _prefs.reload();
             _ghostChosen();
           },
           child: Text(
