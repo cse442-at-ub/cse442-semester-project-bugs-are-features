@@ -44,6 +44,7 @@ class Settings extends StatelessWidget {
                   ),
                 ),
               ),
+              !(_prefs.getBool('has_ghost')) ?
               FlatButton(
                 color: Colors.blue,
                 textColor: Colors.white,
@@ -51,7 +52,7 @@ class Settings extends StatelessWidget {
                   _ghostChosen();
                 },
                 child: Text("Set has_ghost = true"),
-              ),
+              ) :
               FlatButton(
                 color: Colors.blue,
                 textColor: Colors.white,
