@@ -17,7 +17,7 @@ class GraveyardMain extends StatelessWidget {
     return Scaffold(
         body: Stack(
       children: <Widget>[
-        new Image.asset(
+        Image.asset(
           'assets/misc/Graveyard.png',
           width: size.width,
           height: size.height,
@@ -28,7 +28,7 @@ class GraveyardMain extends StatelessWidget {
               shrinkWrap: true,
               crossAxisCount: 3,
               padding: EdgeInsets.all(8.0),
-              children: List.generate(9, (index) {
+              children: List.generate(2, (index) {
                 return makeGhostPicker(index + 1);
               })),
         ),
@@ -48,12 +48,13 @@ class GraveyardMain extends StatelessWidget {
           shape: new ContinuousRectangleBorder(
               borderRadius: BorderRadius.circular(32.0)),
           onPressed: () {
+            print(id);
             _prefs.setInt("ghost_id", id);
-            _prefs.reload();
+            // _prefs.reload();
             _ghostChosen();
           },
           child: Text(
-            "Ghost " + id.toString(),
+            "Ghost ${id.toString()}",
             style: TextStyle(fontSize: 20.0),
           ),
         ));

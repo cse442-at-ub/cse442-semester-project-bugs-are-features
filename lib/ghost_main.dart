@@ -34,31 +34,45 @@ class _GhostMainState extends State<GhostMain> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          // TODO: Fix the ghost image alignemnt
-          Image(
-            image: AssetImage("assets/ghosts/ghost1.png"),
-          ),
-          Text(
-            currentResponse,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.brown,
-              fontSize: 20,
+        body: Stack(
+      children: <Widget>[
+        Image.asset(
+          'assets/misc/Graveyard.png',
+          width: size.width,
+          height: size.height,
+          fit: BoxFit.fill,
+        ),
+        Container(
+          color: const Color(0xFF0E3311).withOpacity(0.8),
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            // TODO: Fix the ghost image alignemnt
+            Image(
+              image: AssetImage(
+                  "assets/ghosts/ghost${_prefs.getInt("ghost_id").toString()}.png"),
             ),
-          ),
-          GridView.count(
-              shrinkWrap: true,
-              crossAxisCount: 2,
-              children: List.generate(4, (index) {
-                return makeGhostPicker(index);
-              })),
-        ],
-      ),
-    );
+            Text(
+              currentResponse,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.brown,
+                fontSize: 20,
+              ),
+            ),
+            GridView.count(
+                shrinkWrap: true,
+                crossAxisCount: 2,
+                children: List.generate(4, (index) {
+                  return makeGhostPicker(index);
+                })),
+          ],
+        )
+      ],
+    ));
   }
 
   Container makeGhostPicker(int id) {
