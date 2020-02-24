@@ -1,7 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GhostMain extends StatefulWidget {
@@ -10,6 +11,7 @@ class GhostMain extends StatefulWidget {
 
   /// Called as a function when a ghost is released.
   final VoidCallback _ghostReleased;
+
   GhostMain(this._prefs, this._ghostReleased);
 
   @override
@@ -39,13 +41,13 @@ class _GhostMainState extends State<GhostMain> {
   initState() {
     super.initState();
     rootBundle.loadString("assets/data/DummyData.json").then((data) => {
-          setState(() {
-            json = jsonDecode(data);
-            currentState = json['states'][startState];
-            print("Hello : " + currentState['prompt']);
-            update();
-          })
-        });
+      setState(() {
+        json = jsonDecode(data);
+        currentState = json['states'][startState];
+        print("Hello : " + currentState['prompt']);
+        update();
+      })
+    });
   }
 
   void update() {
@@ -84,51 +86,63 @@ class _GhostMainState extends State<GhostMain> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         body: Stack(
-      children: <Widget>[
-        Image.asset(
-          'assets/misc/Graveyard.png',
-          width: size.width,
-          height: size.height,
-          fit: BoxFit.fill,
-        ),
-        Container(
-          color: const Color(0xFF0E3311).withOpacity(0.8),
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // TODO: Fix the ghost image alignemnt
             Image.asset(
-                "assets/ghosts/ghost${_prefs.getInt("ghost_id").toString()}.png"),
-            Text(
-              currentResponse,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontSize: 30,
-              ),
-              textAlign: TextAlign.center,
+              'assets/misc/Graveyard.png',
+              width: size.width,
+              height: size.height,
+              fit: BoxFit.fill,
             ),
-            GridView.count(
-                childAspectRatio: 2,
-                shrinkWrap: true,
-                crossAxisCount: 2,
-                children: List.generate(4, (index) {
-                  return makeGhostPicker(index);
-                })),
+            Container(
+              color: Theme
+                  .of(context)
+                  .backgroundColor
+                  .withOpacity(0.8),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                // TODO: Fix the ghost image alignemnt
+                Image.asset(
+                    "assets/ghosts/ghost${_prefs.getInt("ghost_id").toString()}.png"),
+                Text(
+                  currentResponse,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .body1
+                      .copyWith(fontSize: 30, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                GridView.count(
+                    childAspectRatio: 2,
+                    shrinkWrap: true,
+                    crossAxisCount: 2,
+                    children: List.generate(4, (index) {
+                      return makeGhostPicker(index);
+                    })),
+              ],
+            )
           ],
-        )
-      ],
-    ));
+        ));
   }
 
   Container makeGhostPicker(int id) {
     return Container(
         padding: EdgeInsets.all(4.0),
         child: RaisedButton(
-          textColor: Colors.black,
-          color: Colors.green,
-          splashColor: Colors.white,
+          textColor: Theme
+              .of(context)
+              .textTheme
+              .body1
+              .color,
+          color: Theme
+              .of(context)
+              .buttonColor,
+          splashColor: Theme
+              .of(context)
+              .accentColor
+              .withOpacity(0.5),
           shape: new ContinuousRectangleBorder(
               borderRadius: BorderRadius.circular(32.0)),
           onPressed: () => buttonHandler(id),

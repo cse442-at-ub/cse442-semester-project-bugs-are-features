@@ -26,7 +26,9 @@ class Settings extends StatelessWidget {
             maxWidth: 250.0,
             minWidth: 250.0,
             minHeight: 150.0),
-        color: Colors.white,
+        color: Theme
+            .of(context)
+            .backgroundColor,
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -38,24 +40,37 @@ class Settings extends StatelessWidget {
                   "Settings",
                   textAlign: TextAlign.center,
                   textDirection: TextDirection.ltr,
-                  style: TextStyle(
-                    color: Colors.blueGrey,
-                    fontSize: 35.0,
-                  ),
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .body1
+                        .copyWith(fontSize: 35.0)
                 ),
               ),
               !(_prefs.getBool('has_ghost')) ?
               FlatButton(
-                color: Colors.blue,
-                textColor: Colors.white,
+                color: Theme
+                    .of(context)
+                    .buttonColor,
+                textColor: Theme
+                    .of(context)
+                    .textTheme
+                    .body1
+                    .color,
                 onPressed: () {
                   _ghostChosen();
                 },
                 child: Text("Set has_ghost = true"),
               ) :
               FlatButton(
-                color: Colors.blue,
-                textColor: Colors.white,
+                color: Theme
+                    .of(context)
+                    .buttonColor,
+                textColor: Theme
+                    .of(context)
+                    .textTheme
+                    .body1
+                    .color,
                 onPressed: () {
                   _ghostReleased();
                 },
