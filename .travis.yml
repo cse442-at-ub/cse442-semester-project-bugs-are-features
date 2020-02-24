@@ -33,7 +33,7 @@ stages:
     if: branch = master
 
 before_install:
-  - git clone https://github.com/flutter/flutter.git
+  - git clone https://github.com/flutter/flutter.git -b stable
   - export PATH="$PATH:`pwd`/flutter/bin"
   - yes | sdkmanager --update
   - yes | flutter doctor --android-licenses
@@ -43,6 +43,7 @@ script:
   - flutter pub get
   - cd ./lib/
   - flutter analyze
+  - cd ..
 
 before_deploy:
   - flutter precache

@@ -47,6 +47,7 @@ class Settings extends StatelessWidget {
                         .copyWith(fontSize: 35.0)
                 ),
               ),
+              !(_prefs.getBool('has_ghost')) ?
               FlatButton(
                 color: Theme
                     .of(context)
@@ -60,7 +61,7 @@ class Settings extends StatelessWidget {
                   _ghostChosen();
                 },
                 child: Text("Set has_ghost = true"),
-              ),
+              ) :
               FlatButton(
                 color: Theme
                     .of(context)
