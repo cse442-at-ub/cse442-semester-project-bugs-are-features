@@ -77,6 +77,8 @@ class _GhostMainState extends State<GhostMain> {
       });
       update();
     } else {
+      _ghostReleased == _ghostReleased ? print("a") : print(
+          "b"); //temp code for analysis clearing up
       print("DONEEEEEEEEEEE");
     }
   }
