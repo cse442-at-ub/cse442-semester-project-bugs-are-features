@@ -21,9 +21,14 @@ class App extends StatelessWidget {
     return MaterialApp(
       // TODO: Set actual theme colors/styles. These are placeholders.
       theme: ThemeData(
-        primaryColor: Colors.blue,
-        accentColor: Colors.green,
-        textTheme: TextTheme(body1: TextStyle(color: Colors.purple)),
+        brightness: Brightness.dark,
+        backgroundColor: Color.fromRGBO(0x1c, 0x15, 0x1e, 1),
+        primaryColor: Color.fromRGBO(0x4a, 0x4c, 0x52, 1),
+        buttonColor: Color.fromRGBO(0xa1, 0xa6, 0xb4, 1),
+        accentColor: Color.fromRGBO(0xd1, 0xcc, 0xdc, 1),
+
+        textTheme: TextTheme(
+            body1: TextStyle(color: Color.fromRGBO(0xf9, 0xf8, 0xf8, 1))),
       ),
       home: Material(child: RootPage()),
     );
@@ -83,10 +88,11 @@ class _RootPageState extends State<RootPage> {
                 'Ghost App',
                 textAlign: TextAlign.center,
                 textDirection: TextDirection.ltr,
-                style: TextStyle(
-                  color: Colors.blueGrey,
-                  fontSize: 60.0,
-                ),
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .body1
+                      .copyWith(fontSize: 60.0)
               ),
             ],
           ),
@@ -100,7 +106,10 @@ class _RootPageState extends State<RootPage> {
         child: GestureDetector(
           onTap: () {
             showGeneralDialog(
-                barrierColor: Colors.black.withOpacity(0.5),
+                barrierColor: Theme
+                    .of(context)
+                    .backgroundColor
+                    .withOpacity(0.5),
                 transitionBuilder: (context, a1, a2, widget) {
                   return AnimatedOpacity(
                     opacity: 1.0,
