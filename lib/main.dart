@@ -23,9 +23,14 @@ class App extends StatelessWidget {
     return MaterialApp(
       // TODO: Set actual theme colors/styles. These are placeholders.
       theme: ThemeData(
-        primaryColor: Colors.blue,
-        accentColor: Colors.green,
-        textTheme: TextTheme(body1: TextStyle(color: Colors.purple)),
+        brightness: Brightness.dark,
+        backgroundColor: Color.fromRGBO(0x1c, 0x15, 0x1e, 1),
+        primaryColor: Color.fromRGBO(0x4a, 0x4c, 0x52, 1),
+        buttonColor: Color.fromRGBO(0xa1, 0xa6, 0xb4, 1),
+        accentColor: Color.fromRGBO(0xd1, 0xcc, 0xdc, 1),
+
+        textTheme: TextTheme(
+            body1: TextStyle(color: Color.fromRGBO(0xf9, 0xf8, 0xf8, 1))),
       ),
       home: Material(child: RootPage()),
     );
@@ -89,10 +94,11 @@ class _RootPageState extends State<RootPage> {
                 'Ghost App',
                 textAlign: TextAlign.center,
                 textDirection: TextDirection.ltr,
-                style: TextStyle(
-                  color: Colors.blueGrey,
-                  fontSize: 60.0,
-                ),
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .body1
+                      .copyWith(fontSize: 60.0)
               ),
             ],
           ),
@@ -101,17 +107,15 @@ class _RootPageState extends State<RootPage> {
     }
 
     /// The settings button displayed in the top right corner
-    Container settingsBtn = Container(
-      margin:
-          EdgeInsets.only(right: 10, top: MediaQuery.of(context).padding.top),
-      alignment: Alignment.topRight,
-      child: FlatButton(
-          color: Colors.blue,
-          textColor: Colors.white,
-          child: Text("Settings"),
-          onPressed: () {
+    var settingsBtn = Align(
+        alignment: Alignment.topRight,
+        child: GestureDetector(
+          onTap: () {
             showGeneralDialog(
-                barrierColor: Colors.black.withOpacity(0.5),
+                barrierColor: Theme
+                    .of(context)
+                    .backgroundColor
+                    .withOpacity(0.5),
                 transitionBuilder: (context, a1, a2, widget) {
                   return AnimatedOpacity(
                     opacity: 1.0,
@@ -133,9 +137,23 @@ class _RootPageState extends State<RootPage> {
                 // pageBuilder isn't needed because we used transitionBuilder
                 // However, it's still required by the showGeneralDialog widget
                 pageBuilder: (context, animation1, animation2) => null);
-          } // onPressed
+          },
+          child: Container(
+            margin: EdgeInsets.only(
+                top: MediaQuery.of(context).padding.top - 20, right: 60),
+            // color: Colors.black,
+            // decoration: BoxDecoration(
+            //     image: DecorationImage(
+            //         image: AssetImage("assets/misc/GrimReaper.png"),
+            //         fit: BoxFit.cover)),
+            width: 70,
+            height: 150,
+            child: Image.asset(
+              "assets/misc/GrimReaper.png",
+              fit: BoxFit.fitHeight,
+            ),
           ),
-    );
+        ));
 
     _hasGhost = _prefs.getBool('has_ghost');
     // Select our main view container.
@@ -170,7 +188,6 @@ class _RootPageState extends State<RootPage> {
   /// Grabs our instance of SharedPreferences to pass to children.
   _readPrefs() async {
     _prefs = await SharedPreferences.getInstance();
-
     // Check if this is our first app launch so we can init preferences.
     if (_prefs.getBool('first_launch') ?? true) {
       _initPrefs();
