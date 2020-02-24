@@ -1,0 +1,88 @@
+{
+	"states": [
+		{
+			"prompt": "Hello",
+			"options": [
+				{
+					"value": "I don't want to talk to you",
+					"link": -1
+				},
+				{
+					"value": "Hi, how are you?",
+					"link": 1
+				},
+				{
+					"value": "What were you in your past life?",
+					"link": 3
+				},
+				{
+					"value": "Hi! What are you doing?",
+					"link": 2
+				}
+			]
+		},
+		{
+			"prompt": "Awful!",
+			"options": [
+				{
+					"value": "Good!, I don't want to talk to you anyways",
+					"link": "-1"
+				},
+				{
+					"value": "Hope you feel better! I'll let you be.",
+					"link": "-1"
+				},
+				{
+					"value": "Why?, What are you doing?",
+					"link": "2"
+				},
+				{
+					"value": null,
+					"link": null
+				}
+			]
+		},
+		{
+			"prompt": "Haunting People like you!",
+			"options": [
+				{
+					"value": "Well, get better at it!",
+					"link": "-1"
+				},
+				{
+					"value": "You're doing great at it! Keep it up",
+					"link": "-1"
+				},
+				{
+					"value": "Why? What were you in your past life?",
+					"link": "3"
+				},
+				{
+					"value": null,
+					"link": null
+				}
+			]
+		},
+		{
+			"prompt": "The Gods didn't like me... I was a french fry",
+			"options": [
+				{
+					"value": "HA! You should be ashamed",
+					"link": "-1"
+				},
+				{
+					"value": "I bet you were the best french fry in the world!",
+					"link": "-1"
+				},
+				{
+					"value": null,
+					"link": null
+				},
+				{
+					"value": null,
+					"link": null
+				}
+			]
+		}
+	]
+}
