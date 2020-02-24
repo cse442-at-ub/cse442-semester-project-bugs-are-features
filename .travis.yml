@@ -43,6 +43,7 @@ script:
   - flutter pub get
   - cd ./lib/
   - flutter analyze
+  - cd ..
 
 before_deploy:
   - flutter precache
