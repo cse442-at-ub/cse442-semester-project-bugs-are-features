@@ -8,6 +8,7 @@ import 'widgets/splash_screen.dart';
 import 'ghost_main.dart';
 import 'graveyard_main.dart';
 import 'widgets/settings_button.dart';
+import 'widgets/dev_button.dart';
 
 /// RootPage is the "actual" root widget of the app. See also [_RootPageState].
 ///
@@ -56,6 +57,8 @@ class _RootPageState extends State<RootPage> {
     }
 
     var view = <Widget>[];
+
+
     // Select our main view container.
     if (_prefs.getBool('has_ghost')) {
       GhostMain ghost = GhostMain(_prefs, _ghostReleased);
@@ -65,7 +68,13 @@ class _RootPageState extends State<RootPage> {
       view.add(graveyard);
     }
 
-    view.add(SettingsButton(_prefs, _ghostReleased, _ghostChosen));
+    view.add(SettingsButton(_prefs, _ghostReleased));
+
+    // Add Dev Settings button _only_ if in development
+    assert(() {
+      view.add(DevButton(_prefs, _ghostReleased, _ghostChosen));
+      return true;
+    }());
 
     return Stack(children: view);
   }

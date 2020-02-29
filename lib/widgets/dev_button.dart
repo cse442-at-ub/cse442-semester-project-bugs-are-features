@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'settings.dart';
+import 'dev_settings.dart';
 
-class SettingsButton extends StatelessWidget {
+class DevButton extends StatelessWidget {
   /// The app wide preferences.
   final SharedPreferences _prefs;
+
+  /// Called as a function when a ghost is chosen.
+  final VoidCallback _ghostChosen;
 
   /// Called as a function when a ghost is released.
   final VoidCallback _ghostReleased;
 
-  SettingsButton(this._prefs, this._ghostReleased);
+  DevButton(this._prefs, this._ghostReleased, this._ghostChosen);
 
   @override
   Widget build(BuildContext context) {
     return Align(
-        alignment: Alignment.topRight,
+        alignment: Alignment.topLeft,
         child: GestureDetector(
           onTap: () {
             showGeneralDialog(
@@ -28,7 +31,7 @@ class SettingsButton extends StatelessWidget {
                     opacity: a1.value,
                     child: Center(
                       child: Material(
-                        child: Settings(_prefs, _ghostReleased),
+                        child: DevSettings(_prefs, _ghostReleased, _ghostChosen),
                       ),
                     ),
                   ),
@@ -36,7 +39,7 @@ class SettingsButton extends StatelessWidget {
               },
               transitionDuration: Duration(milliseconds: 350),
               barrierDismissible: true,
-              barrierLabel: 'Settings',
+              barrierLabel: 'Development Settings',
               context: context,
               // pageBuilder isn't needed because we used transitionBuilder
               // However, it's still required by the showGeneralDialog widget
@@ -44,13 +47,12 @@ class SettingsButton extends StatelessWidget {
           },
           child: Container(
             margin: EdgeInsets.only(
-                top: MediaQuery.of(context).padding.top - 20, right: 60),
-            width: 70,
-            height: 150,
-            child: Image.asset(
-              "assets/misc/GrimReaper.png",
-              fit: BoxFit.fitHeight,
-            ),
+                top: MediaQuery.of(context).padding.top - 20, right: 70),
+            child: FlatButton(
+              color: Theme.of(context).buttonColor,
+              textColor: Theme.of(context).textTheme.body1.color,
+              child: Text("DEV SETTINGS"),
+            )
           ),
         ));
   }
