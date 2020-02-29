@@ -28,7 +28,6 @@ class Settings extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          // TODO: Styling & make dev-only section
           Padding(
             padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
             child: Text(

@@ -3,6 +3,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dev_settings.dart';
 
+/// The Development Settings menu button.
+///
+/// This button is only visible during development, and scarcely so in the
+/// upper left hand corner of the screen. As you might expect, it opens the
+/// [DevSettings] widget in a modal.
 class DevButton extends StatelessWidget {
   /// The app wide preferences.
   final SharedPreferences _prefs;
@@ -18,7 +23,7 @@ class DevButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
-        alignment: Alignment.topLeft,
+        alignment: Alignment.topCenter,
         child: GestureDetector(
           onTap: () {
             showGeneralDialog(
@@ -47,11 +52,17 @@ class DevButton extends StatelessWidget {
           },
           child: Container(
             margin: EdgeInsets.only(
-                top: MediaQuery.of(context).padding.top - 20, right: 70),
+                top: MediaQuery.of(context).padding.top - 20),
             child: FlatButton(
               color: Theme.of(context).buttonColor,
               textColor: Theme.of(context).textTheme.body1.color,
-              child: Text("DEV SETTINGS"),
+              child: Text(
+                "Dev Settings",
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
             )
           ),
         ));

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// The Settings modal that fades in when the Settings button is pressed.
+/// The Dev Settings modal that fades in when the Dev Settings button is pressed.
 ///
-/// This widget is pretty straightforward. The user can changed settings here.
+/// This widget is pretty straightforward. Developers can change settings here.
 /// This may need to be updated to a StatefulWidget in the future to reflect
 /// any settings that a user has changed right away.
 class DevSettings extends StatelessWidget {
@@ -31,7 +31,6 @@ class DevSettings extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          // TODO: Styling & make dev-only section
           Padding(
             padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
             child: Text(

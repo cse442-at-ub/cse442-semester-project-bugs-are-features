@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ghost_app/db/db.dart';
 
-import 'widgets/splash_screen.dart';
 import 'ghost_main.dart';
 import 'graveyard_main.dart';
-import 'widgets/settings_button.dart';
+
 import 'widgets/dev_button.dart';
+import 'widgets/settings_button.dart';
+import 'widgets/splash_screen.dart';
 
 /// RootPage is the "actual" root widget of the app. See also [_RootPageState].
 ///
