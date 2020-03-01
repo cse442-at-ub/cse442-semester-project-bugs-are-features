@@ -37,6 +37,7 @@ before_install:
   - export PATH="$PATH:`pwd`/flutter/bin"
   - flutter doctor -v
   - yes | sdkmanager --update
+  - flutter doctor -v
   - yes | flutter doctor --android-licenses
   - flutter doctor -v
 
