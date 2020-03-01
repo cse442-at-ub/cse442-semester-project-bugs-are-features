@@ -7,10 +7,7 @@ class SettingsButton extends StatelessWidget {
   /// The app wide preferences.
   final SharedPreferences _prefs;
 
-  /// Called as a function when a ghost is released.
-  final VoidCallback _ghostReleased;
-
-  SettingsButton(this._prefs, this._ghostReleased);
+  SettingsButton(this._prefs);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +25,7 @@ class SettingsButton extends StatelessWidget {
                     opacity: a1.value,
                     child: Center(
                       child: Material(
-                        child: Settings(_prefs, _ghostReleased),
+                        child: Settings(_prefs),
                       ),
                     ),
                   ),

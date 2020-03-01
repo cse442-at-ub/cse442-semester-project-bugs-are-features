@@ -10,10 +10,7 @@ class Settings extends StatelessWidget {
   /// The app wide preferences.
   final SharedPreferences _prefs;
 
-  /// Called as a function when a ghost is released.
-  final VoidCallback _ghostReleased;
-
-  Settings(this._prefs, this._ghostReleased);
+  Settings(this._prefs);
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +25,7 @@ class Settings extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
+          // TODO: Add settings!
           Padding(
             padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
             child: Text(

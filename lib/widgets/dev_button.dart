@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:ghost_app/db/db.dart';
+
 import 'dev_settings.dart';
 
 /// The Development Settings menu button.
@@ -12,13 +14,13 @@ class DevButton extends StatelessWidget {
   /// The app wide preferences.
   final SharedPreferences _prefs;
 
-  /// Called as a function when a ghost is chosen.
-  final VoidCallback _ghostChosen;
+  /// The DB instance.
+  final DB _database;
 
   /// Called as a function when a ghost is released.
   final VoidCallback _ghostReleased;
 
-  DevButton(this._prefs, this._ghostReleased, this._ghostChosen);
+  DevButton(this._prefs, this._ghostReleased, this._database);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,11 @@ class DevButton extends StatelessWidget {
                     opacity: a1.value,
                     child: Center(
                       child: Material(
-                        child: DevSettings(_prefs, _ghostReleased, _ghostChosen),
+                        child: DevSettings(
+                          _prefs,
+                          _ghostReleased,
+                          _database,
+                        ),
                       ),
                     ),
                   ),

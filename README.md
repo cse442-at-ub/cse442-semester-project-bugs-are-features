@@ -9,3 +9,4 @@ A spooky ghost game
 | ------------ | ------ | ------- |
 | first_launch | `bool` | `true`  |
 | has_ghost    | `bool` | `false` |
+| ghost_id     | `int`  | 0       |

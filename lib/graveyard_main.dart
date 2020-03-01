@@ -8,7 +8,7 @@ class GraveyardMain extends StatelessWidget {
   final SharedPreferences _prefs;
 
   /// Called as a function when a ghost is chosen.
-  final VoidCallback _ghostChosen;
+  final ValueSetter<int> _ghostChosen;
 
   GraveyardMain(this._prefs, this._ghostChosen);
 
@@ -63,9 +63,7 @@ class GraveyardMain extends StatelessWidget {
                   .of(context)
                   .backgroundColor)),
           onPressed: () {
-            print(id);
-            _prefs.setInt("ghost_id", id);
-            _ghostChosen();
+            _ghostChosen(id);
           },
           child: Text(
             "Ghost ${id.toString()}",

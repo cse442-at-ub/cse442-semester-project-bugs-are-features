@@ -69,11 +69,11 @@ class _RootPageState extends State<RootPage> {
       view.add(graveyard);
     }
 
-    view.add(SettingsButton(_prefs, _ghostReleased));
+    view.add(SettingsButton(_prefs));
 
     // Add Dev Settings button _only_ if in development
     assert(() {
-      view.add(DevButton(_prefs, _ghostReleased, _ghostChosen));
+      view.add(DevButton(_prefs, _ghostReleased, _database));
       return true;
     }());
 
@@ -106,18 +106,40 @@ class _RootPageState extends State<RootPage> {
     // TODO: Delineate all the preferences we'll need.
     _prefs.setBool('first_launch', false);
     _prefs.setBool('has_ghost', false);
+    _prefs.setInt('ghost_id', 0);
   }
 
   /// Call from [GraveyardMain] when a ghost is select to render [GhostMain].
-  _ghostChosen() {
+  _ghostChosen(int id) async {
+    // Returns the amount of rows updated
+    int updated = await _database.setGhost(id);
+
+    if (updated != 1) {
+      throw Exception('Less than or more than one ghost was chosen.');
+    }
+
     setState(() {
+      _prefs.setInt('ghost_id', id);
       _prefs.setBool('has_ghost', true);
     });
   }
 
   /// Call from [GhostMain] when a ghost is select to render [GraveyardMain].
-  _ghostReleased() {
+  _ghostReleased() async {
+    int id = _prefs.getInt('ghost_id');
+
+    if (id == 0) {
+      throw Exception('Tried to release a ghost without having one.');
+    }
+
+    // Returns the amount of rows updated
+    int updated = await _database.unsetGhost(_prefs.getInt('ghost_id'));
+    if (updated != 1) {
+      throw Exception('Less than or more than one ghost was chosen.');
+    }
+
     setState(() {
+      _prefs.setInt('ghost_id', 0);
       _prefs.setBool('has_ghost', false);
     });
   }
