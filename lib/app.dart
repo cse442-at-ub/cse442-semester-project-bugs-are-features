@@ -59,7 +59,6 @@ class _RootPageState extends State<RootPage> {
 
     var view = <Widget>[];
 
-
     // Select our main view container.
     if (_prefs.getBool('has_ghost')) {
       GhostMain ghost = GhostMain(_prefs, _ghostReleased);
@@ -109,7 +108,7 @@ class _RootPageState extends State<RootPage> {
     _prefs.setInt('ghost_id', 0);
   }
 
-  /// Call from [GraveyardMain] when a ghost is select to render [GhostMain].
+  /// Call from [GraveyardMain] when a ghost is selected to render [GhostMain].
   _ghostChosen(int id) async {
     // Returns the amount of rows updated
     int updated = await _database.setGhost(id);
@@ -124,7 +123,7 @@ class _RootPageState extends State<RootPage> {
     });
   }
 
-  /// Call from [GhostMain] when a ghost is select to render [GraveyardMain].
+  /// Should only be called from [Settings] when a ghost is released.
   _ghostReleased() async {
     int id = _prefs.getInt('ghost_id');
 
