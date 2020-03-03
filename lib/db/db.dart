@@ -116,15 +116,10 @@ class DB {
     await db.execute(
         "CREATE TABLE ${Constants.GHOST_TABLE} ("
             "${Constants.GHOST_ID} INTEGER PRIMARY KEY AUTOINCREMENT,"
-            // 0 = Angry, 1 = Neutral, 2 = Friendly
             "${Constants.GHOST_TEMPERAMENT} INTEGER NOT NULL,"
-            // Difficulty 0 - 2, 2 being hardest
             "${Constants.GHOST_DIFFICULTY} INTEGER NOT NULL,"
-            // 0-10 Story Progress
             "${Constants.GHOST_PROGRESS} INTEGER NOT NULL,"
-            // Accumulated Points
             "${Constants.GHOST_SCORE} INTEGER NOT NULL,"
-            // If the ghost is "assigned" to user
             "${Constants.GHOST_ACTIVE} BOOLEAN NOT NULL"
         ")");
 
