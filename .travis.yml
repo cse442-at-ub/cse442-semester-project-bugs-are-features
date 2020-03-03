@@ -38,6 +38,8 @@ before_install:
   - flutter doctor -v
   - yes | sdkmanager --update
   - flutter doctor -v
+  - yes | sdkmanager --licenses
+  - flutter doctor -v
   - yes | flutter doctor --android-licenses
   - flutter doctor -v
 
