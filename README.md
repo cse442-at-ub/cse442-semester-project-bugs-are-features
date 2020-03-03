@@ -20,7 +20,7 @@ A spooky ghost game
 
 #### ghost Table
 
-Here are the current columns. Note that these are defined as constants in constants.db. *Don't hardcode these.* `import 'constants.dart' as Constants` from the `db`.
+Here are the current columns. Note that these are defined as constants in `db/constants.dart`. *Don't hardcode these.* `import 'constants.dart' as Constants` from the `db` library.
 
 | Name        | Data Type | Purpose             |
 | ----------- | --------- | ------------------- |
