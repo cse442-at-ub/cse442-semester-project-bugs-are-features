@@ -32,3 +32,6 @@ Here are the current columns. Note that these are defined as constants in `db/co
 | active      | `BOOLEAN` | Whether or not a ghost is currently selected and being played. May not strictly be necessary to store, but will likely be useful. |
 
 
+## Twine
+
+We will be using Twine. 
