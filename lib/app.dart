@@ -1,12 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ghost_app/db/db.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ghost_main.dart';
 import 'graveyard_main.dart';
-
 import 'widgets/dev_button.dart';
 import 'widgets/settings_button.dart';
 import 'widgets/splash_screen.dart';
@@ -61,7 +60,7 @@ class _RootPageState extends State<RootPage> {
 
     // Select our main view container.
     if (_prefs.getBool('has_ghost')) {
-      GhostMain ghost = GhostMain(_prefs, _ghostReleased);
+      GhostMain ghost = GhostMain(_prefs, _ghostReleased, _database);
       view.add(ghost);
     } else {
       GraveyardMain graveyard = GraveyardMain(_prefs, _ghostChosen);

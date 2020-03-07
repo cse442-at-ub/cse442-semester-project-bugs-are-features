@@ -1,9 +1,9 @@
 import 'dart:developer' as dev;
 
+import 'package:ghost_app/db/debug.dart';
+import 'package:ghost_app/widgets/ghost.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-
-import 'package:ghost_app/db/debug.dart';
 
 import 'constants.dart' as Constants;
 
@@ -43,6 +43,49 @@ class DB {
   /// Returns the debugging class for the database.
   get debug {
     return _debug;
+  }
+
+  Future<Ghost> getGhost(int id) async {
+    List<Map> maps = await _pool.query(
+        Constants.GHOST_TABLE,
+        columns: null,
+        where: '${Constants.GHOST_ID} = ?',
+        whereArgs: [id]
+    );
+    if (maps.length > 0) {
+      var map = maps.first;
+      Level lvl;
+      switch (map['${Constants.GHOST_DIFFICULTY}']) {
+        case 0:
+          {
+            lvl = Level.Easy;
+          }
+          break;
+
+        case 1:
+          {
+            lvl = Level.Med;
+          }
+          break;
+
+        case 2:
+          {
+            lvl = Level.Hard;
+          }
+          break;
+      }
+      return Ghost(
+          temperament: map['${Constants.GHOST_TEMPERAMENT}'],
+          progress: 0.2,
+          //map['${Constants.GHOST_PROGRESS}'],
+          name: map['${Constants.GHOST_ID}'],
+          score: map['${Constants.GHOST_SCORE}'],
+          level: lvl,
+          imageURI: null //TODO add image path to database
+      );
+    } else {
+      return null;
+    }
   }
 
   /// Sets a particular ghost id as chosen and active.

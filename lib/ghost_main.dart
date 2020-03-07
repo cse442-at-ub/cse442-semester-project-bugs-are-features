@@ -3,7 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:ghost_app/widgets/ghost.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'db/db.dart';
 
 class GhostMain extends StatefulWidget {
   /// The app wide preferences.
@@ -12,17 +15,22 @@ class GhostMain extends StatefulWidget {
   /// Called as a function when a ghost is released.
   final VoidCallback _ghostReleased;
 
-  GhostMain(this._prefs, this._ghostReleased);
+  final DB _database;
+
+  GhostMain(this._prefs, this._ghostReleased, this._database);
 
   @override
-  _GhostMainState createState() => _GhostMainState(_prefs, _ghostReleased);
+  _GhostMainState createState() =>
+      _GhostMainState(_prefs, _ghostReleased, _database);
 }
 
 class _GhostMainState extends State<GhostMain> {
-  _GhostMainState(this._prefs, this._ghostReleased);
+  _GhostMainState(this._prefs, this._ghostReleased, this._database);
 
   /// The app wide preferences.
   final SharedPreferences _prefs;
+  Ghost currentGhost;
+  final DB _database;
 
   /// Called as a function when a ghost is released.
   final VoidCallback _ghostReleased;
@@ -40,7 +48,16 @@ class _GhostMainState extends State<GhostMain> {
   @override
   initState() {
     super.initState();
-    rootBundle.loadString("assets/data/DummyData.json").then((data) => {
+    _database.getGhost(_prefs.getInt('ghost_id')).then((dbGhost) =>
+    {
+      setState(() {
+        print("current id of ghost = " + _prefs.getInt('ghost_id').toString());
+        currentGhost = dbGhost;
+        print("Ghost is called " + currentGhost.name);
+      })
+    });
+    rootBundle.loadString("assets/data/DummyData.json").then((data) =>
+    {
       setState(() {
         json = jsonDecode(data);
         currentState = json['states'][startState];
@@ -85,7 +102,10 @@ class _GhostMainState extends State<GhostMain> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    print("Now Building");
+    Size size = MediaQuery
+        .of(context)
+        .size;
     return Scaffold(
         body: Stack(
           children: <Widget>[
@@ -122,7 +142,7 @@ class _GhostMainState extends State<GhostMain> {
                     Container(
                         width: 128,
                         child: LinearProgressIndicator(
-                            value: 0.5,
+                            value: currentGhost.progress,
                             valueColor: AlwaysStoppedAnimation<Color>(
                               Theme
                                   .of(context)
