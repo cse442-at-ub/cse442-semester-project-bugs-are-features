@@ -1,12 +1,13 @@
-
-
-
-enum Temperament {Friendly, Neutral, Angry}  //Temperament of the ghost. Friendly: 0, Neutral: 1, Angry: 2
-enum Level {Easy, Med, Hard}                 //Levels. Easy: 0, Medium: 1, Hard: 2
+enum Temperament {
+  Friendly,
+  Neutral,
+  Angry
+} //Temperament of the ghost. Friendly: 0, Neutral: 1, Angry: 2
+enum Level { Easy, Med, Hard } //Levels. Easy: 0, Medium: 1, Hard: 2
 
 class Ghost {
-
-  final Temperament temperament;
+  final int id;
+  final int temperament;
   final String name;
   final Level level;
   final int score;
@@ -14,6 +15,11 @@ class Ghost {
   final String imageURI;
 
   Ghost(
-      {this.temperament, this.name, this.level, this.score, this.progress, this.imageURI});
-
+      {this.id,
+      this.temperament,
+      this.name,
+      this.level,
+      this.score,
+      this.progress,
+      this.imageURI});
 }

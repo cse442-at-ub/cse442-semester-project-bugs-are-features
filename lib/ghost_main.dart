@@ -48,23 +48,23 @@ class _GhostMainState extends State<GhostMain> {
   @override
   initState() {
     super.initState();
-    _database.getGhost(_prefs.getInt('ghost_id')).then((dbGhost) =>
-    {
-      setState(() {
-        print("current id of ghost = " + _prefs.getInt('ghost_id').toString());
-        currentGhost = dbGhost;
-        print("Ghost is called " + currentGhost.name);
-      })
-    });
-    rootBundle.loadString("assets/data/DummyData.json").then((data) =>
-    {
-      setState(() {
-        json = jsonDecode(data);
-        currentState = json['states'][startState];
-        print("Hello : " + currentState['prompt']);
-        update();
-      })
-    });
+    print("INIT STATE");
+    _database.getGhost(_prefs.getInt('ghost_id')).then((dbGhost) => {
+          setState(() {
+            print("current id of ghost = " +
+                _prefs.getInt('ghost_id').toString());
+            currentGhost = dbGhost;
+            print("Ghost is called " + currentGhost.name);
+          })
+        });
+    rootBundle.loadString("assets/data/DummyData.json").then((data) => {
+          setState(() {
+            json = jsonDecode(data);
+            currentState = json['states'][startState];
+            print("Hello : " + currentState['prompt']);
+            update();
+          })
+        });
   }
 
   void update() {
@@ -94,8 +94,9 @@ class _GhostMainState extends State<GhostMain> {
       });
       update();
     } else {
-      _ghostReleased == _ghostReleased ? print("a") : print(
-          "b"); //temp code for analysis clearing up
+      _ghostReleased == _ghostReleased
+          ? print("a")
+          : print("b"); //temp code for analysis clearing up
       print("DONEEEEEEEEEEE");
     }
   }
@@ -103,82 +104,66 @@ class _GhostMainState extends State<GhostMain> {
   @override
   Widget build(BuildContext context) {
     print("Now Building");
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
         body: Stack(
+      children: <Widget>[
+        Image.asset(
+          'assets/misc/Graveyard.png',
+          width: size.width,
+          height: size.height,
+          fit: BoxFit.fill,
+        ),
+        Container(
+          color: Theme.of(context).backgroundColor.withOpacity(0.8),
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            // TODO: Fix the ghost image alignemnt
             Image.asset(
-              'assets/misc/Graveyard.png',
-              width: size.width,
-              height: size.height,
-              fit: BoxFit.fill,
+                "assets/ghosts/ghost${_prefs.getInt("ghost_id").toString()}.png"),
+            Text(
+              currentResponse,
+              style: Theme.of(context)
+                  .textTheme
+                  .body1
+                  .copyWith(fontSize: 30, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
             ),
-            Container(
-              color: Theme
-                  .of(context)
-                  .backgroundColor
-                  .withOpacity(0.8),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Row(
               children: <Widget>[
-                // TODO: Fix the ghost image alignemnt
-                Image.asset(
-                    "assets/ghosts/ghost${_prefs.getInt("ghost_id").toString()}.png"),
-                Text(
-                  currentResponse,
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .body1
-                      .copyWith(fontSize: 30, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-                Row(
-                  children: <Widget>[
-                    Expanded(child: Text("Current Progress")),
-                    Container(
-                        width: 128,
-                        child: LinearProgressIndicator(
-                            value: currentGhost.progress,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Theme
-                                  .of(context)
-                                  .accentColor,
-                            )))
-                  ],
-                ),
-                GridView.count(
-                    childAspectRatio: 2,
-                    shrinkWrap: true,
-                    crossAxisCount: 2,
-                    children: List.generate(4, (index) {
-                      return makeGhostPicker(index);
-                    })),
+                Expanded(child: Text("Current Progress")),
+                Container(
+                    width: 128,
+                    child: LinearProgressIndicator(
+                        value:
+                            (currentGhost != null) ? currentGhost.progress : .0,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).accentColor,
+                        )))
               ],
-            )
+            ),
+            GridView.count(
+                childAspectRatio: 2,
+                shrinkWrap: true,
+                crossAxisCount: 2,
+                children: List.generate(4, (index) {
+                  return makeGhostPicker(index);
+                })),
           ],
-        ));
+        )
+      ],
+    ));
   }
 
   Container makeGhostPicker(int id) {
     return Container(
         padding: EdgeInsets.all(4.0),
         child: RaisedButton(
-          textColor: Theme
-              .of(context)
-              .textTheme
-              .body1
-              .color,
-          color: Theme
-              .of(context)
-              .buttonColor,
-          splashColor: Theme
-              .of(context)
-              .accentColor
-              .withOpacity(0.5),
+          textColor: Theme.of(context).textTheme.body1.color,
+          color: Theme.of(context).buttonColor,
+          splashColor: Theme.of(context).accentColor.withOpacity(0.5),
           shape: new ContinuousRectangleBorder(
               borderRadius: BorderRadius.circular(32.0)),
           onPressed: () => buttonHandler(id),

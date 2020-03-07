@@ -46,12 +46,8 @@ class DB {
   }
 
   Future<Ghost> getGhost(int id) async {
-    List<Map> maps = await _pool.query(
-        Constants.GHOST_TABLE,
-        columns: null,
-        where: '${Constants.GHOST_ID} = ?',
-        whereArgs: [id]
-    );
+    List<Map> maps = await _pool.query(Constants.GHOST_TABLE,
+        columns: null, where: '${Constants.GHOST_ID} = ?', whereArgs: [id]);
     if (maps.length > 0) {
       var map = maps.first;
       Level lvl;
@@ -75,14 +71,15 @@ class DB {
           break;
       }
       return Ghost(
+          id: map['${Constants.GHOST_ID}'],
           temperament: map['${Constants.GHOST_TEMPERAMENT}'],
-          progress: 0.2,
           //map['${Constants.GHOST_PROGRESS}'],
-          name: map['${Constants.GHOST_ID}'],
-          score: map['${Constants.GHOST_SCORE}'],
+          name: "Ronaldo",
           level: lvl,
+          score: map['${Constants.GHOST_SCORE}'],
+          progress: .9, //
           imageURI: null //TODO add image path to database
-      );
+          );
     } else {
       return null;
     }
@@ -102,11 +99,8 @@ class DB {
 
     dev.log("Set ghost id $id", name: "db.db");
     // Return the ID that was updated.
-    int res = await _pool.update(
-        Constants.GHOST_TABLE, row,
-        where: '${Constants.GHOST_ID} = ?',
-        whereArgs: [id]
-    );
+    int res = await _pool.update(Constants.GHOST_TABLE, row,
+        where: '${Constants.GHOST_ID} = ?', whereArgs: [id]);
 
     return res;
   }
@@ -129,11 +123,8 @@ class DB {
 
     dev.log("Unset ghost id $id", name: "db.db");
     // Return the ID that was updated.
-    int res = await _pool.update(
-        Constants.GHOST_TABLE, row,
-        where: '${Constants.GHOST_ID} = ?',
-        whereArgs: [id]
-    );
+    int res = await _pool.update(Constants.GHOST_TABLE, row,
+        where: '${Constants.GHOST_ID} = ?', whereArgs: [id]);
 
     return res;
   }
@@ -156,14 +147,13 @@ class DB {
   /// Creates the database tables and initializes the data.
   _seed(Database db, int version) async {
     dev.log("Seeding DB", name: "db.db");
-    await db.execute(
-        "CREATE TABLE ${Constants.GHOST_TABLE} ("
-            "${Constants.GHOST_ID} INTEGER PRIMARY KEY AUTOINCREMENT,"
-            "${Constants.GHOST_TEMPERAMENT} INTEGER NOT NULL,"
-            "${Constants.GHOST_DIFFICULTY} INTEGER NOT NULL,"
-            "${Constants.GHOST_PROGRESS} INTEGER NOT NULL,"
-            "${Constants.GHOST_SCORE} INTEGER NOT NULL,"
-            "${Constants.GHOST_ACTIVE} BOOLEAN NOT NULL"
+    await db.execute("CREATE TABLE ${Constants.GHOST_TABLE} ("
+        "${Constants.GHOST_ID} INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "${Constants.GHOST_TEMPERAMENT} INTEGER NOT NULL,"
+        "${Constants.GHOST_DIFFICULTY} INTEGER NOT NULL,"
+        "${Constants.GHOST_PROGRESS} INTEGER NOT NULL,"
+        "${Constants.GHOST_SCORE} INTEGER NOT NULL,"
+        "${Constants.GHOST_ACTIVE} BOOLEAN NOT NULL"
         ")");
 
     // Insert a default row for each ghost
