@@ -55,17 +55,18 @@ You are all set to start creating an awesome ghost story!
 ### Creating a Story 
 
 1. Click on the 'new story' button on the right, give your story a name and click on 'Add'.
-2. You will be directed to a new screen similar to the one shown below. This is your workspace for Twine where you can edit and add new elements to your story.
-3. Each box, as shown in the picture below, can be treated as an interaction scene between the player and the ghost. The green rocket symbol on the top left indicates that this is the starting point of the story. You get various options after clicking on the box like delete, edit and play. 
+2. You will be directed to a new screen similar to the one shown below. This is your workspace for Twine where you can edit and add new elements to your story. ![Step2](/twine/Step2.png)
+3. Each box, as shown in the picture below, can be treated as an interaction scene between the player and the ghost. The green rocket symbol on the top left indicates that this is the starting point of the story. You get various options after clicking on the box like delete, edit and play. <br>![Step3](/twine/Step3.png)
 4. Go ahead and click on the 'pencil icon' shown in the image above. This will open up the edit window of the box. 
-5. The edit window will look like the image shown below. It has a heading on top and a message/interaction space in its body. 
+5. The edit window will look like the image shown below. It has a heading on top and a message/interaction space in its body. <br>![Step5](/twine/Step5.png)
 6. Make sure to give a meaningful heading/title to the scene boxes which would describe the conversation that would take place in that particular scene. A good practice should be to keep it short. 
-7. Next step is to add interaction links which will create more scene boxes and progress the story further. In the picture below I have filled out the starting scene box with some example interaction with the ghost and the player.
+7. Next step is to add interaction links which will create more scene boxes and progress the story further. In the picture below, I have filled out the starting scene box with some example interaction with the ghost and the player. ![Step7](/twine/Step7.png)
 8. As shown in the picture above, you should follow these writing conventions while making an interaction.
    - The message that the ghost is saying/replying to the user choice should always be on the first line.
    - Enter each subsequent user reply to that message should be in a new line.
-   - To link a user reply to a new/existing scene box, use the following format `[[Reply to the ghost->Name of the scene box to link]]`.
-9.  This is what your workspace should look like after you have added three replies to the ghost message in the 'Start' scene box.
+   - To link a user reply to a new/existing scene box, use the following format `[[Reply to the ghost->Name of the scene box to link]]`
+9. This is what your workspace should look like after you have added three replies to the ghost message in the 'Start' scene box.<br>
+![Step9](/twine/Step9.png)
 10. After you are satisfied by the story you can export it to JSON simply by clicking on the play button on the bottom left part of the screen. This will open up a new tab with the JSON representation of the story you just created.
 
 These are the basic functionalities you need to create complex non-linear stories and export it to JSON for integration in the application. The next section will have more information of the generated JSON format.
