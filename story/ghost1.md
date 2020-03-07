@@ -11,9 +11,7 @@
 
 He was a clockmaker in 1634. At this time clockmaking was considered the most technically advanced trade out there.
 
-## Ghost 1, Level 0
-
-### Level 0 User Question Pool
+## Level 0 User Question Pool
 | Question | Progress |
 | -------- | -------- |
 | `Hello?` | `1`     |
@@ -26,17 +24,19 @@ He was a clockmaker in 1634. At this time clockmaking was considered the most te
 | `Who are you?` | `1` |
 | `Is there anything I can do for you?` | `0` |
 
-### Level 0 Ghost Response Pool
+## Level 0 Ghost Response Pool
 - `...`
 - `<you feel cold>`
 - `<you hear nothing>`
 - `<you feel apprehensive>`
 - `<your neck tingles>`
 
-### Level 1 Level-Up Event
+----
+
+## Level 1 Level-Up Event
 The ghost becomes more visible.
 
-### Level 1 User Question Pool
+## Level 1 User Question Pool
 | Question | Progress |
 | -------- | -------- |
 | `Hello?` | `1`     |
@@ -49,7 +49,7 @@ The ghost becomes more visible.
 | `Who are you?` | `1` |
 | `Is there anything I can do for you?` | `0` |
 
-### Level 1 Ghost Response Pool
+## Level 1 Ghost Response Pool
 | Responses |
 | --------- |
 |`...` |
@@ -62,10 +62,13 @@ The ghost becomes more visible.
 | `<you feel apprehensive>` |
 | `<your neck tingles>` |
 
+---
+
 ### Level 2 Level-Up Event
 The ghost now becomes fully visible.
 
 0. **Ghost**: `Hello, human...`
+
 | Response | pid | Effect |
 | -------- | --- | ------ |
 | `Hello` | None | None |
