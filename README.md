@@ -46,6 +46,10 @@ To export it to JSON format after creating the sotry you would have to add it ma
 4. Copy the following `https://lazerwalker.com/twison/format.js`and paste it into add a story format input field and press Add.
 5. Select 'Twison 0.0.1 by Mike Lazer-Walker' at the end of the story formats list.
 
+#### Note
+* If you want to test your story in the browser you can change the export format to 'Harlowe 3.1.0' and click 'Play'. Then you will be able to test your story in the browser iteself.
+* Twine does not have user accounts and cloud storage. It works on local browser cookies. It saves your stories by default in your browser cookies but you can also click on 'Publish to File' in the bottom bar in the menu which pops up after clicking on the name of your story. You can then import this file later in a different browser using Twine and continue your work!
+
 You are all set to start creating an awesome ghost story!
 
 ### Creating a Story 
@@ -78,7 +82,7 @@ You are all set to start creating an awesome ghost story!
 <img src="/twine/Step9.png"></img> 
 </div>
 10. After you are satisfied by the story you can export it to JSON simply by clicking on the play button on the bottom left part of the screen. This will open up a new tab with the JSON representation of the story you just created.
-
+<br>
 These are the basic functionalities you need to create complex non-linear stories and export it to JSON for integration in the application. The next section will have more information of the generated JSON format.
 
 ### Story JSON Format 
