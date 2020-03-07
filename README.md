@@ -34,17 +34,17 @@ Here are the current columns. Note that these are defined as constants in `db/co
 
 ## Twine
 
-We used [Twine](https://twinery.org/) to generate the story-based gameply in the application.
+We used [Twine](https://twinery.org/) to generate the story-based gamely in the application.
 
 ### Initial Setup
 
-To export it to JSON format after creating the sotry you would have to add it mannually as Twine does not support JSON export by default (Credits: [Twison](https://github.com/lazerwalker/twison)). If you have already added the JSON export format, skip to [Creating a Story](#creating-a-story).
+To export it to JSON format after creating the sotry you would have to add it manually as Twine does not support JSON export by default (Credits: [Twison](https://github.com/lazerwalker/twison)). If you have already added the JSON export format, skip to [Creating a Story](#creating-a-story).
 
 1. Open the [Twine 2](https://twinery.org/2/#!/stories) online editor.
 2. Click on 'Formats' button location on the right-hand side of the screen.
 3. Select the 'Add a New Format.
 4. Copy the following `https://lazerwalker.com/twison/format.js`and paste it into add a story format input field and press Add.
-5. Select 'Twison 0.0.1 by Mike Lazer-Walker' at the end of the sotry formats list.
+5. Select 'Twison 0.0.1 by Mike Lazer-Walker' at the end of the story formats list.
 
 You are all set to start creating an awesome ghost story!
 
@@ -57,14 +57,14 @@ You are all set to start creating an awesome ghost story!
 5. The edit window will look like the image shown below. It has a heading on top and a message/interaction space in its body. 
 6. Make sure to give a meaningful heading/title to the scene boxes which would describe the conversation that would take place in that particular scene. A good practice should be to keep it short. 
 7. Next step is to add interaction links which will create more scene boxes and progress the story further. In the picture below I have filled out the starting scene box with some example interaction with the ghost and the player.
-8. As shown in the picture above, you should follow these writing coventions while making an interaction:
+8. As shown in the picture above, you should follow these writing conventions while making an interaction:
    * The message that the ghost is saying/replying to the user choice should always be on the first line.
    * Enter each subsequent user reply to that message should be in a new line.
-   * To link a user reply to a new/exisitng scene box, use the following format `[[Reply to the ghost->Name of the scene box to link]]`.
+   * To link a user reply to a new/existing scene box, use the following format `[[Reply to the ghost->Name of the scene box to link]]`.
 9. This is what your workspace should look like after you have added three replies to the ghost message in the 'Start' scene box.
 10. After you are satisfied by the story you can export it to JSON simply by clicking on the play button on the bottom left part of the screen. This will open up a new tab with the JSON representation of the story you just created.
 
-These are the basic funcationalities you need to create complex non-linear stories and export it to JSON for integration in the application. The next section will have more information of the generated JSON format.
+These are the basic functionalities you need to create complex non-linear stories and export it to JSON for integration in the application. The next section will have more information of the generated JSON format.
 
 ### Story JSON Format 
 
@@ -134,8 +134,9 @@ Below is the JSON object for the story we just created in the section above.
   "ifid": "203045F5-2FFF-443B-8320-987CA95FEC15"
 }
 ```
+
 The JSON object consists of the following elements:
-1. The top level keys that are important for us to implement in the application are: `passages`, `startnode`. You can add more inofrmation in the top level to customize user experience and keep track of various things. 
+1. The top level keys that are important for us to implement in the application are: `passages`, `startnode`. You can add more information in the top level to customize user experience and keep track of various things. 
 2. The `passages` is the most important array of objects as it contains all the scene boxes and interactions that you created in Twine for our story.
 3. Each passage object represents the scene box in twine and the important elements inside that object are:
    * `text`: Contains the message from the ghost.
