@@ -25,11 +25,13 @@ He was a clockmaker in 1634. At this time clockmaking was considered the most te
 | `Is there anything I can do for you?` | `0` |
 
 ## Level 0 Ghost Response Pool
-- `...`
-- `<you feel cold>`
-- `<you hear nothing>`
-- `<you feel apprehensive>`
-- `<your neck tingles>`
+| Responses |
+| --------- |
+| `...` |
+| `<you feel cold>` |
+| `<you hear nothing>` |
+| `<you feel apprehensive>` |
+| `<your neck tingles>` |
 
 ----
 
@@ -47,44 +49,97 @@ The ghost becomes more visible.
 | `Why are you here?` | `1` |
 | `What would you like me to know?` | `1` |
 | `Who are you?` | `1` |
-| `Is there anything I can do for you?` | `0` |
+| `Is there anything I can do for you?` | `1` |
 
 ## Level 1 Ghost Response Pool
 | Responses |
 | --------- |
 |`...` |
-| `Hello...` |
-| `What do you want...` |
-| `Leave me alone` |
+| `<you feel a slight breeze>` |
 | `<you feel cold>` |
 | `<you hear nothing>` |
 | `<you hear a snap>` |
 | `<you feel apprehensive>` |
 | `<your neck tingles>` |
 
----
+----
 
-### Level 2 Level-Up Event
-The ghost now becomes fully visible.
+## Level 2 Level-Up Event
+The ghost now becomes fully visible. This interaction is super-short and brief: just the ghost saying something and the player's response.
 
 0. **Ghost**: `Hello, human...`
 
-| Response | pid | Effect |
-| -------- | --- | ------ |
-| `Hello` | None | None |
-| `<you scream in fear>` | None | 20% slower progress |
-|`Go away!` | None | 40% slower progress |
-| `What's your name?` | None | None |
+| Response | pid | Progress | Effect |
+| -------- | --- | -------- | ------ |
+| `Hello` | None | `5` |  None |
+| `<you scream in fear>` | None | `2` | 20% slower progress |
+| `Go away!` | None | `0` | 40% slower progress |
+| `What's your name?` | None | `5` | None |
 
-### Level 2 User Question Pool
-- `Hello?`
-- `I can sense a presence`
-- `Why are you here?`
-- `What would you like me to know?`
-- `Who are you?`
-- `Is there anything I can do for you?`
+## Level 2 User Question Pool
+| Question | Progress |
+| -------- | -------- |
+| `Hello`  | `1`     |
+| `I can sense a presence` | `1` |
+| `<you scream at the sight of a ghost>` |
+| `Why are you here?` | `1` |
+| `What would you like me to know?` | `1` |
+| `Who are you?` | `1` |
+| `Is there anything I can do for you?` | `1` |
 
-### Level 2 Ghost Response Pool
-- ``
+## Level 2 Ghost Response Pool
+| Response |
+| -------- |
+| `...` |
+| `<the ghost stares at you>` |
+| `<you feel cold>` |
+| `<you hear a snap>` |
+| `<you feel apprehensive>` |
+| `<your neck tingles>` |
 
+---
+
+## Level 3 Level-Up Event
+
+0. **Ghost**: `I wish I could go home...`
+
+| Response | pid | Progress |
+| -------- | --- | -------- |
+| `Too bad` | `1` | `0` |
+| `Where's home?` | `2` | `5` |
+| `Why?` | `3` | `5` |
+| `Do ghosts have homes?` | `4` | `3` |
+
+1. **Ghost**: `Too bad, huh? We'll see about that...` 
+- Effect: 20% slower progress
+
+2. **Ghost**: `London was home. My old home.`
+- Effect: None
+
+3. **Ghost**: `You think being a ghost is fun? I miss London.`
+- Effect: None
+
+4. **Ghost**: `That's... a good question. Sort of. But my human home was London.`
+- Effect: None
+
+## Level 3 User Question Pool
+| Question | Progress |
+| -------- | -------- |
+| `Hello`  | `1`     |
+| `I can sense a presence` | `1` |
+| `<you scream at the sight of a ghost>` |
+| `Why are you here?` | `1` |
+| `What would you like me to know?` | `1` |
+| `Who are you?` | `1` |
+| `Is there anything I can do for you?` | `1` |
+
+## Level 3 Ghost Response Pool
+| Response |
+| -------- |
+| `...` |
+| `<the ghost stares at you>` |
+| `<you feel cold>` |
+| `<you hear a snap>` |
+| `<you feel apprehensive>` |
+| `<your neck tingles>` |
 
