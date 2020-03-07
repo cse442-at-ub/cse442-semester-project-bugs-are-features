@@ -81,7 +81,7 @@ The ghost now becomes fully visible. This interaction is super-short and brief: 
 | -------- | -------- |
 | `Hello`  | `1`     |
 | `I can sense a presence` | `1` |
-| `<you scream at the sight of a ghost>` |
+| `<you scream at the sight of a ghost>` | `0` |
 | `Why are you here?` | `1` |
 | `What would you like me to know?` | `1` |
 | `Who are you?` | `1` |
@@ -127,7 +127,7 @@ The ghost now becomes fully visible. This interaction is super-short and brief: 
 | -------- | -------- |
 | `Hello`  | `1`     |
 | `I can sense a presence` | `1` |
-| `<you scream at the sight of a ghost>` |
+| `<you scream at the sight of a ghost>` | `0` |
 | `Why are you here?` | `1` |
 | `What would you like me to know?` | `1` |
 | `Who are you?` | `1` |
