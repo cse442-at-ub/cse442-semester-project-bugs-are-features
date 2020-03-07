@@ -116,6 +116,20 @@ class _GhostMainState extends State<GhostMain> {
                       .copyWith(fontSize: 30, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
+                Row(
+                  children: <Widget>[
+                    Expanded(child: Text("Current Progress")),
+                    Container(
+                        width: 128,
+                        child: LinearProgressIndicator(
+                            value: 0.5,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Theme
+                                  .of(context)
+                                  .accentColor,
+                            )))
+                  ],
+                ),
                 GridView.count(
                     childAspectRatio: 2,
                     shrinkWrap: true,

@@ -40,8 +40,7 @@ class SettingsButton extends StatelessWidget {
               pageBuilder: (context, animation1, animation2) => null);
           },
           child: Container(
-            margin: EdgeInsets.only(
-                top: MediaQuery.of(context).padding.top - 20, right: 60),
+            //margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top - 20, right: 60),
             width: 70,
             height: 150,
             child: Image.asset(
