@@ -82,7 +82,7 @@ You are all set to start creating an awesome ghost story!
 <img src="/twine/Step9.png"></img> 
 </div>
 10. After you are satisfied by the story you can export it to JSON simply by clicking on the play button on the bottom left part of the screen. This will open up a new tab with the JSON representation of the story you just created.
-<br>
+<br><br>
 These are the basic functionalities you need to create complex non-linear stories and export it to JSON for integration in the application. The next section will have more information of the generated JSON format.
 
 ### Story JSON Format 
