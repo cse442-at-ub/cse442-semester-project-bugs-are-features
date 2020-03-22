@@ -318,7 +318,7 @@ The ghost now becomes fully visible. This interaction is super-short and brief: 
 
 3. **Ghost**: `Oh really? The King of Britain cared.`
 
-4. **Ghost**: `I was an apprentice as a child. I had my own shop for 5 years and made 11 clocks within in it.
+4. **Ghost**: `I was an apprentice as a child. I had my own shop for 5 years and made 11 clocks within in it.`
 
 ---
 
