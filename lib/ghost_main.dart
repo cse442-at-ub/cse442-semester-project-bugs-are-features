@@ -92,6 +92,7 @@ class _GhostMainState extends State<GhostMain> {
       setState(() {
         currentState = json['states'][btnLinks[id]];
       });
+      currentGhost.score += 0.1;
       update();
     } else {
       _ghostReleased == _ghostReleased
@@ -138,7 +139,7 @@ class _GhostMainState extends State<GhostMain> {
                     width: 128,
                     child: LinearProgressIndicator(
                         value:
-                            (currentGhost != null) ? currentGhost.progress : .0,
+                        (currentGhost != null) ? currentGhost.score : 0.2,
                         valueColor: AlwaysStoppedAnimation<Color>(
                           Theme.of(context).accentColor,
                         )))

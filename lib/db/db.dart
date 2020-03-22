@@ -73,16 +73,22 @@ class DB {
       return Ghost(
           id: map['${Constants.GHOST_ID}'],
           temperament: map['${Constants.GHOST_TEMPERAMENT}'],
-          //map['${Constants.GHOST_PROGRESS}'],
           name: "Ronaldo",
           level: lvl,
-          score: map['${Constants.GHOST_SCORE}'],
-          progress: map['${Constants.GHOST_PROGRESS}'], //
+          score: map['${Constants.GHOST_SCORE}'].toDouble(),
+          progress: map['${Constants.GHOST_PROGRESS}'],
           imageURI: null //TODO add image path to database
           );
     } else {
       return null;
     }
+  }
+
+  Future<int> updateGhost(Ghost ghost) async {
+    dev.log("Set ghost id $ghost.id", name: "db.db");
+    // Return the ID that was updated.
+    return await _pool.update(Constants.GHOST_TABLE, ghost.toMap(),
+        where: '${Constants.GHOST_ID} = ?', whereArgs: [ghost.id]);
   }
 
   /// Sets a particular ghost id as chosen and active.
@@ -93,7 +99,7 @@ class DB {
 
     Map<String, dynamic> row = {
       Constants.GHOST_PROGRESS: 0,
-      Constants.GHOST_SCORE: 1,
+      Constants.GHOST_SCORE: 0.1,
       Constants.GHOST_ACTIVE: true
     };
 
@@ -117,7 +123,7 @@ class DB {
       Constants.GHOST_TEMPERAMENT: 1,
       Constants.GHOST_DIFFICULTY: id ~/ 3,
       Constants.GHOST_PROGRESS: 0,
-      Constants.GHOST_SCORE: 0,
+      Constants.GHOST_SCORE: 0.0,
       Constants.GHOST_ACTIVE: false
     };
 
@@ -152,7 +158,7 @@ class DB {
         "${Constants.GHOST_TEMPERAMENT} INTEGER NOT NULL,"
         "${Constants.GHOST_DIFFICULTY} INTEGER NOT NULL,"
         "${Constants.GHOST_PROGRESS} INTEGER NOT NULL,"
-        "${Constants.GHOST_SCORE} INTEGER NOT NULL,"
+        "${Constants.GHOST_SCORE} FLOAT NOT NULL,"
         "${Constants.GHOST_ACTIVE} BOOLEAN NOT NULL"
         ")");
 
@@ -162,7 +168,7 @@ class DB {
         Constants.GHOST_TEMPERAMENT: 1,
         Constants.GHOST_DIFFICULTY: i ~/ 3,
         Constants.GHOST_PROGRESS: 0,
-        Constants.GHOST_SCORE: 0,
+        Constants.GHOST_SCORE: 0.0,
         Constants.GHOST_ACTIVE: false
       };
       dev.log("Inserted ghost id ${i + 1}", name: "db.db");

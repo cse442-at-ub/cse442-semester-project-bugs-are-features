@@ -15,11 +15,11 @@ class Ghost {
   final Temperament temperament;
   final String name;
   final Level level;
-  final int score;
-  final int progress; //between 0 and 10
+  double score; //between 0.0 and 1.0
+  int progress;
   final String imageURI;
 
-  final int chatOptionScore; 
+  final int chatOptionScore;
 
   Ghost(
       {this.id,
@@ -30,6 +30,36 @@ class Ghost {
       this.progress,
       this.imageURI,
       this.chatOptionScore});
+
+  Map<String, dynamic> toMap() {
+    int lvl;
+    switch (level) {
+      case Level.Easy:
+        {
+          lvl = 0;
+        }
+        break;
+      case Level.Med:
+        {
+          lvl = 1;
+        }
+        break;
+      case Level.Hard:
+        {
+          lvl = 2;
+        }
+        break;
+    }
+    return {
+      "id": id,
+      "temperament": temperament,
+      "name": name,
+      "difficulty": lvl,
+      "progress": progress,
+      "score": score,
+      //TODO add columns in db for imageURI
+    };
+  }
 }
 
 //Getters and Setters
