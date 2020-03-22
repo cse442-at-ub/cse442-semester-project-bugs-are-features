@@ -11,50 +11,55 @@ enum Level {
 } //Levels. Easy: 0, Medium: 1, Hard: 2
 
 class Ghost {
-  final int id;
-  final Temperament temperament;
-  final String name;
-  final Level level;
-  final int score;
-  final int progress; //between 0 and 10
-  final String imageURI;
+  final int _id;
+  final Temperament _temperament;
+  final String _name;
+  final Level _level;
+  double _score; //between 0.0 and 1.0
+  int _progress;
+  final String _imageURI;
 
-  final int chatOptionScore;
+  final int _chatOptionScore;
 
-  Ghost(
-      {this.id,
-      this.temperament,
-      this.name,
-      this.level,
-      this.score,
-      this.progress,
-      this.imageURI,
-      this.chatOptionScore});
+  Ghost(this._id,
+      this._temperament,
+      this._name,
+      this._level,
+      this._score,
+      this._progress,
+      this._imageURI,
+      this._chatOptionScore);
+
+  Map<String, dynamic> toMap() {
+    return {
+      "id": _id,
+      "temperament": _temperament.index,
+      "name": _name,
+      "difficulty": _level.index,
+      "progress": _progress,
+      "score": _score,
+      //TODO add columns in db for imageURI
+    };
+  }
+
+  //Getters and Setters
+  int get id => _id;
+
+  Temperament get temperament => _temperament;
+
+  String get name => _name;
+
+  Level get level => level;
+
+  double get score => _score;
+
+  set score(double increment) => _score += increment;
+
+  int get progress => _progress;
+
+  set progress(int p) => progress = p;
+
+  String get imageURI => _imageURI;
+
+  int get chatOptionScore => _chatOptionScore;
 }
-
-//Getters and Setters
-int get id => id;
-set id(int gNo)  => id = gNo;
-
-Temperament get temperament => temperament;
-set temperament(Temperament t) => temperament = t;
-
-String get name => name;
-set name(String n) => name = n;
-
-Level get level => level;
-set level(Level l) => level = l;
-
-int get score => score;
-set score(int s) => score = s + chatOptionScore;
-
-int get progress => progress;
-set progress(int p) => progress = p;
-
-String get imageURI => imageURI;
-set imageURI(String img) => imageURI = img;
-
-int get chatOptionScore => chatOptionScore;
-set chatOptionScore(int cos) => chatOptionScore = cos;
-
-
