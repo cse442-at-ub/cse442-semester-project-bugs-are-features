@@ -34,7 +34,7 @@ class Ghost {
     return {
       "id": _id,
       "temperament": _temperament.index,
-      "name": _name,
+      //"name": _name,
       "difficulty": _level.index,
       "progress": _progress,
       "score": _score,
