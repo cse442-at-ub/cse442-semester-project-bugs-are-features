@@ -37,7 +37,6 @@ class _GhostMainState extends State<GhostMain> {
 
   var json;
   var currentState;
-  double _progressValue = 0;
   int startState = 0;
 
   var options = ["Hello", "What is your name?", "Blah", "Foo"];
@@ -89,17 +88,14 @@ class _GhostMainState extends State<GhostMain> {
   }
 
   void buttonHandler(int id) {
-    _updateProgress(id);
     if (btnLinks[id] != -1) {
+      _updateProgress(id);
       setState(() {
         currentState = json['states'][btnLinks[id]];
       });
       update();
     } else {
-      _ghostReleased == _ghostReleased
-          ? print("a")
-          : print("b"); //temp code for analysis clearing up
-      print("DONEEEEEEEEEEE");
+      print("End of this decision tree");
     }
   }
 
@@ -140,7 +136,7 @@ class _GhostMainState extends State<GhostMain> {
                 Container(
                     width: 128,
                     child: LinearProgressIndicator(
-                        value: (currentGhost != null) ? _progressValue : .0,
+                        value: (currentGhost != null) ? currentGhost.score : .0,
                         valueColor: AlwaysStoppedAnimation<Color>(
                           Theme.of(context).accentColor,
                         )))
@@ -183,10 +179,11 @@ class _GhostMainState extends State<GhostMain> {
   void _updateProgress(int value) {
     double increasedValue = value * 0.1;
     setState(() {
-      _progressValue += increasedValue;
-      if (_progressValue > 1) {
-        _progressValue = 0;
+      currentGhost.score += increasedValue;
+      if (currentGhost.score > 1) {
+        currentGhost.score = 0;
       }
+      _database.updateGhost(currentGhost);
     });
   }
 }
