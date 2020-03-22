@@ -134,8 +134,9 @@ class _GhostMainState extends State<GhostMain> {
               textAlign: TextAlign.center,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                Expanded(child: Text("Current Progress")),
+                Container(child: Text("Current Progress")),
                 Container(
                     width: 128,
                     child: LinearProgressIndicator(
