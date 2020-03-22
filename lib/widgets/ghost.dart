@@ -11,29 +11,26 @@ enum Level {
 } //Levels. Easy: 0, Medium: 1, Hard: 2
 
 class Ghost {
-  final int id;
-  final Temperament temperament;
-  final String name;
-  final Level level;
-  double score; //between 0.0 and 1.0
-  int progress;
-  final String imageURI;
+  final int _id;
+  final Temperament _temperament;
+  final String _name;
+  final Level _level;
+  double _score; //between 0.0 and 1.0
+  int _progress;
+  final String _imageURI;
 
-  final int chatOptionScore;
+  final int _chatOptionScore;
 
-  Ghost(
-      {this.id,
-      this.temperament,
-      this.name,
-      this.level,
-      this.score,
-      this.progress,
-      this.imageURI,
-      this.chatOptionScore});
+  Ghost(this._id,
+      this._temperament,
+      this._name,
+      this._level,
+      this._imageURI,
+      this._chatOptionScore);
 
   Map<String, dynamic> toMap() {
     int lvl;
-    switch (level) {
+    switch (_level) {
       case Level.Easy:
         {
           lvl = 0;
@@ -50,41 +47,55 @@ class Ghost {
         }
         break;
     }
+
+    int temp;
+    switch (_temperament) {
+      case Temperament.Friendly:
+        {
+          lvl = 0;
+        }
+        break;
+      case Temperament.Neutral:
+        {
+          lvl = 1;
+        }
+        break;
+      case Temperament.Angry:
+        {
+          lvl = 2;
+        }
+        break;
+    }
+
     return {
-      "id": id,
-      "temperament": temperament,
-      "name": name,
+      "id": _id,
+      "temperament": temp,
+      "name": _name,
       "difficulty": lvl,
-      "progress": progress,
-      "score": score,
+      "progress": _progress,
+      "score": _score,
       //TODO add columns in db for imageURI
     };
   }
+
+  //Getters and Setters
+  int get id => _id;
+
+  Temperament get temperament => _temperament;
+
+  String get name => _name;
+
+  Level get level => level;
+
+  double get score => _score;
+
+  set score(double increment) => _score += increment;
+
+  int get progress => _progress;
+
+  set progress(int p) => progress = p;
+
+  String get imageURI => _imageURI;
+
+  int get chatOptionScore => _chatOptionScore;
 }
-
-//Getters and Setters
-int get id => id;
-set id(int gNo)  => id = gNo;
-
-Temperament get temperament => temperament;
-set temperament(Temperament t) => temperament = t;
-
-String get name => name;
-set name(String n) => name = n;
-
-Level get level => level;
-set level(Level l) => level = l;
-
-int get score => score;
-set score(int s) => score = s + chatOptionScore;
-
-int get progress => progress;
-set progress(int p) => progress = p;
-
-String get imageURI => imageURI;
-set imageURI(String img) => imageURI = img;
-
-int get chatOptionScore => chatOptionScore;
-set chatOptionScore(int cos) => chatOptionScore = cos;
-
-
