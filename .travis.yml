@@ -6,8 +6,8 @@ os:
 android:
   components:
     - build-tools-28.0.3
-    - build-tools-29.0.3
-    - android-29
+    #- build-tools-29.0.3
+    - android-28
     - platform-tools
     - tools
   licenses:
@@ -38,7 +38,7 @@ before_install:
   - flutter doctor -v
   - yes | sdkmanager --update
   - flutter doctor -v
-  - sdkmanager --help
+  - sdkmanager --help; true
   - flutter doctor -v
   - yes | flutter doctor --android-licenses
   - flutter doctor -v
