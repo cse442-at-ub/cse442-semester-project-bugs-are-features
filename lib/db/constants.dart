@@ -19,7 +19,7 @@ const String GHOST_DIFFICULTY = 'difficulty';
 /// Current Ghost Story Progress: 0-10. 0 is a fresh game. INTEGER
 const String GHOST_PROGRESS = 'progress';
 
-/// Current Accumulated Points for the ghost. INTEGER
+/// Current Accumulated Points for the ghost. FLOAT
 const String GHOST_SCORE = 'score';
 
 /// If the ghost is "assigned" to user. BOOLEAN

@@ -37,6 +37,7 @@ class _GhostMainState extends State<GhostMain> {
 
   var json;
   var currentState;
+  double _progressValue = 0;
   int startState = 0;
 
   var options = ["Hello", "What is your name?", "Blah", "Foo"];
@@ -88,6 +89,7 @@ class _GhostMainState extends State<GhostMain> {
   }
 
   void buttonHandler(int id) {
+    _updateProgress(id);
     if (btnLinks[id] != -1) {
       setState(() {
         currentState = json['states'][btnLinks[id]];
@@ -132,13 +134,13 @@ class _GhostMainState extends State<GhostMain> {
               textAlign: TextAlign.center,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                Expanded(child: Text("Current Progress")),
+                Container(child: Text("Current Progress")),
                 Container(
                     width: 128,
                     child: LinearProgressIndicator(
-                        value:
-                            (currentGhost != null) ? currentGhost.progress : .0,
+                        value: (currentGhost != null) ? _progressValue : .0,
                         valueColor: AlwaysStoppedAnimation<Color>(
                           Theme.of(context).accentColor,
                         )))
@@ -150,7 +152,7 @@ class _GhostMainState extends State<GhostMain> {
                 crossAxisCount: 2,
                 children: List.generate(4, (index) {
                   return makeGhostPicker(index);
-                })),
+                }))
           ],
         )
       ],
@@ -161,7 +163,11 @@ class _GhostMainState extends State<GhostMain> {
     return Container(
         padding: EdgeInsets.all(4.0),
         child: RaisedButton(
-          textColor: Theme.of(context).textTheme.body1.color,
+          textColor: Theme
+              .of(context)
+              .textTheme
+              .body1
+              .color,
           color: Theme.of(context).buttonColor,
           splashColor: Theme.of(context).accentColor.withOpacity(0.5),
           shape: new ContinuousRectangleBorder(
@@ -172,5 +178,15 @@ class _GhostMainState extends State<GhostMain> {
             style: TextStyle(fontSize: 20.0),
           ),
         ));
+  }
+
+  void _updateProgress(int value) {
+    double increasedValue = value * 0.1;
+    setState(() {
+      _progressValue += increasedValue;
+      if (_progressValue > 1) {
+        _progressValue = 0;
+      }
+    });
   }
 }
