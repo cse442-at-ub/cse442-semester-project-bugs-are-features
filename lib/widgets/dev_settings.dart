@@ -54,8 +54,8 @@ class DevSettings extends StatelessWidget {
             color: pressAttention ? Theme.of(context).buttonColor : Colors.red[700],
             textColor: Theme.of(context).textTheme.body1.color,
             onPressed: () {
-              setState(pressAttention);
-              showAlertOnRelease(context);
+              _setState(pressAttention);
+              _showAlertOnRelease(context);
             },
             child: Text("Release ghost"),
           ),
@@ -86,14 +86,16 @@ class DevSettings extends StatelessWidget {
   }
 
   ///Shows the Alert dialogue on pressing Release ghost
-  showAlertOnRelease(BuildContext context) {
+  void _showAlertOnRelease(BuildContext context) {
     // set up the buttons
     Widget noButton =
     FlatButton(
       color: Colors.deepPurple,
       textColor: Colors.white,
       child: Text("No, I miss the ghost."),
-      onPressed:  () {},
+      onPressed:  () {
+        _closeDialog(context);
+      },
     );
 
     Widget yesButton =
@@ -103,6 +105,7 @@ class DevSettings extends StatelessWidget {
       child: Text("Yes, Release the ghost"),
       onPressed:  () {
         _ghostReleased();
+        _closeDialog(context);
       },
     );
 
@@ -127,8 +130,13 @@ class DevSettings extends StatelessWidget {
   }
 
   ///set state of presAttention to true when Release ghost is pressed.
-  void setState(bool pressAttention){
+  void _setState(bool pressAttention){
     pressAttention = true;
+  }
+
+  ///C;oses the dialog
+  void _closeDialog(BuildContext context) {
+    Navigator.pop(context);
   }
 
 }
