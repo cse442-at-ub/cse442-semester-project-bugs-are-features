@@ -25,53 +25,17 @@ class Ghost {
       this._temperament,
       this._name,
       this._level,
+      this._score,
+      this._progress,
       this._imageURI,
       this._chatOptionScore);
 
   Map<String, dynamic> toMap() {
-    int lvl;
-    switch (_level) {
-      case Level.Easy:
-        {
-          lvl = 0;
-        }
-        break;
-      case Level.Med:
-        {
-          lvl = 1;
-        }
-        break;
-      case Level.Hard:
-        {
-          lvl = 2;
-        }
-        break;
-    }
-
-    int temp;
-    switch (_temperament) {
-      case Temperament.Friendly:
-        {
-          lvl = 0;
-        }
-        break;
-      case Temperament.Neutral:
-        {
-          lvl = 1;
-        }
-        break;
-      case Temperament.Angry:
-        {
-          lvl = 2;
-        }
-        break;
-    }
-
     return {
       "id": _id,
-      "temperament": temp,
+      "temperament": _temperament.index,
       "name": _name,
-      "difficulty": lvl,
+      "difficulty": _level.index,
       "progress": _progress,
       "score": _score,
       //TODO add columns in db for imageURI

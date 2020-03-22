@@ -50,34 +50,16 @@ class DB {
         columns: null, where: '${Constants.GHOST_ID} = ?', whereArgs: [id]);
     if (maps.length > 0) {
       var map = maps.first;
-      Level lvl;
-      switch (map['${Constants.GHOST_DIFFICULTY}']) {
-        case 0:
-          {
-            lvl = Level.Easy;
-          }
-          break;
-
-        case 1:
-          {
-            lvl = Level.Med;
-          }
-          break;
-
-        case 2:
-          {
-            lvl = Level.Hard;
-          }
-          break;
-      }
       return Ghost(
-          id: map['${Constants.GHOST_ID}'],
-          temperament: map['${Constants.GHOST_TEMPERAMENT}'],
-          name: "Ronaldo",
-          level: lvl,
-          score: map['${Constants.GHOST_SCORE}'].toDouble(),
-          progress: map['${Constants.GHOST_PROGRESS}'],
-          imageURI: null //TODO add image path to database
+          map['${Constants.GHOST_ID}'],
+          Temperament.values[map['${Constants.GHOST_TEMPERAMENT}']],
+          "Ronaldo",
+          Level.values[map['${Constants.GHOST_DIFFICULTY}']],
+          map['${Constants.GHOST_SCORE}'].toDouble(),
+          map['${Constants.GHOST_PROGRESS}'],
+          null,
+          //TODO add image path to database
+          0
           );
     } else {
       return null;
