@@ -1,9 +1,9 @@
 import 'dart:developer' as dev;
 
+import 'package:ghost_app/db/debug.dart';
+import 'package:ghost_app/widgets/ghost.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-
-import 'package:ghost_app/db/debug.dart';
 
 import 'constants.dart' as Constants;
 
@@ -45,6 +45,34 @@ class DB {
     return _debug;
   }
 
+  Future<Ghost> getGhost(int id) async {
+    List<Map> maps = await _pool.query(Constants.GHOST_TABLE,
+        columns: null, where: '${Constants.GHOST_ID} = ?', whereArgs: [id]);
+    if (maps.length > 0) {
+      var map = maps.first;
+      return Ghost(
+          map['${Constants.GHOST_ID}'],
+          Temperament.values[map['${Constants.GHOST_TEMPERAMENT}']],
+          "Ronaldo",
+          Level.values[map['${Constants.GHOST_DIFFICULTY}']],
+          map['${Constants.GHOST_SCORE}'].toDouble(),
+          map['${Constants.GHOST_PROGRESS}'],
+          null,
+          //TODO add image path to database
+          0
+          );
+    } else {
+      return null;
+    }
+  }
+
+  Future<int> updateGhost(Ghost ghost) async {
+    dev.log("Set ghost id $ghost.id", name: "db.db");
+    // Return the ID that was updated.
+    return await _pool.update(Constants.GHOST_TABLE, ghost.toMap(),
+        where: '${Constants.GHOST_ID} = ?', whereArgs: [ghost.id]);
+  }
+
   /// Sets a particular ghost id as chosen and active.
   Future<int> setGhost(int id) async {
     if (id < 0 || id > 9) {
@@ -53,17 +81,14 @@ class DB {
 
     Map<String, dynamic> row = {
       Constants.GHOST_PROGRESS: 0,
-      Constants.GHOST_SCORE: 1,
+      Constants.GHOST_SCORE: 0.1,
       Constants.GHOST_ACTIVE: true
     };
 
     dev.log("Set ghost id $id", name: "db.db");
     // Return the ID that was updated.
-    int res = await _pool.update(
-        Constants.GHOST_TABLE, row,
-        where: '${Constants.GHOST_ID} = ?',
-        whereArgs: [id]
-    );
+    int res = await _pool.update(Constants.GHOST_TABLE, row,
+        where: '${Constants.GHOST_ID} = ?', whereArgs: [id]);
 
     return res;
   }
@@ -80,17 +105,14 @@ class DB {
       Constants.GHOST_TEMPERAMENT: 1,
       Constants.GHOST_DIFFICULTY: id ~/ 3,
       Constants.GHOST_PROGRESS: 0,
-      Constants.GHOST_SCORE: 0,
+      Constants.GHOST_SCORE: 0.0,
       Constants.GHOST_ACTIVE: false
     };
 
     dev.log("Unset ghost id $id", name: "db.db");
     // Return the ID that was updated.
-    int res = await _pool.update(
-        Constants.GHOST_TABLE, row,
-        where: '${Constants.GHOST_ID} = ?',
-        whereArgs: [id]
-    );
+    int res = await _pool.update(Constants.GHOST_TABLE, row,
+        where: '${Constants.GHOST_ID} = ?', whereArgs: [id]);
 
     return res;
   }
@@ -113,19 +135,26 @@ class DB {
   /// Creates the database tables and initializes the data.
   _seed(Database db, int version) async {
     dev.log("Seeding DB", name: "db.db");
-    await db.execute(
-        "CREATE TABLE ${Constants.GHOST_TABLE} ("
-            "${Constants.GHOST_ID} INTEGER PRIMARY KEY AUTOINCREMENT,"
-            // 0 = Angry, 1 = Neutral, 2 = Friendly
-            "${Constants.GHOST_TEMPERAMENT} INTEGER NOT NULL,"
-            // Difficulty 0 - 2, 2 being hardest
-            "${Constants.GHOST_DIFFICULTY} INTEGER NOT NULL,"
-            // 0-10 Story Progress
-            "${Constants.GHOST_PROGRESS} INTEGER NOT NULL,"
-            // Accumulated Points
-            "${Constants.GHOST_SCORE} INTEGER NOT NULL,"
-            // If the ghost is "assigned" to user
-            "${Constants.GHOST_ACTIVE} BOOLEAN NOT NULL"
+    await db.execute("CREATE TABLE ${Constants.GHOST_TABLE} ("
+        "${Constants.GHOST_ID} INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "${Constants.GHOST_TEMPERAMENT} INTEGER NOT NULL,"
+        "${Constants.GHOST_DIFFICULTY} INTEGER NOT NULL,"
+        "${Constants.GHOST_PROGRESS} INTEGER NOT NULL,"
+        "${Constants.GHOST_SCORE} FLOAT NOT NULL,"
+        "${Constants.GHOST_ACTIVE} BOOLEAN NOT NULL"
+        ")");
+    
+    await db.execute("CREATE TABLE ${Constants.GHOST_RESPONSES_TABLE} ("
+        "${Constants.GRESPONSE_PK} INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "${Constants.PIB} INTEGER NOT NULL,"
+        "${Constants.LEVEL} INTEGER NOT NULL,"
+        "${Constants.RESPONSE_IDS} STRING NOT NULL,"
+        "${Constants.ENCR_GHOST_ID} STRING NOT NULL"
+        ")");
+
+    await db.execute("CREATE TABLE ${Constants.USER_RESPONSES_TABLE} ("
+        "${Constants.URESPONSE_PK} INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "${Constants.UID} INTEGER NOT NULL"
         ")");
 
     // Insert a default row for each ghost
@@ -134,7 +163,7 @@ class DB {
         Constants.GHOST_TEMPERAMENT: 1,
         Constants.GHOST_DIFFICULTY: i ~/ 3,
         Constants.GHOST_PROGRESS: 0,
-        Constants.GHOST_SCORE: 0,
+        Constants.GHOST_SCORE: 0.0,
         Constants.GHOST_ACTIVE: false
       };
       dev.log("Inserted ghost id ${i + 1}", name: "db.db");
@@ -142,3 +171,4 @@ class DB {
     }
   }
 }
+
