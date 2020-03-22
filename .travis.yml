@@ -21,6 +21,7 @@ addons:
     packages:
       - libstdc++6
       - fonts-droid
+      - openjdk-8-jdk
 
 branches:
   only:
