@@ -143,6 +143,19 @@ class DB {
         "${Constants.GHOST_SCORE} FLOAT NOT NULL,"
         "${Constants.GHOST_ACTIVE} BOOLEAN NOT NULL"
         ")");
+    
+    await db.execute("CREATE TABLE ${Constants.GHOST_RESPONSES_TABLE} ("
+        "${Constants.GRESPONSE_PK} INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "${Constants.PIB} INTEGER NOT NULL,"
+        "${Constants.LEVEL} INTEGER NOT NULL,"
+        "${Constants.RESPONSE_IDS} STRING NOT NULL,"
+        "${Constants.ENCR_GHOST_ID} STRING NOT NULL"
+        ")");
+
+    await db.execute("CREATE TABLE ${Constants.USER_RESPONSES_TABLE} ("
+        "${Constants.URESPONSE_PK} INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "${Constants.UID} INTEGER NOT NULL"
+        ")");
 
     // Insert a default row for each ghost
     for (var i = 0; i < 9; i++) {
@@ -158,3 +171,4 @@ class DB {
     }
   }
 }
+
