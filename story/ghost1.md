@@ -68,7 +68,6 @@ The ghost becomes more visible.
 The ghost now becomes fully visible. This interaction is super-short and brief: just the ghost saying something and the player's response.
 
 0. **Ghost**: `Hello, human...`
-
 | Response | pid | Progress | Effect |
 | -------- | --- | -------- | ------ |
 | `Hello` | None | `5` |  None |
@@ -102,13 +101,12 @@ The ghost now becomes fully visible. This interaction is super-short and brief: 
 ## Level 3 Level-Up Event
 
 0. **Ghost**: `I wish I could go home...`
-
 | Response | pid | Progress |
 | -------- | --- | -------- |
-| `Too bad` | `1` | `0` |
-| `Where's home?` | `2` | `5` |
+| `Too bad.` | `1` | `0` |
+| `Where's home?` | `2` | `10` |
 | `Why?` | `3` | `5` |
-| `Do ghosts have homes?` | `4` | `3` |
+| `Do ghosts have homes?` | `4` | `5` |
 
 1. **Ghost**: `Too bad, huh? We'll see about that...` 
 - Effect: 20% slower progress
@@ -143,3 +141,140 @@ The ghost now becomes fully visible. This interaction is super-short and brief: 
 | `<you feel apprehensive>` |
 | `<your neck tingles>` |
 
+---
+
+## Level 4 Level-Up Event
+
+0. **Ghost**: `I used to care a lot about time. Not so much anymore...`
+| Response | pid | Progress |
+| -------- | --- | -------- |
+| `Why?` | `1` | `5` |
+| `I don't have time for this.` | `2` | `0` |
+| `What's so good about time?` | `1` | `10` |
+| `Oh, okay.` | `1` | `5` |
+
+1. **Ghost**: `Keeping track of time was my job.` 
+| Response | pid | Progress |
+| -------- | --- | -------- |
+| `How so?` | `3` | `5`      |
+| `What was your job?` | `3` | `10` |
+| `You had a job?` | `3` | `5` |
+| `I don't care.` | `4` | `0` |
+
+2. **Ghost**: `Then I don't have time for you. Which is ironic because I used to be a clock-maker.`
+
+3. **Ghost**: `I was a clock maker, and among the best of them, too.`
+| Response | pid | Progress |
+| -------- | --- | -------- |
+| `Neat!` | None | `5`      |
+| `Okay.` | None | `5` |
+| `That's a cool job.` | None | `10` |
+| `I don't care` | None | `0` |
+
+---
+
+## Level 5 Level-Up Event
+
+0. **Ghost**: `We have not formally introduced ourselves. I'm a ghost, so I know your name. Do you want to know mine?`
+| Response | pid | Progress |
+| -------- | --- | -------- |
+| `I already know it.` | `2` | `5` |
+| `Yes, absolutely!` | `1` | `10` |
+| `You're just a ghost, who cares?` | `3` | `0` |
+| `Sure, why not.` | `1` | `5` |
+
+1. **Ghost**: `My name is Samuel Tomlins. Or it used to be, at least.` 
+| Response | pid | Progress |
+| -------- | --- | -------- |
+| `Pleased to meet you, Samuel!` | `2` | `10` |
+| `Can I call you Sam?` | `3` | `5` |
+| `You're still just a ghost.` | `4` | `0` |
+| `Good to know.` | None | `5` |
+
+2. **Ghost**: `Likewise.`
+
+3. **Ghost**: `No, never.`
+
+4. **Ghost**: `That's true. And you're just a dumb human.`
+
+---
+
+## Level 6 Level-Up Event
+
+0. **Ghost**: `How old do you think I am?`
+| Response | pid | Progress |
+| -------- | --- | -------- |
+| `Over 300 years old.` | `1` | `10` |
+| `In your twenties.` | `1` | `10` |
+| `Too old.` | `2` | `0` |
+| `I have no clue.` | `3` | `5` |
+
+1. **Ghost**: `I guess that's sort of right. I ... became a ghost when I was 26, but that was a long time ago.` 
+| Response | pid | Progress |
+| -------- | --- | -------- |
+| `You're younger than I thought.` | `4` | `5` |
+| `You mean died?` | `5` | `0` |
+| `How long ago?` | `4` | `10` |
+| `So how old are you actually?` | `4` | `5` |
+
+2. **Ghost**: `Wrong. I died young, at 26, so I can never be too old!`
+| Response | pid | Progress |
+| -------- | --- | -------- |
+| `You're younger than I thought.` | `4` | `5` |
+| `That's up for debate.` | `5` | `0` |
+| `When did you pass?` | `4` | `10` |
+| `So how old are you actually?` | `4` | `5` |
+
+3. **Ghost**: `I'll give you a hint: I am ... was ... 20 years old, plus six.`
+| Response | pid | Progress |
+| -------- | --- | -------- |
+| `You're younger than I thought.` | `4` | `5` |
+| `You mean died?` | `5` | `0` |
+| `How long ago?` | `4` | `10` |
+| `So how old are you actually?` | `4` | `5` |
+
+4. **Ghost**: `That was over 400 years ago. I was born in 1608 and ... became a ghost in 1634.`
+
+5. **Ghost**: `Yes. Thanks for reminding me.`
+
+---
+
+## Level 7 Level-Up Event
+
+0. **Ghost**: `You know what the worst part of being a ghost is?`
+| Response | pid | Progress |
+| -------- | --- | -------- |
+| `You're dead?` | `1` | `5` |
+| `It seems kind of cool to me, actually.` | `2` | `0` |
+| `It must be boring.` | `1` | `5` |
+| `The lack of company?` | `3` | `10` |
+
+1. **Ghost**: `Well, yeah. But I miss my wife.` 
+| Response | pid | Progress |
+| -------- | --- | -------- |
+| `Isn't there some way to see her?` | `5` | `10` |
+| `Oh yeah, she's long gone.` | `4` | `0` |
+| `I'm sorry to hear that.` | `5` | `5` |
+| `Is there anything I can do?` | `5` | `5` |
+
+2. **Ghost**: `Maybe I can help you become one.`
+| Response | pid | Progress |
+| -------- | --- | -------- |
+| `Sorry, I didn't mean that.` | `0` | `0` |
+| `Please do.` | `4` | `0` |
+| `Uhh... I think I'll pass.` | `0` | `0` |
+| `... what's the worst part?` | `3` | `0` |
+
+3. **Ghost**: `Yes, exactly. I miss my wife.` 
+| Response | pid | Progress |
+| -------- | --- | -------- |
+| `Isn't there some way to see her?` | `5` | `10` |
+| `Oh yeah, she's long gone.` | `4` | `0` |
+| `I'm sorry to hear that.` | `6` | `10` |
+| `Is there anything I can do?` | `5` | `5` |
+
+4. **Ghost**: `...`
+
+5. **Ghost**: `I don't know. But as long as I'm stuck as a ghost, I won't be able to find out.`
+
+6. **Ghost**: `Thanks. I hope that if I can be released from being a ghost, I'll be able to see her again.`
