@@ -77,7 +77,7 @@ class DB {
           name: "Ronaldo",
           level: lvl,
           score: map['${Constants.GHOST_SCORE}'],
-          progress: .9, //
+          progress: map['${Constants.GHOST_PROGRESS}'], //
           imageURI: null //TODO add image path to database
           );
     } else {
