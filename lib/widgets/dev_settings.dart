@@ -23,6 +23,8 @@ class DevSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool pressAttention = false; //toggled when release ghost is pressed
+
     return Container(
       constraints: BoxConstraints(
           maxHeight: 300.0,
@@ -49,10 +51,11 @@ class DevSettings extends StatelessWidget {
 
           // Set has_ghost = false
           FlatButton(
-            color: Theme.of(context).buttonColor,
+            color: pressAttention ? Theme.of(context).buttonColor : Colors.red[700],
             textColor: Theme.of(context).textTheme.body1.color,
             onPressed: () {
-              _ghostReleased();
+              setState(pressAttention);
+              showAlertOnRelease(context);
             },
             child: Text("Release ghost"),
           ),
@@ -81,4 +84,53 @@ class DevSettings extends StatelessWidget {
       )
     );
   }
+
+  ///Shows the Alert dialogue on pressing Release ghost
+  showAlertOnRelease(BuildContext context) {
+    // set up the buttons
+    Widget noButton =
+    FlatButton(
+      color: Colors.deepPurple,
+      textColor: Colors.white,
+      child: Text("No, I miss the ghost."),
+      onPressed:  () {},
+    );
+
+    Widget yesButton =
+    FlatButton(
+      color: Colors.deepPurple,
+      textColor: Colors.white,
+      child: Text("Yes, Release the ghost"),
+      onPressed:  () {
+        _ghostReleased();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("AlertDialog"),
+      backgroundColor: Colors.purple,
+      content: Text("Are you sure you wanna release the ghost?"),
+      actions: [
+        noButton,
+        yesButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  ///set state of presAttention to true when Release ghost is pressed.
+  void setState(bool pressAttention){
+    pressAttention = true;
+  }
+
 }
+
+
