@@ -19,7 +19,7 @@ class Ghost {
   final int progress; //between 0 and 10
   final String imageURI;
 
-  final int chatOptionScore; 
+  final int chatOptionScore;
 
   Ghost(
       {this.id,
