@@ -129,7 +129,7 @@ class _GhostMainState extends State<GhostMain> {
               currentResponse,
               style: Theme.of(context)
                   .textTheme
-                  .bodyText1
+                  .body1
                   .copyWith(fontSize: 30, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
@@ -162,7 +162,11 @@ class _GhostMainState extends State<GhostMain> {
     return Container(
         padding: EdgeInsets.all(4.0),
         child: RaisedButton(
-          textColor: Theme.of(context).textTheme.bodyText1.color,
+          textColor: Theme
+              .of(context)
+              .textTheme
+              .body1
+              .color,
           color: Theme.of(context).buttonColor,
           splashColor: Theme.of(context).accentColor.withOpacity(0.5),
           shape: new ContinuousRectangleBorder(
