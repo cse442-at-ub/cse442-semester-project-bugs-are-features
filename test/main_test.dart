@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:ghost_app/main.dart';
+import 'package:ghost_app/app.dart';
 
 void main() {
   // TODO: Make these tests work. Requires learning Flutter testing...
