@@ -6,8 +6,9 @@ import 'settings.dart';
 class SettingsButton extends StatelessWidget {
   /// The app wide preferences.
   final SharedPreferences _prefs;
+  final VoidCallback _ghostReleased;
 
-  SettingsButton(this._prefs);
+  SettingsButton(this._prefs, this._ghostReleased);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class SettingsButton extends StatelessWidget {
                     opacity: a1.value,
                     child: Center(
                       child: Material(
-                        child: Settings(_prefs),
+                        child: Settings(_prefs, _ghostReleased),
                       ),
                     ),
                   ),
