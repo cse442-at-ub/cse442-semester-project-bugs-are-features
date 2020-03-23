@@ -67,7 +67,7 @@ class _RootPageState extends State<RootPage> {
       view.add(graveyard);
     }
 
-    view.add(SettingsButton(_prefs));
+    view.add(SettingsButton(_prefs, _ghostReleased));
 
     // Add Dev Settings button _only_ if in development
     assert(() {
