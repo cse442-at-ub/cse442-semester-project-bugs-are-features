@@ -136,7 +136,7 @@ class _GhostMainState extends State<GhostMain> {
                 Container(
                     width: 128,
                     child: LinearProgressIndicator(
-                        value: (currentGhost != null) ? _progressValue : .0,
+                        value: (currentGhost != null) ? currentGhost.score : .0,
                         valueColor: AlwaysStoppedAnimation<Color>(
                           Theme.of(context).accentColor,
                         )))
@@ -185,6 +185,7 @@ class _GhostMainState extends State<GhostMain> {
         _progressValue = 0;
         currentLevel = 2;
       }
+      _database.updateGhost(currentGhost);
     });
   }
 }
