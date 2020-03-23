@@ -5,8 +5,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ghost_app/widgets/ghost.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'dart:math';
 import 'db/db.dart';
+
+class Response {
+  final String response;
+  final int pid;
+  final int value;
+
+  Response(this.response, this.pid, this.value);
+}
 
 class GhostMain extends StatefulWidget {
   /// The app wide preferences.
@@ -37,71 +45,62 @@ class _GhostMainState extends State<GhostMain> {
 
   var json;
   var currentState;
+  var currentLevel = 2;
+  double _progressValue = 0;
   int startState = 0;
 
-  var options = ["Hello", "What is your name?", "Blah", "Foo"];
-  var response = ["Hi", "Ghost", "Bloo", "Bar"];
-  var btnLinks = [0, 0, 0, 0]; // Set all btn links to state 0
-  var btnText = ["Loading...", "Loading...", "Loading...", "Loading..."];
+  var responseObjects = [];
   var currentResponse = "Loading";
+
+  void _loadDatabase() {
+    _database.getGhost(_prefs.getInt('ghost_id')).then((dbGhost) {
+      print("current id of ghost = " + _prefs.getInt('ghost_id').toString());
+      currentGhost = dbGhost;
+      print("Ghost is called " + currentGhost.name);
+    });
+  }
+
+  void _loadTwineData() {
+    rootBundle.loadString("assets/data/Level$currentLevel.json").then((data) {
+      setState(() {
+        var random = Random();
+        json = jsonDecode(data);
+        var passages = json["passages"];
+        var len = passages.length;
+        var ghostResponse = passages[random.nextInt(len)];
+        int newLine = ghostResponse["text"].indexOf("\n");
+        currentResponse = newLine != -1
+            ? ghostResponse["text"].substring(0, newLine)
+            : ghostResponse["text"];
+        var start = passages[0];
+        var links = start["links"];
+        responseObjects.clear();
+        for (var j = 0; j < 4; j++) {
+          var i = random.nextInt(links.length - j);
+          var message = links[i]["name"];
+          int pid = int.parse(links[i]["pid"]);
+          int value = int.parse(passages[pid - 1]["tags"][0]);
+          Response responseObject = Response(message, pid, value);
+          responseObjects.add(responseObject);
+        }
+      });
+    });
+  }
 
   @override
   initState() {
     super.initState();
-    print("INIT STATE");
-    _database.getGhost(_prefs.getInt('ghost_id')).then((dbGhost) => {
-          setState(() {
-            print("current id of ghost = " +
-                _prefs.getInt('ghost_id').toString());
-            currentGhost = dbGhost;
-            print("Ghost is called " + currentGhost.name);
-          })
-        });
-    rootBundle.loadString("assets/data/DummyData.json").then((data) => {
-          setState(() {
-            json = jsonDecode(data);
-            currentState = json['states'][startState];
-            print("Hello : " + currentState['prompt']);
-            update();
-          })
-        });
+    _loadDatabase();
+    _loadTwineData();
   }
 
-  void update() {
-    for (int i = 0; i < 4; i++) {
-      setState(() {
-        if (currentState['options'][i]['link'] != null) {
-          btnLinks[i] =
-              int.parse(currentState['options'][i]['link'].toString());
-        } else {
-          btnLinks[i] = -1;
-        }
-        if (currentState['options'][i]['value'] != null) {
-          btnText[i] = currentState['options'][i]['value'];
-        } else {
-          btnText[i] = "";
-        }
-
-        currentResponse = currentState['prompt'];
-      });
-    }
-  }
-
-  void buttonHandler(int id) {
-    if (btnLinks[id] != -1) {
-      _updateProgress(id);
-      setState(() {
-        currentState = json['states'][btnLinks[id]];
-      });
-      update();
-    } else {
-      print("End of this decision tree");
-    }
+  void buttonHandler(var response) {
+    _updateProgress(response.value);
+    _loadTwineData();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("Now Building");
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         body: Stack(
@@ -132,11 +131,12 @@ class _GhostMainState extends State<GhostMain> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                Container(child: Text("Current Progress")),
+                Container(
+                    child: Text("Current Progress (Level $currentLevel)")),
                 Container(
                     width: 128,
                     child: LinearProgressIndicator(
-                        value: (currentGhost != null) ? currentGhost.score : .0,
+                        value: _progressValue,
                         valueColor: AlwaysStoppedAnimation<Color>(
                           Theme.of(context).accentColor,
                         )))
@@ -159,18 +159,16 @@ class _GhostMainState extends State<GhostMain> {
     return Container(
         padding: EdgeInsets.all(4.0),
         child: RaisedButton(
-          textColor: Theme
-              .of(context)
-              .textTheme
-              .body1
-              .color,
+          textColor: Theme.of(context).textTheme.body1.color,
           color: Theme.of(context).buttonColor,
           splashColor: Theme.of(context).accentColor.withOpacity(0.5),
           shape: new ContinuousRectangleBorder(
               borderRadius: BorderRadius.circular(32.0)),
-          onPressed: () => buttonHandler(id),
+          onPressed: () => buttonHandler(responseObjects[id]),
           child: Text(
-            btnText[id],
+            responseObjects.length == 0
+                ? "Loading"
+                : responseObjects[id].response,
             style: TextStyle(fontSize: 20.0),
           ),
         ));
@@ -179,9 +177,13 @@ class _GhostMainState extends State<GhostMain> {
   void _updateProgress(int value) {
     double increasedValue = value * 0.1;
     setState(() {
-      currentGhost.score += increasedValue;
-      if (currentGhost.score > 1) {
-        currentGhost.score = 0;
+      _progressValue += increasedValue;
+      if (_progressValue >= 1) {
+        _progressValue = 0;
+        currentLevel = 3;
+      } else if (_progressValue <= 0) {
+        _progressValue = 0;
+        currentLevel = 2;
       }
       _database.updateGhost(currentGhost);
     });
