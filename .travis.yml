@@ -67,3 +67,6 @@ after_script:
 cache:
   directories:
     - $HOME/.pub-cache
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache
