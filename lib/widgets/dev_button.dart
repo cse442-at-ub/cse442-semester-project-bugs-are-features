@@ -29,48 +29,47 @@ class DevButton extends StatelessWidget {
         child: GestureDetector(
           onTap: () {
             showGeneralDialog(
-              barrierColor: Theme.of(context).backgroundColor.withOpacity(0.5),
-              transitionBuilder: (context, a1, a2, widget) {
-                return AnimatedOpacity(
-                  opacity: 1.0,
-                  duration: Duration(milliseconds: 350),
-                  child: Opacity(
-                    opacity: a1.value,
-                    child: Center(
-                      child: Material(
-                        child: DevSettings(
-                          _prefs,
-                          _ghostReleased,
-                          _database,
+                barrierColor:
+                    Theme.of(context).backgroundColor.withOpacity(0.5),
+                transitionBuilder: (context, a1, a2, widget) {
+                  return AnimatedOpacity(
+                    opacity: 1.0,
+                    duration: Duration(milliseconds: 350),
+                    child: Opacity(
+                      opacity: a1.value,
+                      child: Center(
+                        child: Material(
+                          child: DevSettings(
+                            _prefs,
+                            _ghostReleased,
+                            _database,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              },
-              transitionDuration: Duration(milliseconds: 350),
-              barrierDismissible: true,
-              barrierLabel: 'Development Settings',
-              context: context,
-              // pageBuilder isn't needed because we used transitionBuilder
-              // However, it's still required by the showGeneralDialog widget
-              pageBuilder: (context, animation1, animation2) => null);
+                  );
+                },
+                transitionDuration: Duration(milliseconds: 350),
+                barrierDismissible: true,
+                barrierLabel: 'Development Settings',
+                context: context,
+                // pageBuilder isn't needed because we used transitionBuilder
+                // However, it's still required by the showGeneralDialog widget
+                pageBuilder: (context, animation1, animation2) => null);
           },
           child: Container(
-            margin: EdgeInsets.only(
-                top: MediaQuery.of(context).padding.top - 20),
-            child: FlatButton(
-              color: Theme.of(context).buttonColor,
-              textColor: Theme.of(context).textTheme.body1.color,
-              child: Text(
-                "Dev Settings",
-                style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
-                ),
-              )
-            )
-          ),
+              margin:
+                  EdgeInsets.only(top: MediaQuery.of(context).padding.top - 20),
+              child: FlatButton(
+                  color: Theme.of(context).buttonColor,
+                  textColor: Theme.of(context).textTheme.body1.color,
+                  child: Text(
+                    "Dev Settings",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ))),
         ));
   }
 }

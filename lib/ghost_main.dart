@@ -8,6 +8,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'db/db.dart';
 
+class Response {
+  final String response;
+  final int pid;
+  final int value;
+
+  Response(this.response, this.pid, this.value);
+}
+
 class GhostMain extends StatefulWidget {
   /// The app wide preferences.
   final SharedPreferences _prefs;
@@ -44,28 +52,52 @@ class _GhostMainState extends State<GhostMain> {
   var response = ["Hi", "Ghost", "Bloo", "Bar"];
   var btnLinks = [0, 0, 0, 0]; // Set all btn links to state 0
   var btnText = ["Loading...", "Loading...", "Loading...", "Loading..."];
+  var respObjects = [];
   var currentResponse = "Loading";
+
+  void _loadDummyData() {
+    rootBundle.loadString("assets/data/DummyData.json").then((data) {
+      json = jsonDecode(data);
+      currentState = json['states'][startState];
+      print("Hello : " + currentState['prompt']);
+      update();
+    });
+  }
+
+  void _loadDatabase() {
+    _database.getGhost(_prefs.getInt('ghost_id')).then((dbGhost) {
+      print("current id of ghost = " + _prefs.getInt('ghost_id').toString());
+      currentGhost = dbGhost;
+      print("Ghost is called " + currentGhost.name);
+    });
+  }
+
+  void _loadTwineData() {
+    rootBundle.loadString("assets/data/Twine.json").then((data) {
+      setState(() {
+        json = jsonDecode(data);
+        var passages = json["passages"];
+        var start = passages[0];
+        int newLine = start["text"].indexOf("\n");
+        currentResponse = start["text"].substring(0, newLine);
+        var links = start["links"];
+        for (var i = 0; i < links.length; i++) {
+          var message = links[i]["name"];
+          int pid = int.parse(links[i]["pid"]);
+          int value = int.parse(passages[pid - 1]["tags"][0]);
+          Response responseObject = Response(message, pid, value);
+          respObjects.add(responseObject);
+        }
+      });
+    });
+  }
 
   @override
   initState() {
+    print("Init");
     super.initState();
-    print("INIT STATE");
-    _database.getGhost(_prefs.getInt('ghost_id')).then((dbGhost) => {
-          setState(() {
-            print("current id of ghost = " +
-                _prefs.getInt('ghost_id').toString());
-            currentGhost = dbGhost;
-            print("Ghost is called " + currentGhost.name);
-          })
-        });
-    rootBundle.loadString("assets/data/DummyData.json").then((data) => {
-          setState(() {
-            json = jsonDecode(data);
-            currentState = json['states'][startState];
-            print("Hello : " + currentState['prompt']);
-            update();
-          })
-        });
+    _loadDatabase();
+    _loadTwineData();
   }
 
   void update() {
@@ -88,19 +120,19 @@ class _GhostMainState extends State<GhostMain> {
     }
   }
 
-  void buttonHandler(int id) {
-    _updateProgress(id);
-    if (btnLinks[id] != -1) {
-      setState(() {
-        currentState = json['states'][btnLinks[id]];
-      });
-      update();
-    } else {
-      _ghostReleased == _ghostReleased
-          ? print("a")
-          : print("b"); //temp code for analysis clearing up
-      print("DONEEEEEEEEEEE");
-    }
+  void buttonHandler(var response) {
+    _updateProgress(response.value);
+    // if (btnLinks[id] != -1) {
+    //   setState(() {
+    //     currentState = json['states'][btnLinks[id]];
+    //   });
+    //   update();
+    // } else {
+    //   _ghostReleased == _ghostReleased
+    //       ? print("a")
+    //       : print("b"); //temp code for analysis clearing up
+    //   print("DONEEEEEEEEEEE");
+    // }
   }
 
   @override
@@ -163,18 +195,14 @@ class _GhostMainState extends State<GhostMain> {
     return Container(
         padding: EdgeInsets.all(4.0),
         child: RaisedButton(
-          textColor: Theme
-              .of(context)
-              .textTheme
-              .body1
-              .color,
+          textColor: Theme.of(context).textTheme.body1.color,
           color: Theme.of(context).buttonColor,
           splashColor: Theme.of(context).accentColor.withOpacity(0.5),
           shape: new ContinuousRectangleBorder(
               borderRadius: BorderRadius.circular(32.0)),
-          onPressed: () => buttonHandler(id),
+          onPressed: () => buttonHandler(respObjects[id]),
           child: Text(
-            btnText[id],
+            respObjects.length == 0 ? "Loading" : respObjects[id].response,
             style: TextStyle(fontSize: 20.0),
           ),
         ));
