@@ -136,7 +136,7 @@ class _GhostMainState extends State<GhostMain> {
                 Container(
                     width: 128,
                     child: LinearProgressIndicator(
-                        value: (currentGhost != null) ? currentGhost.score : .0,
+                        value: _progressValue,
                         valueColor: AlwaysStoppedAnimation<Color>(
                           Theme.of(context).accentColor,
                         )))
