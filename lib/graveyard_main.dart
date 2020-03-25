@@ -42,26 +42,16 @@ class GraveyardMain extends StatelessWidget {
     return Container(
         padding: EdgeInsets.all(4.0),
         child: RaisedButton(
-          color: Theme
-              .of(context)
-              .buttonColor,
-          textColor: Theme
-              .of(context)
-              .textTheme
-              .body1
-              .color,
+          color: Theme.of(context).buttonColor,
+          textColor: Theme.of(context).textTheme.body1.color,
           disabledColor: Colors.grey,
           disabledTextColor: Colors.black,
-          splashColor: Theme
-              .of(context)
-              .accentColor,
+          splashColor: Theme.of(context).accentColor,
           shape: BeveledRectangleBorder(
               borderRadius: new BorderRadius.only(
                   topLeft: Radius.circular(16.0),
                   topRight: Radius.circular(16.0)),
-              side: BorderSide(color: Theme
-                  .of(context)
-                  .backgroundColor)),
+              side: BorderSide(color: Theme.of(context).backgroundColor)),
           onPressed: () {
             _ghostChosen(id);
           },

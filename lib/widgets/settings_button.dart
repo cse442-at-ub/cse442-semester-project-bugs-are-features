@@ -12,11 +12,13 @@ class SettingsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-        alignment: Alignment.topRight,
-        child: GestureDetector(
-          onTap: () {
-            showGeneralDialog(
+    return Container(
+      margin: EdgeInsets.only(
+          top: MediaQuery.of(context).padding.top - 20, right: 10),
+      alignment: Alignment.topRight,
+      child: GestureDetector(
+        onTap: () {
+          showGeneralDialog(
               barrierColor: Theme.of(context).backgroundColor.withOpacity(0.5),
               transitionBuilder: (context, a1, a2, widget) {
                 return AnimatedOpacity(
@@ -39,16 +41,19 @@ class SettingsButton extends StatelessWidget {
               // pageBuilder isn't needed because we used transitionBuilder
               // However, it's still required by the showGeneralDialog widget
               pageBuilder: (context, animation1, animation2) => null);
-          },
-          child: Container(
-            //margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top - 20, right: 60),
-            width: 70,
-            height: 150,
-            child: Image.asset(
-              "assets/misc/GrimReaper.png",
-              fit: BoxFit.fitHeight,
-            ),
+        },
+        child: Container(
+          width: 100,
+          height: 200,
+          // color: Colors.black,
+          child: Image.asset(
+            "assets/misc/GrimReaper.png",
+            fit: BoxFit.fitHeight,
+            height: 100,
+            width: 2,
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

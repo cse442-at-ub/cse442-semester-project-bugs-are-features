@@ -17,62 +17,65 @@ class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool pressAttention = false; //toggled when release ghost is pressed
+    int ghostId = _prefs.getInt('ghost_id');
 
     return Container(
-      constraints: BoxConstraints(
-          maxHeight: 300.0,
-          maxWidth: 250.0,
-          minWidth: 250.0,
-          minHeight: 150.0),
-      color: Theme.of(context).backgroundColor,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          // TODO: Add settings!
-          Padding(
-            padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
-            child: Text(
-              "Settings",
-              textAlign: TextAlign.center,
-              textDirection: TextDirection.ltr,
-                style: Theme.of(context).textTheme.body1.copyWith(fontSize: 35.0)
-            ),
-          ),
+        constraints: BoxConstraints(
+            maxHeight: 300.0,
+            maxWidth: 250.0,
+            minWidth: 250.0,
+            minHeight: 150.0),
+        color: Theme.of(context).backgroundColor,
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              // TODO: Add settings!
+              Padding(
+                padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
+                child: Text("Settings",
+                    textAlign: TextAlign.center,
+                    textDirection: TextDirection.ltr,
+                    style: Theme.of(context)
+                        .textTheme
+                        .body1
+                        .copyWith(fontSize: 35.0)),
+              ),
 
-          FlatButton(
-            color: pressAttention ? Theme.of(context).buttonColor : Colors.red[700],
-            textColor: Theme.of(context).textTheme.body1.color,
-            onPressed: () {
-              _setState(pressAttention);
-              _showAlertOnRelease(context);
-            },
-            child: Text("Release ghost"),
-          ),
-        ]
-      )
-    );
+              Visibility(
+                visible: ghostId == 0 ? false : true,
+                child: FlatButton(
+                  color: pressAttention
+                      ? Theme.of(context).buttonColor
+                      : Colors.red[700],
+                  textColor: Theme.of(context).textTheme.body1.color,
+                  onPressed: () {
+                    _setState(pressAttention);
+                    _showAlertOnRelease(context);
+                  },
+                  child: Text("Release ghost"),
+                ),
+              ),
+            ]));
   }
 
   ///Shows the Alert dialogue on pressing Release ghost
   void _showAlertOnRelease(BuildContext context) {
     // set up the buttons
-    Widget noButton =
-    FlatButton(
+    Widget noButton = FlatButton(
       color: Colors.deepPurple,
       textColor: Colors.white,
       child: Text("No, I miss the ghost."),
-      onPressed:  () {
+      onPressed: () {
         _closeDialog(context);
       },
     );
 
-    Widget yesButton =
-    FlatButton(
+    Widget yesButton = FlatButton(
       color: Colors.deepPurple,
       textColor: Colors.white,
       child: Text("Yes, Release the ghost"),
-      onPressed:  () {
+      onPressed: () {
         _ghostReleased();
         _closeDialog(context);
       },
@@ -99,11 +102,11 @@ class Settings extends StatelessWidget {
   }
 
   ///set state of presAttention to true when Release ghost is pressed.
-  void _setState(bool pressAttention){
+  void _setState(bool pressAttention) {
     pressAttention = true;
   }
 
-  ///C;oses the dialog
+  ///Closes the dialog
   void _closeDialog(BuildContext context) {
     Navigator.pop(context);
   }
