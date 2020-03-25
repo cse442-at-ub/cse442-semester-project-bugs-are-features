@@ -75,8 +75,8 @@ class DevSettings extends StatelessWidget {
             color: Theme.of(context).buttonColor,
             textColor: Theme.of(context).textTheme.body1.color,
             onPressed: () {
-              _database.delete();
               _ghostReleased();
+              _database.delete();
             },
             child: Text("!! Reset database !!"),
           ),

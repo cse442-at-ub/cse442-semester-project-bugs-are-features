@@ -30,34 +30,40 @@ const String GHOST_ACTIVE = 'active';
 
 /* GHOST RESPONSE TABLE */
 
-///Name of the table
-const String GHOST_RESPONSES_TABLE = 'ghost-responses';
+/// Name of the table
+const String GHOST_RESP_TABLE = 'ghost_responses';
 
-///Ghost response Primary Key
-const String GRESPONSE_PK = 'ghost-response-PK';
+/// Ghost response Primary Key
+const String GHOST_RESP_ID = 'id';
 
-///Level of the response
-const String LEVEL = 'level';
+/// Ghost ID
+const String GHOST_RESP_GHOST_ID = 'gid';
 
-///Id of the response
-const String PIB = 'pib';
+/// Level of the response
+const String GHOST_RESP_LEVEL = 'level';
 
-///Id of the response options : 4 options
-const String RESPONSE_IDS = 'response-ids';
+/// ID of the response
+const String GHOST_RESP_RESP_ID = 'rid';
 
-///Encrypted ghost id
-const String ENCR_GHOST_ID = 'encr-ghost-id';
+/// IDs of the response options : 4 options
+const String GHOST_RESP_IDS = 'response_ids';
+
+/// The text of the ghost's response
+const String GHOST_RESP_TEXT = 'text';
 
 
 
 
 /* USER RESPONSE TABLE */
 
-///Name of the table
-const String USER_RESPONSES_TABLE = 'user-responses';
+/// Name of the table
+const String USER_RESP_TABLE = 'user_responses';
 
-///User response Primary Key
-const String URESPONSE_PK = 'user-response-PK';
+/// User response Primary Key
+const String USER_RESP_ID = 'id';
 
-///Id of the chosen response
-const String UID = 'user-response-id';
+/// ID of the chosen response
+const String USER_RESP_PID = 'rid';
+
+/// The text of this response
+const String USER_RESP_TEXT = 'text';

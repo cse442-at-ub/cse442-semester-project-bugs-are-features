@@ -128,6 +128,7 @@ class DB {
   delete() async {
     close();
     dev.log("Deleted DB", name: "db.db");
+    print(_path);
     await deleteDatabase(_path);
     _init();
   }
@@ -144,17 +145,19 @@ class DB {
         "${Constants.GHOST_ACTIVE} BOOLEAN NOT NULL"
         ")");
     
-    await db.execute("CREATE TABLE ${Constants.GHOST_RESPONSES_TABLE} ("
-        "${Constants.GRESPONSE_PK} INTEGER PRIMARY KEY AUTOINCREMENT,"
-        "${Constants.PIB} INTEGER NOT NULL,"
-        "${Constants.LEVEL} INTEGER NOT NULL,"
-        "${Constants.RESPONSE_IDS} STRING NOT NULL,"
-        "${Constants.ENCR_GHOST_ID} STRING NOT NULL"
+    await db.execute("CREATE TABLE ${Constants.GHOST_RESP_TABLE} ("
+        "${Constants.GHOST_RESP_ID} INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "${Constants.GHOST_RESP_GHOST_ID} INTEGER NOT NULL,"
+        "${Constants.GHOST_RESP_LEVEL} INTEGER NOT NULL,"
+        "${Constants.GHOST_RESP_RESP_ID} INTEGER NOT NULL,"
+        "${Constants.GHOST_RESP_IDS} STRING NOT NULL,"
+        "${Constants.GHOST_RESP_TEXT} STRING NOT NULL"
         ")");
 
-    await db.execute("CREATE TABLE ${Constants.USER_RESPONSES_TABLE} ("
-        "${Constants.URESPONSE_PK} INTEGER PRIMARY KEY AUTOINCREMENT,"
-        "${Constants.UID} INTEGER NOT NULL"
+    await db.execute("CREATE TABLE ${Constants.USER_RESP_TABLE} ("
+        "${Constants.USER_RESP_ID} INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "${Constants.USER_RESP_PID} INTEGER NOT NULL,"
+        "${Constants.USER_RESP_TEXT} STRING NOT NULL"
         ")");
 
     // Insert a default row for each ghost
