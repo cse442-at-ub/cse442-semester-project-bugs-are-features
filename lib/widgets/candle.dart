@@ -25,6 +25,8 @@ class _CandleState extends State<Candle> {
   /// If the candle is currently lit or not
   bool _isLit = false;
 
+  Timer _timer;
+
   /// Lights the candle, rendering the ghost inaccessible
   _lightCandle() async {
     Map<String, String> row = {Constants.GHOST_CANDLE_LIT: 'true'};
@@ -42,7 +44,7 @@ class _CandleState extends State<Candle> {
       time = Duration(minutes: 1);
       return true;
     }());
-    Timer(time, _extinguishCandle);
+    _timer = Timer(time, _extinguishCandle);
 
     setState(() {
       _isLit = true;
@@ -63,6 +65,14 @@ class _CandleState extends State<Candle> {
     setState(() {
       _isLit = false;
     });
+  }
+
+  @override
+  void dispose() {
+    if (_timer != null && _timer.isActive) {
+      _timer.cancel();
+    }
+    super.dispose();
   }
 
   @override
