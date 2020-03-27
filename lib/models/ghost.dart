@@ -9,18 +9,12 @@ import 'package:ghost_app/db/constants.dart' as Constants;
 const List<int> LEVEL_POINTS = [0, 10, 20, 40, 80, 160, 320, 640, 1280, 2560, 5120];
 /// Returns the current level based upon a given score
 int checkLevel(int score) {
-  if (score >= LEVEL_POINTS[10])      return 10;
-  else if (score >= LEVEL_POINTS[9])  return 9;
-  else if (score >= LEVEL_POINTS[8])  return 8;
-  else if (score >= LEVEL_POINTS[7])  return 7;
-  else if (score >= LEVEL_POINTS[6])  return 6;
-  else if (score >= LEVEL_POINTS[5])  return 5;
-  else if (score >= LEVEL_POINTS[4])  return 4;
-  else if (score >= LEVEL_POINTS[3])  return 3;
-  else if (score >= LEVEL_POINTS[2])  return 2;
-  else if (score >= LEVEL_POINTS[1])  return 1;
-  else if (score >= LEVEL_POINTS[0])  return 0;
-  else throw Exception('Ghost score is negative!');
+  for (int i = 10; i > 0; i--) {
+    if (score >= LEVEL_POINTS[i]) {
+      return i;
+    }
+  }
+  throw Exception('Ghost score is negative!');
 }
 
 enum Temperament {
@@ -148,6 +142,7 @@ class Ghost {
   /// Returns the Image icon of the ghost
   Image get image => Image.asset("assets/ghosts/ghost$_id.png");
 
+  /// Returns an semi-transparent Image of the ghost
   Image get opaqueImage => Image.asset(
       "assets/ghosts/ghost$_id.png",
       color: Color.fromRGBO(255, 255, 255, 0.5),

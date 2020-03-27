@@ -111,17 +111,16 @@ class _RootPageState extends State<RootPage> {
     _readPrefs();
     await _database.init();
 
+    int gid = _prefs.getInt('ghost_id');
+    if (gid > 0) {
+      await _setGhost(gid);
+    }
     // Pre-load all images
     precacheImage(AssetImage('assets/misc/Graveyard.png'), context);
     precacheImage(AssetImage('assets/misc/GrimReaper.png'), context);
     precacheImage(AssetImage('assets/misc/MainIcon.png'), context);
     precacheImage(AssetImage('assets/ghosts/ghost1.png'), context);
     precacheImage(AssetImage('assets/ghosts/ghost2.png'), context);
-
-    int gid = _prefs.getInt('ghost_id');
-    if (gid > 0) {
-      _setGhost(gid);
-    }
 
     // Hold splash screen.
     await Future.delayed(Duration(seconds: 2));
@@ -176,7 +175,7 @@ class _RootPageState extends State<RootPage> {
       throw Exception('Less than or more than one ghost was chosen.');
     }
 
-    _setGhost(id);
+    await _setGhost(id);
 
     setState(() {
       _prefs.setInt('ghost_id', id);
