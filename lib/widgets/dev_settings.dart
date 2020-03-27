@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:ghost_app/db/db.dart';
-import 'package:ghost_app/db/debug.dart';
 
 /// The Dev Settings modal that fades in when the Dev Settings button is pressed.
 ///
@@ -18,92 +16,110 @@ class DevSettings extends StatelessWidget {
 
   /// Called as a function when a ghost is released.
   final VoidCallback _ghostReleased;
+  final VoidCallback _showNotification;
+  final VoidCallback _hideNotification;
 
-  DevSettings(this._prefs, this._ghostReleased, this._database);
+  DevSettings(this._prefs, this._ghostReleased, this._database,
+      this._showNotification, this._hideNotification);
 
   @override
   Widget build(BuildContext context) {
     bool pressAttention = false; //toggled when release ghost is pressed
+    int ghostId = _prefs.getInt('ghost_id');
 
     return Container(
-      constraints: BoxConstraints(
-          maxHeight: 300.0,
-          maxWidth: 250.0,
-          minWidth: 250.0,
-          minHeight: 150.0
-      ),
-      color: Theme.of(context).backgroundColor,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
+        constraints: BoxConstraints(
+            maxHeight: 300.0,
+            maxWidth: 250.0,
+            minWidth: 250.0,
+            minHeight: 150.0),
+        color: Theme.of(context).backgroundColor,
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              // Header Menu Text
+              Padding(
+                padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
+                child: Text("Dev Settings",
+                    textAlign: TextAlign.center,
+                    textDirection: TextDirection.ltr,
+                    style: Theme.of(context)
+                        .textTheme
+                        .body1
+                        .copyWith(fontSize: 35.0)),
+              ),
 
-          // Header Menu Text
-          Padding(
-            padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
-            child: Text(
-              "Dev Settings",
-              textAlign: TextAlign.center,
-              textDirection: TextDirection.ltr,
-                style: Theme.of(context).textTheme.body1.copyWith(fontSize: 35.0)
-            ),
-          ),
+              // Set has_ghost = false
+              Visibility(
+                visible: ghostId == 0 ? false : true,
+                child: FlatButton(
+                  color: pressAttention
+                      ? Theme.of(context).buttonColor
+                      : Colors.red[700],
+                  textColor: Theme.of(context).textTheme.body1.color,
+                  onPressed: () {
+                    _setState(pressAttention);
+                    _showAlertOnRelease(context);
+                  },
+                  child: Text("Release ghost"),
+                ),
+              ),
 
-          // Set has_ghost = false
-          FlatButton(
-            color: pressAttention ? Theme.of(context).buttonColor : Colors.red[700],
-            textColor: Theme.of(context).textTheme.body1.color,
-            onPressed: () {
-              _setState(pressAttention);
-              _showAlertOnRelease(context);
-            },
-            child: Text("Release ghost"),
-          ),
+              // Print Database
+              FlatButton(
+                color: Theme.of(context).buttonColor,
+                textColor: Theme.of(context).textTheme.body1.color,
+                onPressed: () {
+                  _database.debug.printGhostTable();
+                },
+                child: Text("Print `ghost` table."),
+              ),
 
-          // Reset Database
-          FlatButton(
-            color: Theme.of(context).buttonColor,
-            textColor: Theme.of(context).textTheme.body1.color,
-            onPressed: () {
-              _database.debug.printGhostTable();
-            },
-            child: Text("Print `ghost` table."),
-          ),
+              // Reset Database
+              FlatButton(
+                color: Theme.of(context).buttonColor,
+                textColor: Theme.of(context).textTheme.body1.color,
+                onPressed: () {
+                  _ghostReleased();
+                  _database.delete();
+                },
+                child: Text("!! Reset database !!"),
+              ),
 
-          // Reset Database
-          FlatButton(
-            color: Theme.of(context).buttonColor,
-            textColor: Theme.of(context).textTheme.body1.color,
-            onPressed: () {
-              _ghostReleased();
-              _database.delete();
-            },
-            child: Text("!! Reset database !!"),
-          ),
-        ]
-      )
-    );
+              FlatButton(
+                color: Theme.of(context).buttonColor,
+                textColor: Theme.of(context).textTheme.body1.color,
+                onPressed: () => _showNotification(),
+                child: Text("Show Notification"),
+              ),
+
+              FlatButton(
+                color: Theme.of(context).buttonColor,
+                textColor: Theme.of(context).textTheme.body1.color,
+                onPressed: () => _hideNotification(),
+                child: Text("Hide Notification"),
+              )
+            ]));
   }
 
   ///Shows the Alert dialogue on pressing Release ghost
   void _showAlertOnRelease(BuildContext context) {
     // set up the buttons
-    Widget noButton =
-    FlatButton(
+    Widget noButton = FlatButton(
       color: Colors.deepPurple,
       textColor: Colors.white,
       child: Text("No, I miss the ghost."),
-      onPressed:  () {
+      onPressed: () {
         _closeDialog(context);
       },
     );
 
-    Widget yesButton =
-    FlatButton(
+    Widget yesButton = FlatButton(
       color: Colors.deepPurple,
       textColor: Colors.white,
       child: Text("Yes, Release the ghost"),
-      onPressed:  () {
+      onPressed: () {
         _ghostReleased();
         _closeDialog(context);
       },
@@ -130,15 +146,12 @@ class DevSettings extends StatelessWidget {
   }
 
   ///set state of presAttention to true when Release ghost is pressed.
-  void _setState(bool pressAttention){
+  void _setState(bool pressAttention) {
     pressAttention = true;
   }
 
-  ///C;oses the dialog
+  ///Closes the dialog
   void _closeDialog(BuildContext context) {
     Navigator.pop(context);
   }
-
 }
-
-

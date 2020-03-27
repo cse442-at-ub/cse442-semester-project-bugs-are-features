@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:ghost_app/db/db.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -34,6 +35,10 @@ class _RootPageState extends State<RootPage> {
   /// Displays splash screen when false. True when assets are loaded.
   bool _assetsLoaded = false;
 
+  var settings;
+
+  FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
+
   /// Instance of app preferences. Is passed to children.
   SharedPreferences _prefs;
 
@@ -41,6 +46,7 @@ class _RootPageState extends State<RootPage> {
   initState() {
     super.initState();
     _loadAssets();
+    _initNotification();
   }
 
   @override
@@ -66,12 +72,13 @@ class _RootPageState extends State<RootPage> {
       GraveyardMain graveyard = GraveyardMain(_prefs, _ghostChosen);
       view.add(graveyard);
     }
-
+    settings = SettingsButton(_prefs, _ghostReleased);
     view.add(SettingsButton(_prefs, _ghostReleased));
 
     // Add Dev Settings button _only_ if in development
     assert(() {
-      view.add(DevButton(_prefs, _ghostReleased, _database));
+      view.add(DevButton(_prefs, _ghostReleased, _database, _showNotification,
+          _hideNotification));
       return true;
     }());
 
@@ -88,6 +95,27 @@ class _RootPageState extends State<RootPage> {
         _assetsLoaded = true;
       });
     });
+  }
+
+  /// Initialize the settings needed to send a notification
+  void _initNotification() {
+    _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    var android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    var ios = IOSInitializationSettings();
+    var initSettings = InitializationSettings(android, ios);
+    _flutterLocalNotificationsPlugin.initialize(initSettings,
+        onSelectNotification: onSelectNotification);
+  }
+
+  /// Used to specify the page which will open after notification is selected.
+  Future<void> onSelectNotification(String payload) async {
+    if (payload != null) {
+      debugPrint('notification payload: ' + payload);
+    }
+    await Navigator.maybePop(
+      context,
+      MaterialPageRoute(builder: (context) => RootPage()),
+    );
   }
 
   /// Grabs our instance of SharedPreferences to pass to children.
@@ -140,5 +168,19 @@ class _RootPageState extends State<RootPage> {
       _prefs.setInt('ghost_id', 0);
       _prefs.setBool('has_ghost', false);
     });
+  }
+
+  Future _showNotification() async {
+    var android = AndroidNotificationDetails(
+        'channel id', 'channel NAME', 'CHANNEL DISCRIPTION',
+        importance: Importance.Max, priority: Priority.High, playSound: false);
+    var ios = IOSNotificationDetails();
+    var platform = NotificationDetails(android, ios);
+    await _flutterLocalNotificationsPlugin.show(
+        0, "Ghost is calling you!", null, platform);
+  }
+
+  Future _hideNotification() async {
+    await _flutterLocalNotificationsPlugin.cancel(0);
   }
 }

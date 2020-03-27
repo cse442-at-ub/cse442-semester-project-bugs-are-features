@@ -17,17 +17,30 @@ class DevButton extends StatelessWidget {
   /// The DB instance.
   final DB _database;
 
-  /// Called as a function when a ghost is released.
+  /// Called as a function when a ghost is released.`
   final VoidCallback _ghostReleased;
+  final VoidCallback _showNotification;
+  final VoidCallback _hideNotification;
 
-  DevButton(this._prefs, this._ghostReleased, this._database);
+  DevButton(this._prefs, this._ghostReleased, this._database,
+      this._showNotification, this._hideNotification);
 
   @override
   Widget build(BuildContext context) {
-    return Align(
+    return Container(
         alignment: Alignment.topCenter,
-        child: GestureDetector(
-          onTap: () {
+        margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+        child: FlatButton(
+          color: Theme.of(context).buttonColor,
+          textColor: Theme.of(context).textTheme.body1.color,
+          child: Text(
+            "Dev Settings",
+            style: TextStyle(
+              color: Colors.red,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          onPressed: () {
             showGeneralDialog(
                 barrierColor:
                     Theme.of(context).backgroundColor.withOpacity(0.5),
@@ -39,11 +52,8 @@ class DevButton extends StatelessWidget {
                       opacity: a1.value,
                       child: Center(
                         child: Material(
-                          child: DevSettings(
-                            _prefs,
-                            _ghostReleased,
-                            _database,
-                          ),
+                          child: DevSettings(_prefs, _ghostReleased, _database,
+                              _showNotification, _hideNotification),
                         ),
                       ),
                     ),
@@ -57,19 +67,6 @@ class DevButton extends StatelessWidget {
                 // However, it's still required by the showGeneralDialog widget
                 pageBuilder: (context, animation1, animation2) => null);
           },
-          child: Container(
-              margin:
-                  EdgeInsets.only(top: MediaQuery.of(context).padding.top - 20),
-              child: FlatButton(
-                  color: Theme.of(context).buttonColor,
-                  textColor: Theme.of(context).textTheme.body1.color,
-                  child: Text(
-                    "Dev Settings",
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ))),
         ));
   }
 }
