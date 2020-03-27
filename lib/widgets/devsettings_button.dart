@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:ghost_app/db/db.dart';
 
-import 'dev_settings.dart';
+import 'devsettings.dart';
 
 /// The Development Settings menu button.
 ///
