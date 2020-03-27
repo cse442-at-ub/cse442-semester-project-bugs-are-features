@@ -1,12 +1,13 @@
 import 'dart:convert';
+import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ghost_app/widgets/ghost.dart';
+import 'package:ghost_app/models/ghost.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
-import 'db/db.dart';
+import '../db/db.dart';
 
 class Response {
   final String response;
@@ -23,21 +24,28 @@ class GhostMain extends StatefulWidget {
   /// Called as a function when a ghost is released.
   final VoidCallback _ghostReleased;
 
+  /// The database instance
   final DB _database;
 
-  GhostMain(this._prefs, this._ghostReleased, this._database);
+  /// The current ghost instance
+  final Ghost _ghost;
+
+  GhostMain(this._prefs, this._ghostReleased, this._database, this._ghost);
 
   @override
   _GhostMainState createState() =>
-      _GhostMainState(_prefs, _ghostReleased, _database);
+      _GhostMainState(_prefs, _ghostReleased, _database, _ghost);
 }
 
 class _GhostMainState extends State<GhostMain> {
-  _GhostMainState(this._prefs, this._ghostReleased, this._database);
 
   /// The app wide preferences.
   final SharedPreferences _prefs;
-  Ghost currentGhost;
+
+  /// Instance of the current ghost
+  Ghost _currentGhost;
+
+  /// The database instance
   final DB _database;
 
   /// Called as a function when a ghost is released.
@@ -45,23 +53,21 @@ class _GhostMainState extends State<GhostMain> {
 
   var json;
   var currentState;
-  var currentLevel = 2;
+
+  /// The level of progression currently attained
+  var _currentLevel = 2;
+
   double _progressValue = 0;
   int startState = 0;
 
   var responseObjects = [];
   var currentResponse = "Loading";
 
-  void _loadDatabase() {
-    _database.getGhost(_prefs.getInt('ghost_id')).then((dbGhost) {
-      print("current id of ghost = " + _prefs.getInt('ghost_id').toString());
-      currentGhost = dbGhost;
-      print("Ghost is called " + currentGhost.name);
-    });
-  }
+  _GhostMainState(
+      this._prefs, this._ghostReleased, this._database, this._currentGhost);
 
   void _loadTwineData() {
-    rootBundle.loadString("assets/data/Level$currentLevel.json").then((data) {
+    rootBundle.loadString("assets/data/Level$_currentLevel.json").then((data) {
       setState(() {
         var random = Random();
         json = jsonDecode(data);
@@ -90,7 +96,6 @@ class _GhostMainState extends State<GhostMain> {
   @override
   initState() {
     super.initState();
-    _loadDatabase();
     _loadTwineData();
   }
 
@@ -102,9 +107,8 @@ class _GhostMainState extends State<GhostMain> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-        body: Stack(
-      children: <Widget>[
+    return Stack(
+          children: <Widget>[
         Image.asset(
           'assets/misc/Graveyard.png',
           width: size.width,
@@ -115,24 +119,26 @@ class _GhostMainState extends State<GhostMain> {
           color: Theme.of(context).backgroundColor.withOpacity(0.8),
         ),
         Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            // TODO: Fix the ghost image alignemnt
-            Image.asset(
-                "assets/ghosts/ghost${_prefs.getInt("ghost_id").toString()}.png"),
+            // The ghost image
+            _currentGhost.icon,
+
+            // The ghost's response
             Text(
               currentResponse,
-              style: Theme.of(context)
-                  .textTheme
-                  .body1
-                  .copyWith(fontSize: 30, fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.body1.copyWith(
+                  fontSize: 30, fontWeight: FontWeight.bold
+              ),
               textAlign: TextAlign.center,
             ),
+
+            // The current progress text + meter
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 Container(
-                    child: Text("Current Progress (Level $currentLevel)")),
+                    child: Text("Current Progress (Level $_currentLevel)")),
                 Container(
                     width: 128,
                     child: LinearProgressIndicator(
@@ -142,17 +148,18 @@ class _GhostMainState extends State<GhostMain> {
                         )))
               ],
             ),
+
+            // The button responses
             GridView.count(
                 childAspectRatio: 2,
                 shrinkWrap: true,
                 crossAxisCount: 2,
-                children: List.generate(4, (index) {
-                  return makeGhostPicker(index);
-                }))
+                children: List.generate(4, (index) => makeGhostPicker(index))
+            )
           ],
         )
       ],
-    ));
+    );
   }
 
   Container makeGhostPicker(int id) {
@@ -180,12 +187,12 @@ class _GhostMainState extends State<GhostMain> {
       _progressValue += increasedValue;
       if (_progressValue >= 1) {
         _progressValue = 0;
-        currentLevel = 3;
+        _currentLevel = 3;
       } else if (_progressValue <= 0) {
         _progressValue = 0;
-        currentLevel = 2;
+        _currentLevel = 2;
       }
-      _database.updateGhost(currentGhost);
+      _database.updateGhost(_currentGhost);
     });
   }
 }

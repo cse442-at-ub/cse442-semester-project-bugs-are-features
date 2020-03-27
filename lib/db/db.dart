@@ -1,7 +1,7 @@
 import 'dart:developer' as dev;
 
 import 'package:ghost_app/db/debug.dart';
-import 'package:ghost_app/widgets/ghost.dart';
+import 'package:ghost_app/models/ghost.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -21,13 +21,9 @@ class DB {
   /// Some debugging utilities in a DbDebug class for the database.
   DbDebug _debug;
 
-  DB() {
-    _init();
-  }
-
   /// Opens the database connection, storing to the pool.
-  _init() async {
-    dev.log("Called _init", name: "db.db");
+  init() async {
+    dev.log("Called init", name: "db.db");
     // These aren't in the constructor because they're asynchronous
     var databasesPath = await getDatabasesPath();
     _path = join(databasesPath, Constants.DB_NAME);
@@ -36,20 +32,19 @@ class DB {
   }
 
   /// Returns the database connection singleton.
-  get pool {
-    return _pool;
-  }
+  get pool => _pool;
 
   /// Returns the debugging class for the database.
-  get debug {
-    return _debug;
-  }
+  get debug => _debug;
 
+  /// Returns an instance of the ghost
   Future<Ghost> getGhost(int id) async {
     List<Map> maps = await _pool.query(Constants.GHOST_TABLE,
         columns: null, where: '${Constants.GHOST_ID} = ?', whereArgs: [id]);
+
     if (maps.length > 0) {
       var map = maps.first;
+
       return Ghost(
           map['${Constants.GHOST_ID}'],
           Temperament.values[map['${Constants.GHOST_TEMPERAMENT}']],
@@ -57,10 +52,8 @@ class DB {
           Level.values[map['${Constants.GHOST_DIFFICULTY}']],
           map['${Constants.GHOST_SCORE}'].toDouble(),
           map['${Constants.GHOST_PROGRESS}'],
-          null,
-          //TODO add image path to database
           0
-          );
+      );
     } else {
       return null;
     }
@@ -130,7 +123,7 @@ class DB {
     dev.log("Deleted DB", name: "db.db");
     print(_path);
     await deleteDatabase(_path);
-    _init();
+    init();
   }
 
   /// Creates the database tables and initializes the data.

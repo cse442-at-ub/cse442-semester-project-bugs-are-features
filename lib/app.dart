@@ -1,15 +1,19 @@
 import 'dart:async';
+import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:ghost_app/db/db.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'ghost_main.dart';
-import 'graveyard_main.dart';
+import 'screens/ghost.dart';
+import 'screens/graveyard.dart';
+import 'screens/splash.dart';
+
+import 'models/ghost.dart';
+
 import 'widgets/dev_button.dart';
 import 'widgets/settings_button.dart';
-import 'widgets/splash_screen.dart';
 
 /// RootPage is the "actual" root widget of the app. See also [_RootPageState].
 ///
@@ -35,8 +39,10 @@ class _RootPageState extends State<RootPage> {
   /// Displays splash screen when false. True when assets are loaded.
   bool _assetsLoaded = false;
 
-  var settings;
+  /// An instance of our ghost, if we have one
+  Ghost _ghost;
 
+  /// Instance of the local notifications builder
   FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
 
   /// Instance of app preferences. Is passed to children.
@@ -64,15 +70,24 @@ class _RootPageState extends State<RootPage> {
 
     var view = <Widget>[];
 
+    // Set the app-wide background image
+    var bg = Image.asset(
+      'assets/misc/Graveyard.png',
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      fit: BoxFit.fill,
+    );
+    view.add(bg);
+
+    Widget screen;
     // Select our main view container.
     if (_prefs.getBool('has_ghost')) {
-      GhostMain ghost = GhostMain(_prefs, _ghostReleased, _database);
-      view.add(ghost);
+      screen = GhostMain(_prefs, _ghostReleased, _database, _ghost);
     } else {
-      GraveyardMain graveyard = GraveyardMain(_prefs, _ghostChosen);
-      view.add(graveyard);
+      screen = GraveyardMain(_prefs, _ghostChosen);
     }
-    settings = SettingsButton(_prefs, _ghostReleased);
+    view.add(screen);
+
     view.add(SettingsButton(_prefs, _ghostReleased));
 
     // Add Dev Settings button _only_ if in development
@@ -85,15 +100,34 @@ class _RootPageState extends State<RootPage> {
     return Stack(children: view);
   }
 
+  _setGhost(int gid) {
+    _database.getGhost(gid).then((ghost) {
+      dev.log("Current ghost ID = $gid", name: "app.init");
+      _ghost = ghost;
+    });
+  }
+
   /// For all future image, sound, and startup database calls.
   _loadAssets() async {
     _readPrefs();
+    await _database.init();
+
+    // Pre-load all images
+    precacheImage(AssetImage('assets/misc/Graveyard.png'), context);
+    precacheImage(AssetImage('assets/misc/GrimReaper.png'), context);
+    precacheImage(AssetImage('assets/misc/MainIcon.png'), context);
+    precacheImage(AssetImage('assets/ghosts/ghost1.png'), context);
+    precacheImage(AssetImage('assets/ghosts/ghost2.png'), context);
+
+    int gid = _prefs.getInt('ghost_id');
+    if (gid > 0) {
+      _setGhost(gid);
+    }
 
     // Hold splash screen.
-    Timer(Duration(seconds: 2), () {
-      setState(() {
-        _assetsLoaded = true;
-      });
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      _assetsLoaded = true;
     });
   }
 
@@ -118,7 +152,7 @@ class _RootPageState extends State<RootPage> {
     );
   }
 
-  /// Grabs our instance of SharedPreferences to pass to children.
+  /// Creates our instance of SharedPreferences to pass to children.
   _readPrefs() async {
     _prefs = await SharedPreferences.getInstance();
     // Check if this is our first app launch so we can init preferences.
@@ -139,10 +173,11 @@ class _RootPageState extends State<RootPage> {
   _ghostChosen(int id) async {
     // Returns the amount of rows updated
     int updated = await _database.setGhost(id);
-
     if (updated != 1) {
       throw Exception('Less than or more than one ghost was chosen.');
     }
+
+    _setGhost(id);
 
     setState(() {
       _prefs.setInt('ghost_id', id);

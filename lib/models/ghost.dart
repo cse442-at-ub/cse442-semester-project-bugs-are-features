@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+
 enum Temperament {
   Friendly,
   Neutral,
@@ -11,13 +14,13 @@ enum Level {
 } //Levels. Easy: 0, Medium: 1, Hard: 2
 
 class Ghost {
+  /// The current ghost id
   final int _id;
   final Temperament _temperament;
   final String _name;
   final Level _level;
   double score; //between 0.0 and 1.0
   int progress;
-  final String _imageURI;
 
   final int _chatOptionScore;
 
@@ -27,7 +30,6 @@ class Ghost {
       this._level,
       this.score,
       this.progress,
-      this._imageURI,
       this._chatOptionScore);
 
   Map<String, dynamic> toMap() {
@@ -38,7 +40,6 @@ class Ghost {
       "difficulty": _level.index,
       "progress": progress,
       "score": score,
-      //TODO add columns in db for imageURI
     };
   }
 
@@ -51,7 +52,7 @@ class Ghost {
 
   Level get level => level;
 
-  String get imageURI => _imageURI;
-
   int get chatOptionScore => _chatOptionScore;
+
+  Image get icon => Image.asset("assets/ghosts/ghost$_id.png");
 }
