@@ -106,6 +106,9 @@ class _GhostMainState extends State<GhostMain> {
 
   @override
   Widget build(BuildContext context) {
+    _progressValue = _currentGhost.progress;
+    _currentLevel = _currentGhost.level;
+
     Size size = MediaQuery.of(context).size;
     return Stack(
           children: <Widget>[
@@ -181,18 +184,12 @@ class _GhostMainState extends State<GhostMain> {
         ));
   }
 
-  void _updateProgress(int value) {
-    double increasedValue = value * 0.1;
+  void _updateProgress(int value) async {
+    await _currentGhost.addScore(value);
+
     setState(() {
-      _progressValue += increasedValue;
-      if (_progressValue >= 1) {
-        _progressValue = 0;
-        _currentLevel = 3;
-      } else if (_progressValue <= 0) {
-        _progressValue = 0;
-        _currentLevel = 2;
-      }
-      _database.updateGhost(_currentGhost);
+      _progressValue = _currentGhost.progress;
+      _currentLevel = _currentGhost.level;
     });
   }
 }

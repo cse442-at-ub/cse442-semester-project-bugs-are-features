@@ -12,7 +12,7 @@ import 'screens/splash.dart';
 
 import 'models/ghost.dart';
 
-import 'widgets/dev_button.dart';
+import 'widgets/devsettings_button.dart';
 import 'widgets/settings_button.dart';
 
 /// RootPage is the "actual" root widget of the app. See also [_RootPageState].
@@ -100,11 +100,10 @@ class _RootPageState extends State<RootPage> {
     return Stack(children: view);
   }
 
-  _setGhost(int gid) {
-    _database.getGhost(gid).then((ghost) {
-      dev.log("Current ghost ID = $gid", name: "app.init");
-      _ghost = ghost;
-    });
+  _setGhost(int gid) async {
+    _ghost = Ghost(gid, _database);
+    await _ghost.init();
+    dev.log("Current ghost ID = $gid", name: "app.init");
   }
 
   /// For all future image, sound, and startup database calls.

@@ -17,10 +17,10 @@ const String GHOST_TEMPERAMENT = 'temperament';
 /// Ghost Difficulty: Difficulty 0 - 2, 2 being hardest. INTEGER
 const String GHOST_DIFFICULTY = 'difficulty';
 
-/// Current Ghost Story Progress: 0-10. 0 is a fresh game. INTEGER
-const String GHOST_PROGRESS = 'progress';
+/// Current Ghost Story Level: 0-10. 0 is a fresh game. INTEGER
+const String GHOST_LEVEL = 'level';
 
-/// Current Accumulated Points for the ghost. FLOAT
+/// Current Accumulated Points for the ghost. INTEGER
 const String GHOST_SCORE = 'score';
 
 /// If the ghost is "assigned" to user. BOOLEAN
