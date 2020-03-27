@@ -46,7 +46,7 @@ class DB {
       // TODO: Change this later when starting from level 0 for tutortial
       Constants.GHOST_LEVEL: 2,
       Constants.GHOST_SCORE: 20,
-      Constants.GHOST_ACTIVE: true
+      Constants.GHOST_ACTIVE: 'true'
     };
 
     dev.log("Set ghost id $id", name: "db.db");
@@ -75,7 +75,8 @@ class DB {
       Constants.GHOST_DIFFICULTY: id ~/ 3,
       Constants.GHOST_LEVEL: 0,
       Constants.GHOST_SCORE: 0,
-      Constants.GHOST_ACTIVE: false
+      Constants.GHOST_ACTIVE: 'false',
+      Constants.GHOST_CANDLE_LIT: 'false'
     };
 
     dev.log("Unset ghost id $id", name: "db.db");
@@ -113,11 +114,12 @@ class DB {
     await db.execute(
         "CREATE TABLE ${Constants.GHOST_TABLE} ("
           "${Constants.GHOST_ID} INTEGER PRIMARY KEY AUTOINCREMENT,"
-          "${Constants.GHOST_TEMPERAMENT} INTEGER NOT NULL,"
+          "${Constants.GHOST_TEMPERAMENT} INTEGER DEFAULT 1,"
           "${Constants.GHOST_DIFFICULTY} INTEGER NOT NULL,"
-          "${Constants.GHOST_LEVEL} INTEGER NOT NULL,"
-          "${Constants.GHOST_SCORE} INTEGER NOT NULL,"
-          "${Constants.GHOST_ACTIVE} BOOLEAN NOT NULL"
+          "${Constants.GHOST_LEVEL} INTEGER DEFAULT 0,"
+          "${Constants.GHOST_SCORE} INTEGER DEFAULT 0,"
+          "${Constants.GHOST_ACTIVE} BOOLEAN DEFAULT false,"
+          "${Constants.GHOST_CANDLE_LIT} BOOLEAN DEFAULT false"
         ")"
     );
     
@@ -142,14 +144,7 @@ class DB {
 
     // Insert a default row for each ghost
     for (var i = 0; i < 9; i++) {
-      Map<String, dynamic> row = {
-        Constants.GHOST_TEMPERAMENT: 1,
-        Constants.GHOST_DIFFICULTY: i ~/ 3,
-        // TODO: Change this later when starting from level 0
-        Constants.GHOST_LEVEL: 0,
-        Constants.GHOST_SCORE: 0,
-        Constants.GHOST_ACTIVE: false
-      };
+      Map<String, dynamic> row = { Constants.GHOST_DIFFICULTY: i ~/ 3 };
       dev.log("Inserted ghost id ${i + 1}", name: "db.db");
       await db.insert(Constants.GHOST_TABLE, row);
     }

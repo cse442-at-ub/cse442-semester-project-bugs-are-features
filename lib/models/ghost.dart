@@ -8,7 +8,7 @@ import 'package:ghost_app/db/constants.dart' as Constants;
 
 const List<int> LEVEL_POINTS = [0, 10, 20, 40, 80, 160, 320, 640, 1280, 2560, 5120];
 /// Returns the current level based upon a given score
-int getLevel(int score) {
+int checkLevel(int score) {
   if (score >= LEVEL_POINTS[10])      return 10;
   else if (score >= LEVEL_POINTS[9])  return 9;
   else if (score >= LEVEL_POINTS[8])  return 8;
@@ -58,9 +58,6 @@ class Ghost {
   /// The current score points the player has reached
   int _score;
 
-  /// The ghost's current level progress
-  double _progress; // between 0.0 and 1.0
-
   /// ???
   int _chatOptionScore;
 
@@ -86,21 +83,17 @@ class Ghost {
     _level = map['${Constants.GHOST_LEVEL}'];
     _score = map['${Constants.GHOST_SCORE}'];
     _chatOptionScore = 0;
-    print(_level);
   }
 
   addScore(int score) async {
     _score += score;
-    print('Score: $_score, Added pts: $score');
 
-    int checkLevel = getLevel(_score);
-    bool leveledUp = _level < checkLevel;
-    print('Level: $_level, levelUp: $checkLevel');
+    int newLevel = checkLevel(_score);
+    bool leveledUp = _level < newLevel;
     // Check if additional points have leveled us up
     if (leveledUp) {
-      dev.log("Leveled up from $_level to $checkLevel", name: "models.ghost");
-
-      _level = checkLevel;
+      dev.log("Leveled up from $_level to $newLevel", name: "models.ghost");
+      _level = newLevel;
     }
 
     Map<String, dynamic> columns = {
@@ -153,5 +146,11 @@ class Ghost {
   int get chatOptionScore => _chatOptionScore;
 
   /// Returns the Image icon of the ghost
-  Image get icon => Image.asset("assets/ghosts/ghost$_id.png");
+  Image get image => Image.asset("assets/ghosts/ghost$_id.png");
+
+  Image get opaqueImage => Image.asset(
+      "assets/ghosts/ghost$_id.png",
+      color: Color.fromRGBO(255, 255, 255, 0.5),
+      colorBlendMode: BlendMode.modulate
+  );
 }

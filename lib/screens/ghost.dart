@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ghost_app/models/ghost.dart';
+import 'package:ghost_app/widgets/candle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
 import '../db/db.dart';
@@ -22,6 +23,7 @@ class GhostMain extends StatefulWidget {
   final SharedPreferences _prefs;
 
   /// Called as a function when a ghost is released.
+  /// Will only be needed in this widget at the end of the game.
   final VoidCallback _ghostReleased;
 
   /// The database instance
@@ -33,61 +35,46 @@ class GhostMain extends StatefulWidget {
   GhostMain(this._prefs, this._ghostReleased, this._database, this._ghost);
 
   @override
-  _GhostMainState createState() =>
-      _GhostMainState(_prefs, _ghostReleased, _database, _ghost);
+  _GhostMainState createState() => _GhostMainState();
 }
 
 class _GhostMainState extends State<GhostMain> {
+  var _json;
+  var _responseObjects = [];
+  var _currentResponse = "Loading";
 
-  /// The app wide preferences.
-  final SharedPreferences _prefs;
+  bool _canInteract = true;
 
-  /// Instance of the current ghost
-  Ghost _currentGhost;
-
-  /// The database instance
-  final DB _database;
-
-  /// Called as a function when a ghost is released.
-  final VoidCallback _ghostReleased;
-
-  var json;
-  var currentState;
-
-  /// The level of progression currently attained
-  var _currentLevel = 2;
-
-  double _progressValue = 0;
-  int startState = 0;
-
-  var responseObjects = [];
-  var currentResponse = "Loading";
-
-  _GhostMainState(
-      this._prefs, this._ghostReleased, this._database, this._currentGhost);
+  void _setInteract(bool value) {
+    dev.log("Setting canInteract to $value", name: "screens.ghost");
+    setState(() {
+      _canInteract = value;
+    });
+  }
 
   void _loadTwineData() {
-    rootBundle.loadString("assets/data/Level$_currentLevel.json").then((data) {
+    rootBundle.loadString("assets/data/Level${widget._ghost.level}.json")
+    .then((data) {
       setState(() {
         var random = Random();
-        json = jsonDecode(data);
-        var passages = json["passages"];
+        _json = jsonDecode(data);
+        var passages = _json["passages"];
         var len = passages.length;
         var ghostResponse = passages[random.nextInt(len)];
         int newLine = ghostResponse["text"].indexOf("\n");
-        currentResponse = newLine != -1
+        _currentResponse = newLine != -1
             ? ghostResponse["text"].substring(0, newLine)
             : ghostResponse["text"];
         var start = passages[0];
         var links = start["links"];
-        responseObjects.clear();
+        _responseObjects.clear();
         for (var j = 0; j < 4; j++) {
           var i = random.nextInt(links.length - j);
           var message = links[i]["name"];
           int pid = int.parse(links[i]["pid"]);
           int value = int.parse(passages[pid - 1]["tags"][0]);
           Response responseObject = Response(message, pid, value);
-          responseObjects.add(responseObject);
+          _responseObjects.add(responseObject);
         }
       });
     });
@@ -106,51 +93,61 @@ class _GhostMainState extends State<GhostMain> {
 
   @override
   Widget build(BuildContext context) {
-    _progressValue = _currentGhost.progress;
-    _currentLevel = _currentGhost.level;
-
-    Size size = MediaQuery.of(context).size;
-    return Stack(
-          children: <Widget>[
-        Image.asset(
-          'assets/misc/Graveyard.png',
-          width: size.width,
-          height: size.height,
-          fit: BoxFit.fill,
-        ),
+    return Stack(children: <Widget>[
         Container(
           color: Theme.of(context).backgroundColor.withOpacity(0.8),
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
+
             // The ghost image
-            _currentGhost.icon,
+            _canInteract ? widget._ghost.image : widget._ghost.opaqueImage,
 
             // The ghost's response
-            Text(
-              currentResponse,
-              style: Theme.of(context).textTheme.body1.copyWith(
-                  fontSize: 30, fontWeight: FontWeight.bold
-              ),
-              textAlign: TextAlign.center,
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: Text(
+                _canInteract
+                    ? _currentResponse
+                    : "The ghost doesn't like the candle",
+                style: Theme.of(context).textTheme.body1.copyWith(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    fontStyle: _canInteract
+                        ? FontStyle.normal
+                        : FontStyle.italic,
+                ),
+                textAlign: TextAlign.center,
+              )
             ),
 
             // The current progress text + meter
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                Container(
-                    child: Text("Current Progress (Level $_currentLevel)")),
+                Container(child: Text("Level ${widget._ghost.level}")),
                 Container(
                     width: 128,
-                    child: LinearProgressIndicator(
-                        value: _progressValue,
+                    child: Row(children: <Widget>[
+                      Padding(
+                          padding: EdgeInsets.only(right: 20),
+                          child: Text("Progress"),
+                      ),
+                      // Flexible required because in a row
+                      Flexible(child: LinearProgressIndicator(
+                        value: widget._ghost.progress,
                         valueColor: AlwaysStoppedAnimation<Color>(
                           Theme.of(context).accentColor,
-                        )))
+                        )
+                      ))]
+                    )
+                )
               ],
             ),
+
+            // The candle to be lit, or not
+            Candle(widget._database, widget._ghost, _setInteract),
 
             // The button responses
             GridView.count(
@@ -172,24 +169,23 @@ class _GhostMainState extends State<GhostMain> {
           textColor: Theme.of(context).textTheme.body1.color,
           color: Theme.of(context).buttonColor,
           splashColor: Theme.of(context).accentColor.withOpacity(0.5),
-          shape: new ContinuousRectangleBorder(
+          shape: ContinuousRectangleBorder(
               borderRadius: BorderRadius.circular(32.0)),
-          onPressed: () => buttonHandler(responseObjects[id]),
+          onPressed: _canInteract
+              ? () => buttonHandler(_responseObjects[id])
+              : null,
           child: Text(
-            responseObjects.length == 0
+            _responseObjects.length == 0
                 ? "Loading"
-                : responseObjects[id].response,
+                : _responseObjects[id].response,
             style: TextStyle(fontSize: 20.0),
           ),
         ));
   }
 
   void _updateProgress(int value) async {
-    await _currentGhost.addScore(value);
-
-    setState(() {
-      _progressValue = _currentGhost.progress;
-      _currentLevel = _currentGhost.level;
-    });
+    await widget._ghost.addScore(value);
+    // Force a re-draw
+    setState(() {});
   }
 }

@@ -26,7 +26,8 @@ const String GHOST_SCORE = 'score';
 /// If the ghost is "assigned" to user. BOOLEAN
 const String GHOST_ACTIVE = 'active';
 
-
+/// If the candle is lit the ghost is incommunicado
+const String GHOST_CANDLE_LIT = 'candle_lit';
 
 /* GHOST RESPONSE TABLE */
 
