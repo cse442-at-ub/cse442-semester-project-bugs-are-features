@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as Math;
 
 import 'package:flutter/material.dart';
 import 'package:ghost_app/db/constants.dart' as Constants;
@@ -21,11 +22,24 @@ class Candle extends StatefulWidget {
   _CandleState createState() => _CandleState();
 }
 
-class _CandleState extends State<Candle> {
+class _CandleState extends State<Candle>
+    with TickerProviderStateMixin {
   /// If the candle is currently lit or not
   bool _isLit = false;
 
   Timer _timer;
+
+  //Adapted from https://medium.com/flutterdevs/creating-a-countdown-timer-using-animation-in-flutter-2d56d4f3f5f1
+  AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+        vsync: this,
+        //TODO find a way to use the same timer as candle
+        duration: Duration(seconds: 10));
+  }
 
   /// Lights the candle, rendering the ghost inaccessible
   _lightCandle() async {
@@ -41,7 +55,7 @@ class _CandleState extends State<Candle> {
     Duration time = Duration(hours: 1);
     // If we're in debug, just 1 minute
     assert(() {
-      time = Duration(minutes: 1);
+      time = Duration(seconds: 5);
       return true;
     }());
     _timer = Timer(time, _extinguishCandle);
@@ -72,12 +86,27 @@ class _CandleState extends State<Candle> {
     if (_timer != null && _timer.isActive) {
       _timer.cancel();
     }
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     if (_isLit) {
+      return AnimatedBuilder(
+        animation: _controller,
+        builder: (BuildContext context, Widget child) {
+          return CustomPaint(
+            painter: CandlePainter(
+                animation: _controller,
+                backgroundColor: Colors.white,
+                color: Theme
+                    .of(context)
+                    .indicatorColor
+            ),
+          );
+        },
+      );
       //return Image.asset('assets/misc/candle_lit.png'),
       return Text('🕯️');
     } else {
@@ -95,4 +124,38 @@ class _CandleState extends State<Candle> {
     }
   }
 
+}
+
+class CandlePainter extends CustomPainter {
+  CandlePainter({
+    this.animation,
+    this.backgroundColor,
+    this.color,
+  }) : super(repaint: animation);
+
+  final Animation<double> animation;
+  final Color backgroundColor;
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()
+      ..color = backgroundColor
+      ..strokeWidth = 10.0
+      ..strokeCap = StrokeCap.butt
+      ..style = PaintingStyle.stroke;
+
+    canvas.drawCircle(size.center(Offset.zero), size.width / 2.0, paint);
+
+    paint.color = color;
+    double prgs = (1.0 - animation.value) * 2 * Math.pi;
+    canvas.drawArc(Offset.zero & size, Math.pi * 1.5, -prgs, false, paint);
+  }
+
+  @override
+  bool shouldRepaint(CandlePainter oldDelegate) {
+    return animation.value != oldDelegate.animation.value ||
+        color != oldDelegate.color ||
+        backgroundColor != oldDelegate.backgroundColor;
+  }
 }

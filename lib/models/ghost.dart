@@ -2,9 +2,8 @@ import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
-import 'package:ghost_app/db/db.dart';
 import 'package:ghost_app/db/constants.dart' as Constants;
+import 'package:ghost_app/db/db.dart';
 
 const List<int> LEVEL_POINTS = [0, 10, 20, 40, 80, 160, 320, 640, 1280, 2560, 5120];
 /// Returns the current level based upon a given score
@@ -55,6 +54,8 @@ class Ghost {
   /// ???
   int _chatOptionScore;
 
+  ValueNotifier _progressNotifier;
+
   Ghost(this._id, this._database);
 
   init() async {
@@ -77,6 +78,7 @@ class Ghost {
     _level = map['${Constants.GHOST_LEVEL}'];
     _score = map['${Constants.GHOST_SCORE}'];
     _chatOptionScore = 0;
+    _progressNotifier = ValueNotifier(_score);
   }
 
   addScore(int score) async {
