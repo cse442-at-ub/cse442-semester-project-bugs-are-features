@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:ghost_app/db/constants.dart' as Constants;
 import 'package:ghost_app/db/db.dart';
 import 'package:ghost_app/models/ghost.dart';
 
@@ -29,13 +28,7 @@ class _CandleState extends State<Candle> {
 
   /// Lights the candle, rendering the ghost inaccessible
   _lightCandle() async {
-    Map<String, String> row = {Constants.GHOST_CANDLE_LIT: 'true'};
-    await widget._database.pool.update(
-        Constants.GHOST_TABLE,
-        row,
-        where: '${Constants.GHOST_ID} = ?',
-        whereArgs: [widget._ghost.id]
-    );
+    await widget._ghost.toggleCandleDB(true);
     widget._setInteract(false);
 
     Duration time = Duration(hours: 1);
@@ -53,13 +46,7 @@ class _CandleState extends State<Candle> {
 
   /// Extinguishes the candle, allowing the ghost back
   _extinguishCandle() async {
-    Map<String, String> row = {Constants.GHOST_CANDLE_LIT: 'false'};
-    await widget._database.pool.update(
-        Constants.GHOST_TABLE,
-        row,
-        where: '${Constants.GHOST_ID} = ?',
-        whereArgs: [widget._ghost.id]
-    );
+    await widget._ghost.toggleCandleDB(false);
     widget._setInteract(true);
     // TODO: Send notification here
     setState(() {

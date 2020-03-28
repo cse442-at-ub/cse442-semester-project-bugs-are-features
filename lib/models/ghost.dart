@@ -2,9 +2,8 @@ import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
-import 'package:ghost_app/db/db.dart';
 import 'package:ghost_app/db/constants.dart' as Constants;
+import 'package:ghost_app/db/db.dart';
 
 const List<int> LEVEL_POINTS = [0, 10, 20, 40, 80, 160, 320, 640, 1280, 2560, 5120];
 /// Returns the current level based upon a given score
@@ -104,6 +103,16 @@ class Ghost {
     ).then((colsUpdated) => cols = colsUpdated);
 
     return cols;
+  }
+
+  toggleCandleDB(bool toggle) async {
+    Map<String, String> row = {Constants.GHOST_CANDLE_LIT: toggle.toString()};
+    await _database.pool.update(
+        Constants.GHOST_TABLE,
+        row,
+        where: '${Constants.GHOST_ID} = ?',
+        whereArgs: [_id]
+    );
   }
 
   /// Returns the ghost's id
