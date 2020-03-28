@@ -67,13 +67,11 @@ class _CandleState extends State<Candle> {
     } else {
       return GestureDetector(
         onTap: () => _lightCandle(),
-        //child: Image.asset('assets/misc/candle_unlit.png'),
-        child: Text(
-            '<Light Candle>',
-            style: TextStyle(
-              color: Colors.red,
-              fontWeight: FontWeight.bold,
-            )
+        child: Image.asset(
+            'assets/misc/UnlitCandle.png',
+            color: Color.fromRGBO(190, 190, 190, 1.0),
+            colorBlendMode: BlendMode.modulate,
+            width: 50.0
         ),
       );
     }
