@@ -102,7 +102,8 @@ class _GhostMainState extends State<GhostMain> {
           children: <Widget>[
 
             // The ghost image
-            _canInteract ? widget._ghost.image : widget._ghost.opaqueImage,
+            widget._ghost.image,
+            //_canInteract ? widget._ghost.image : widget._ghost.opaqueImage,
 
             // The ghost's response
             Padding(
@@ -147,7 +148,7 @@ class _GhostMainState extends State<GhostMain> {
             ),
 
             // The candle to be lit, or not
-            Candle(widget._database, widget._ghost, _setInteract),
+            Candle(widget._ghost, _setInteract),
 
             // The button responses
             GridView.count(

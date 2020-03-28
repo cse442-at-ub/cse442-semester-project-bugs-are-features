@@ -4,17 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:ghost_app/db/db.dart';
 import 'package:ghost_app/models/ghost.dart';
 
+/// The Candle class that sets the ghost away to be away, or not
 class Candle extends StatefulWidget {
-  /// The database instance
-  final DB _database;
-
   /// The current ghost instance
   final Ghost _ghost;
 
   /// Sets whether or not we can use things on the interface
   final ValueSetter<bool> _setInteract;
 
-  Candle(this._database, this._ghost, this._setInteract);
+  Candle(this._ghost, this._setInteract);
 
   @override
   _CandleState createState() => _CandleState();
@@ -28,7 +26,7 @@ class _CandleState extends State<Candle> {
 
   /// Lights the candle, rendering the ghost inaccessible
   _lightCandle() async {
-    await widget._ghost.toggleCandleDB(true);
+    await widget._ghost.setCandleLit(true);
     widget._setInteract(false);
 
     Duration time = Duration(hours: 1);
@@ -46,7 +44,7 @@ class _CandleState extends State<Candle> {
 
   /// Extinguishes the candle, allowing the ghost back
   _extinguishCandle() async {
-    await widget._ghost.toggleCandleDB(false);
+    await widget._ghost.setCandleLit(false);
     widget._setInteract(true);
     // TODO: Send notification here
     setState(() {
