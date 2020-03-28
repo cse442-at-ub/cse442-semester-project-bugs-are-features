@@ -63,8 +63,7 @@ class _CandleState extends State<Candle> {
   @override
   Widget build(BuildContext context) {
     if (_isLit) {
-      //return Image.asset('assets/misc/candle_lit.png'),
-      return Text('🕯️');
+      return Image.asset('assets/misc/Candle.png', width: 50.0);
     } else {
       return GestureDetector(
         onTap: () => _lightCandle(),

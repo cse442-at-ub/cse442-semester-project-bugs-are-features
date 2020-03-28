@@ -98,7 +98,7 @@ class _GhostMainState extends State<GhostMain> {
           color: Theme.of(context).backgroundColor.withOpacity(0.8),
         ),
         Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
 
             // The ghost image
