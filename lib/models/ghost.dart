@@ -2,9 +2,8 @@ import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
-import 'package:ghost_app/db/db.dart';
 import 'package:ghost_app/db/constants.dart' as Constants;
+import 'package:ghost_app/db/db.dart';
 
 const List<int> LEVEL_POINTS = [0, 10, 20, 40, 80, 160, 320, 640, 1280, 2560, 5120];
 /// Returns the current level based upon a given score
@@ -29,7 +28,10 @@ enum Difficulty {
   Hard
 } // Difficulty. Easy: 0, Medium: 1, Hard: 2
 
-
+/// The ghost model for the currently active ghost.
+///
+/// Makes all of the ghost state accessible throughout the app, as well as
+/// handles any database transactions that affect the state of the ghost.
 class Ghost {
   /// The current ghost id
   final int _id;
@@ -55,6 +57,9 @@ class Ghost {
   /// ???
   int _chatOptionScore;
 
+  ///  Whether or not the candle is currently lit.
+  bool _candleLit;
+
   Ghost(this._id, this._database);
 
   init() async {
@@ -77,9 +82,14 @@ class Ghost {
     _level = map['${Constants.GHOST_LEVEL}'];
     _score = map['${Constants.GHOST_SCORE}'];
     _chatOptionScore = 0;
+    _candleLit = map['${Constants.GHOST_CANDLE_LIT}'] == true;
   }
 
+  /// Adds `score` amount of points to the ghost's score.
   addScore(int score) async {
+    if (score == 0) {
+      return;
+    }
     _score += score;
 
     int newLevel = checkLevel(_score);
@@ -95,15 +105,27 @@ class Ghost {
       Constants.GHOST_LEVEL: _level
     };
 
-    int cols;
+    int rows;
     await _database.pool.update(
         Constants.GHOST_TABLE,
         columns,
         where: '${Constants.GHOST_ID} = ?',
         whereArgs: [_id]
-    ).then((colsUpdated) => cols = colsUpdated);
+    ).then((rowsUpdated) => rows = rowsUpdated);
+    return rows;
+  }
 
-    return cols;
+  /// Sets the candle lit value to be true or false
+  setCandleLit(bool value) async {
+    _candleLit = value;
+
+    Map<String, String> row = {Constants.GHOST_CANDLE_LIT: value.toString()};
+    await _database.pool.update(
+        Constants.GHOST_TABLE,
+        row,
+        where: '${Constants.GHOST_ID} = ?',
+        whereArgs: [_id]
+    );
   }
 
   /// Returns the ghost's id
@@ -139,13 +161,15 @@ class Ghost {
   /// Returns the ghost's chat option score
   int get chatOptionScore => _chatOptionScore;
 
-  /// Returns the Image icon of the ghost
-  Image get image => Image.asset("assets/ghosts/ghost$_id.png");
+  /// Returns whether or not the ghost sees that the candle is lit
+  bool get candleLit => _candleLit;
 
-  /// Returns an semi-transparent Image of the ghost
-  Image get opaqueImage => Image.asset(
-      "assets/ghosts/ghost$_id.png",
-      color: Color.fromRGBO(255, 255, 255, 0.5),
-      colorBlendMode: BlendMode.modulate
-  );
+  /// Returns the Image icon of the ghost
+  Image get image => _candleLit
+      ? Image.asset(
+          "assets/ghosts/ghost$_id.png",
+          color: Color.fromRGBO(255, 255, 255, 0.5),
+          colorBlendMode: BlendMode.modulate
+        )
+      : Image.asset("assets/ghosts/ghost$_id.png");
 }

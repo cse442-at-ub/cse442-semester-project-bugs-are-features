@@ -119,6 +119,8 @@ class _RootPageState extends State<RootPage> {
     precacheImage(AssetImage('assets/misc/Graveyard.png'), context);
     precacheImage(AssetImage('assets/misc/GrimReaper.png'), context);
     precacheImage(AssetImage('assets/misc/MainIcon.png'), context);
+    precacheImage(AssetImage('assets/misc/Candle.png'), context);
+    precacheImage(AssetImage('assets/misc/UnlitCandle.png'), context);
     precacheImage(AssetImage('assets/ghosts/ghost1.png'), context);
     precacheImage(AssetImage('assets/ghosts/ghost2.png'), context);
 
