@@ -17,7 +17,7 @@ class CycleTimer extends StatefulWidget {
 
 class _CycleTimerState extends State<CycleTimer>{
 
-  bool _isDay = false;
+  bool _isDay = false; //set to true to test toggle day cycle
   RestartableTimer _timer; //restartable timer
 
   void _startTimer(int duration) {
@@ -65,10 +65,7 @@ class _CycleTimerState extends State<CycleTimer>{
     else{
       return SwitchListTile(
         title: Image.asset('assets/misc/Moon.png', height: 40, width: 40, alignment: new Alignment(-1.0, -1.0)),
-        value: _isDay,
-        onChanged: (bool value) {
-          setState(() { _isDay = value; });
-        },
+        value: _isDay
       );
     }
 
