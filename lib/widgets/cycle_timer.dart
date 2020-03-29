@@ -50,36 +50,28 @@ class _CycleTimerState extends State<CycleTimer>{
   }
 
 
-
-
- /* @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    RestartableTimer t;
-    if (!_isDay) {
-      return Image.asset('assets/misc/Moon.png', width: 10.0);
-    }
-    else {
-      return GestureDetector(
-        onTap: _toDayCycle(t),
-        child: Image.asset(
-            'assets/misc/Sun.png',
-            width: 10.0
-        ),
-      );
-    }
-  }*/
-
-  bool _lights = false;
-
+///Toggle button to toggle between day and night cycles. Moon = Night cycle, Sun = Day cycle
   @override
   Widget build(BuildContext context) {
-    return SwitchListTile(
-      title: const Text('Lights'),
-      value: _lights,
-      onChanged: (bool value) { setState(() { _lights = value; }); },
-      secondary: const Icon(Icons.lightbulb_outline),
-    );
+    if(_isDay){
+      return SwitchListTile(
+        title: Image.asset('assets/misc/Sun.png', height: 40, width: 40, alignment: new Alignment(-1.0, -1.0)),
+        value: _isDay,
+        onChanged: (bool value) {
+          setState(() { _isDay = value; });
+        },
+      );
+    }
+    else{
+      return SwitchListTile(
+        title: Image.asset('assets/misc/Moon.png', height: 40, width: 40, alignment: new Alignment(-1.0, -1.0)),
+        value: _isDay,
+        onChanged: (bool value) {
+          setState(() { _isDay = value; });
+        },
+      );
+    }
+
   }
 
 }
