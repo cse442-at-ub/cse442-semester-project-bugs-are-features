@@ -19,27 +19,29 @@ class CycleTimer extends StatefulWidget {
 class _CycleTimerState extends State<CycleTimer>{
 
   bool _isDay = false; //set to true to test toggle day cycle
- // RestartableTimer _timer; //restartable timer
-  Timer _timer;
+  CountdownTimer _timer;
 
   int _start = 10;
+  int _current = 10;
 
   void _startTimer(int duration) {
     Duration dur =  Duration(hours: 1);
 
-    const oneSec = const Duration(seconds: 1);
-    _timer = new Timer.periodic(
-      oneSec,
-          (Timer timer) => setState(
-            () {
-          if (_start < 1) {
-            timer.cancel();
-          } else {
-            _start = _start - 1;
-          }
-        },
-      ),
+    //Countdown timer to show progress
+    _timer = new CountdownTimer(
+      new Duration(seconds: _start),
+      new Duration(seconds: 1),
     );
+
+    var sub = _timer.listen(null);
+    sub.onData((duration) {
+      setState(() { _current = _start - duration.elapsed.inSeconds; });
+    });
+
+    sub.onDone(() {
+      print("Done");
+      sub.cancel();
+    });
 
     @override
     void dispose() {
@@ -81,7 +83,7 @@ class _CycleTimerState extends State<CycleTimer>{
             },
             child: Text("start"),
           ),
-          secondary: Text("$_start"),
+          secondary: Text("$_current"),
           value: _isDay,
           onChanged: (bool value) {
             setState(() {
@@ -101,7 +103,7 @@ class _CycleTimerState extends State<CycleTimer>{
               },
               child: Text("start"),
             ),
-            secondary: Text("$_start"),
+            secondary: Text("$_current"),
             value: _isDay
         );
       }
