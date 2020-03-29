@@ -6,7 +6,6 @@ import 'package:ghost_app/models/ghost.dart';
 
 class CycleTimer extends StatefulWidget {
 
-
   final ValueSetter<bool> _interact;
 
   CycleTimer( this._interact);
@@ -53,7 +52,7 @@ class _CycleTimerState extends State<CycleTimer>{
 
 
 
-  /*@override
+ /* @override
   Widget build(BuildContext context) {
     // TODO: implement build
     RestartableTimer t;

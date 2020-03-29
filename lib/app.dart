@@ -4,6 +4,7 @@ import 'dart:developer' as dev;
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:ghost_app/db/db.dart';
+import 'package:ghost_app/widgets/cycle_timer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'screens/ghost.dart';
@@ -61,6 +62,16 @@ class _RootPageState extends State<RootPage> {
     super.dispose();
   }
 
+  //To set interaction with Day/Night Switch
+  bool _canInteract = true;
+  void _setInteract(bool value) {
+    dev.log("Setting canInteract to $value for Day/Night Cycle switch", name: "widgets.app");
+    setState(() {
+      _canInteract = value;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     // Display splash screen until assets are loaded.
@@ -87,6 +98,9 @@ class _RootPageState extends State<RootPage> {
       screen = GraveyardMain(_prefs, _ghostChosen);
     }
     view.add(screen);
+
+    // Day/Night cycle switch
+    view.add(CycleTimer(_setInteract),);
 
     view.add(SettingsButton(_prefs, _ghostReleased));
 
