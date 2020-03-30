@@ -19,14 +19,31 @@ class _CycleTimerState extends State<CycleTimer> {
   bool _isDay = true; //set to true to test toggle day cycle
 
   Timer _timer;
-  DateTime _currentTime;
-  
+  int _currentTime = 10;
+
+  /*Duration _start = new Duration(
+      hours: 2 + DateTime.now().hour,
+      minutes: DateTime.now().minute,
+      seconds: DateTime.now().second
+  );
+*/
+  int _start = 20;
   //Countdown timer to show progress
-  @override
-  void initState() {
-    super.initState();
-    _currentTime = DateTime.now();
-    _timer = Timer.periodic(Duration(seconds: 1), _onTimeChange);
+  void startTimer() {
+
+    CountdownTimer countDownTimer = new CountdownTimer(new Duration(seconds: _start), new Duration(seconds: 1),);
+
+    var sub = countDownTimer.listen(null);
+    sub.onData((duration) {
+      setState(() {
+        _currentTime = _start - duration.elapsed.inSeconds;
+      });
+    });
+
+    sub.onDone(() {
+      print("Done");
+      sub.cancel();
+    });
   }
 
   @override
@@ -35,53 +52,22 @@ class _CycleTimerState extends State<CycleTimer> {
     super.dispose();
   }
 
-  void _onTimeChange(Timer timer) {
-    setState(() {
-      _currentTime = DateTime.now();
-    });
-  }
 
-  ///render all functionality false in day cycle
-  _toDayCycle(Timer t) async {
-    // TODO: Send notification here
-    initState();
-    widget._setInteract(false);
-    setState(() {
-      _isDay = true;
-    });
-  }
-
-  _toNightCycle(Timer t) async {
-    initState();
-    widget._setInteract(true);
-    setState(() {
-      _isDay = false;
-    });
-  }
 
   ///Toggle button to toggle between day and night cycles. Moon = Night cycle, Sun = Day cycle
   @override
   Widget build(BuildContext context) {
-    final startOfNextCycle = calculateStartOfNextCycle(_currentTime);
-    final remaining = startOfNextCycle.difference(_currentTime);
-    //log(startOfNextCycle.toString(), name: "start");
-    //log(remaining.toString(), name: "remaining");
-
-    final hours = remaining.inHours;
-    final minutes = remaining.inMinutes - remaining.inHours * 60;
-    final seconds = remaining.inSeconds - remaining.inMinutes * 60;
-
-    final formattedRemaining = '$hours : $minutes : $seconds';
 
     if (_isDay) {
       return Column(
         children: <Widget>[
           SwitchListTile.adaptive(
             title: Image.asset('assets/misc/Sun.png', height: 40, width: 40, alignment: new Alignment(-1.0, -1.0)),
-            secondary: Text("$formattedRemaining"),
+            secondary: Text(_currentTime.toString()),
             value: _isDay,
             onChanged: (bool value) {
              // _toNightCycle(_timer);
+              startTimer();
               setState(() {
                 _isDay = value;
               });
@@ -94,7 +80,13 @@ class _CycleTimerState extends State<CycleTimer> {
         children: <Widget>[
           SwitchListTile.adaptive(
               title: Image.asset('assets/misc/Moon.png', height: 40, width: 40, alignment: new Alignment(-1.0, -1.0)),
-              secondary: Text("$formattedRemaining"),
+              secondary: Text(_currentTime.toString()),
+              onChanged: (bool value) {
+                startTimer();
+                setState(() {
+                  _isDay = value;
+                });
+              },
               value: _isDay)
         ],
       );
@@ -102,11 +94,4 @@ class _CycleTimerState extends State<CycleTimer> {
   }
 }
 
-///Calculates the time remaining for the next cycle switch. Default set to 2 hrs
-DateTime calculateStartOfNextCycle(DateTime time) {
-  final timeUntilNextCycle = 2 + time.hour;
-  var x = DateTime(time.year, time.month, time.day, timeUntilNextCycle);
-  //log(x.toString(), name: "x");
-  return DateTime(
-      time.year, time.month, time.day, timeUntilNextCycle);
-}
+
