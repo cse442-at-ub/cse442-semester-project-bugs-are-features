@@ -44,13 +44,15 @@ class _CycleTimerState extends State<CycleTimer> {
   ///render all functionality false in day cycle
   _toDayCycle(Timer t) async {
     // TODO: Send notification here
+    initState();
     widget._setInteract(false);
     setState(() {
       _isDay = true;
     });
   }
 
-  _toNightCycle(RestartableTimer t) async {
+  _toNightCycle(Timer t) async {
+    initState();
     widget._setInteract(true);
     setState(() {
       _isDay = false;
@@ -62,6 +64,7 @@ class _CycleTimerState extends State<CycleTimer> {
   Widget build(BuildContext context) {
     final startOfNextCycle = calculateStartOfNextCycle(_currentTime);
     final remaining = startOfNextCycle.difference(_currentTime);
+    //log(startOfNextCycle.toString(), name: "start");
     //log(remaining.toString(), name: "remaining");
 
     final hours = remaining.inHours;
@@ -78,6 +81,7 @@ class _CycleTimerState extends State<CycleTimer> {
             secondary: Text("$formattedRemaining"),
             value: _isDay,
             onChanged: (bool value) {
+             // _toNightCycle(_timer);
               setState(() {
                 _isDay = value;
               });
@@ -101,8 +105,8 @@ class _CycleTimerState extends State<CycleTimer> {
 ///Calculates the time remaining for the next cycle switch. Default set to 2 hrs
 DateTime calculateStartOfNextCycle(DateTime time) {
   final timeUntilNextCycle = 2 + time.hour;
-  //var x = DateTime(time.year, time.month, time.day, time.hour + daysUntilNextWeek);
+  var x = DateTime(time.year, time.month, time.day, timeUntilNextCycle);
   //log(x.toString(), name: "x");
   return DateTime(
-      time.year, time.month, time.day, time.hour + timeUntilNextCycle);
+      time.year, time.month, time.day, timeUntilNextCycle);
 }
