@@ -16,15 +16,11 @@ class CycleTimer extends StatefulWidget {
 }
 
 class _CycleTimerState extends State<CycleTimer> {
-  bool _isDay = false; //set to true to test toggle day cycle
+  bool _isDay = true; //set to true to test toggle day cycle
 
   Timer _timer;
   DateTime _currentTime;
-
-
-
-  Duration dur = Duration(hours: 1);
-
+  
   //Countdown timer to show progress
   @override
   void initState() {
@@ -78,14 +74,7 @@ class _CycleTimerState extends State<CycleTimer> {
       return Column(
         children: <Widget>[
           SwitchListTile.adaptive(
-            title: Image.asset('assets/misc/Sun.png',
-                height: 40, width: 40, alignment: new Alignment(-1.0, -1.0)),
-            /*subtitle: RaisedButton( //make a new widget out of this
-              onPressed: () {
-                //_startTimer(1);
-              },
-              child: Text("start"),
-            ),*/
+            title: Image.asset('assets/misc/Sun.png', height: 40, width: 40, alignment: new Alignment(-1.0, -1.0)),
             secondary: Text("$formattedRemaining"),
             value: _isDay,
             onChanged: (bool value) {
@@ -100,14 +89,7 @@ class _CycleTimerState extends State<CycleTimer> {
       return Column(
         children: <Widget>[
           SwitchListTile.adaptive(
-              title: Image.asset('assets/misc/Moon.png',
-                  height: 40, width: 40, alignment: new Alignment(-1.0, -1.0)),
-              /*subtitle: RaisedButton(
-                onPressed: () {
-                 // _startTimer(1);
-                },
-                child: Text("start"),
-              ),*/
+              title: Image.asset('assets/misc/Moon.png', height: 40, width: 40, alignment: new Alignment(-1.0, -1.0)),
               secondary: Text("$formattedRemaining"),
               value: _isDay)
         ],
