@@ -11,7 +11,6 @@ assignees: ''
 **So I** (testable reward)
 
 ### Acceptance Tests
-- [ ] Tests should be step by step confirmations of the story's meaning
-- [ ] Tests can be created, modified, or ~~deleted~~
-- [ ] This is an incomplete item
-- [x] This is a complete item
+|   Test	| Data  	|   Expected Results	|
+|---	|---	|---	|
+| Short description of the Test	|  Data required / steps taken to run the test	|  Expected result from the Test 
