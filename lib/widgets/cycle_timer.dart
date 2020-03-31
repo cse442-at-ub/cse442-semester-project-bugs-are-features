@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:ghost_app/models/cycle.dart' as Cycle;
 
 class CycleTimer extends StatefulWidget {
-  final ValueSetter<bool> _setInteract;
-
+  /// Sets the Day and Night cycle
   final ValueSetter<bool> _setDayCycle;
+  bool _cancelTimer;
 
-  CycleTimer(this._setInteract, this._setDayCycle);
+  CycleTimer(this._setDayCycle, this._cancelTimer);
   @override
   _CycleTimerState createState() => _CycleTimerState();
 }
@@ -48,6 +48,7 @@ class _CycleTimerState extends State<CycleTimer> {
   }
 
   void _startCycle(bool firstStart) {
+    _destroyTimer();
     if (_isDay) {
       _timer = Timer(_nightCycle, _switchCycle);
       widget._setDayCycle(true);
@@ -73,12 +74,20 @@ class _CycleTimerState extends State<CycleTimer> {
     _dayCycle = Duration(seconds: Cycle.DAY_CYCLE);
     _nightCycle = Duration(seconds: Cycle.NIGHT_CYCLE);
     _timeElapsed = 0;
-    _startCycle(true);
+    if (widget._cancelTimer) {
+      _destroyTimer();
+    } else {
+      _startCycle(true);
+    }
   }
 
   @override
   void dispose() {
     super.dispose();
+    _destroyTimer();
+  }
+
+  void _destroyTimer() {
     if (_timer != null && _timer.isActive) {
       _timer.cancel();
     }
@@ -88,7 +97,7 @@ class _CycleTimerState extends State<CycleTimer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        alignment: Alignment.topCenter,
+        alignment: _isDay ? Alignment.center : Alignment.topCenter,
         margin:
             EdgeInsets.only(top: MediaQuery.of(context).padding.top + _offset),
         child: Column(

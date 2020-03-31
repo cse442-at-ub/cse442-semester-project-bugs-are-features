@@ -169,12 +169,12 @@ class Ghost {
           "assets/ghosts/ghost$_id.png",
           color: Color.fromRGBO(255, 255, 255, 0.5),
           colorBlendMode: BlendMode.modulate,
-          width: 200,
-          height: 200,
+          width: 150,
+          height: 150,
         )
       : Image.asset(
           "assets/ghosts/ghost$_id.png",
-          width: 200,
-          height: 200,
+          width: 150,
+          height: 150,
         );
 }

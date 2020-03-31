@@ -17,10 +17,13 @@ class DevSettings extends StatelessWidget {
   /// Called as a function when a ghost is released.
   final VoidCallback _ghostReleased;
   final VoidCallback _showNotification;
-  final VoidCallback _hideNotification;
 
-  DevSettings(this._prefs, this._ghostReleased, this._database,
-      this._showNotification, this._hideNotification);
+  DevSettings(
+    this._prefs,
+    this._ghostReleased,
+    this._database,
+    this._showNotification,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -97,8 +100,8 @@ class DevSettings extends StatelessWidget {
               FlatButton(
                 color: Theme.of(context).buttonColor,
                 textColor: Theme.of(context).textTheme.body1.color,
-                onPressed: () => _hideNotification(),
-                child: Text("Hide Notification"),
+                onPressed: () => null,
+                child: Text("Stop Day/Night Cycle"),
               )
             ]));
   }

@@ -50,6 +50,8 @@ class _RootPageState extends State<RootPage> {
   SharedPreferences _prefs;
 
   bool _isDayCycle = false;
+  bool _stopTimer = false;
+
   @override
   initState() {
     super.initState();
@@ -61,16 +63,6 @@ class _RootPageState extends State<RootPage> {
   void dispose() {
     _database.close();
     super.dispose();
-  }
-
-  //To set interaction with Day/Night Switch
-  bool _canInteract = true;
-  void _setInteract(bool value) {
-    dev.log("Setting canInteract to $value for Day/Night Cycle switch",
-        name: "widgets.app");
-    setState(() {
-      _canInteract = value;
-    });
   }
 
   @override
@@ -102,21 +94,23 @@ class _RootPageState extends State<RootPage> {
     // Select our main view container.
     var ghost_chosen = _prefs.getBool('has_ghost');
     if (ghost_chosen) {
-      screen = GhostMain(_prefs, _ghostReleased, _database, _ghost);
+      screen =
+          GhostMain(_prefs, _ghostReleased, _database, _ghost, !_isDayCycle);
       // Day/Night cycle switch
     } else {
       screen = GraveyardMain(_prefs, _ghostChosen);
     }
     view.add(screen);
     if (ghost_chosen) {
-      view.add(CycleTimer(_setInteract, _setDayCycle));
+      view.add(CycleTimer(_setDayCycle, _stopTimer));
     }
-    view.add(SettingsButton(_prefs, _ghostReleased));
+    if (!_isDayCycle) {
+      view.add(SettingsButton(_prefs, _ghostReleased));
+    }
 
     // Add Dev Settings button _only_ if in development
     assert(() {
-      view.add(DevButton(_prefs, _ghostReleased, _database, _showNotification,
-          _hideNotification));
+      view.add(DevButton(_prefs, _ghostReleased, _database, _showNotification));
       return true;
     }());
 
@@ -129,7 +123,7 @@ class _RootPageState extends State<RootPage> {
     });
   }
 
-  _setGhost(int gid) async {
+  _setGhost(int gid) async {  
     _ghost = Ghost(gid, _database);
     await _ghost.init();
     dev.log("Current ghost ID = $gid", name: "app.init");
@@ -252,5 +246,11 @@ class _RootPageState extends State<RootPage> {
 
   Future _hideNotification() async {
     await _flutterLocalNotificationsPlugin.cancel(0);
+  }
+
+  void _cancelTimer() {
+    setState(() {
+      _stopTimer = true;
+    });
   }
 }
