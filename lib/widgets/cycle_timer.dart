@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
-import 'package:async/async.dart';
 import 'package:quiver/async.dart';
 
 import 'package:flutter/material.dart';
@@ -27,7 +25,7 @@ class _CycleTimerState extends State<CycleTimer> {
       seconds: DateTime.now().second
   );
 */
-  int _start = 20;
+  int _start = 100;
   //Countdown timer to show progress
   void startTimer() {
 
