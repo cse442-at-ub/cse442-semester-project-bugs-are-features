@@ -20,10 +20,9 @@ class DevButton extends StatelessWidget {
   /// Called as a function when a ghost is released.`
   final VoidCallback _ghostReleased;
   final VoidCallback _showNotification;
-  final VoidCallback _hideNotification;
 
-  DevButton(this._prefs, this._ghostReleased, this._database,
-      this._showNotification, this._hideNotification);
+  DevButton(
+      this._prefs, this._ghostReleased, this._database, this._showNotification);
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +52,7 @@ class DevButton extends StatelessWidget {
                       child: Center(
                         child: Material(
                           child: DevSettings(_prefs, _ghostReleased, _database,
-                              _showNotification, _hideNotification),
+                              _showNotification),
                         ),
                       ),
                     ),

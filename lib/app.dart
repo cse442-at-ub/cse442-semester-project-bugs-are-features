@@ -49,6 +49,9 @@ class _RootPageState extends State<RootPage> {
   /// Instance of app preferences. Is passed to children.
   SharedPreferences _prefs;
 
+  bool _isDayCycle = false;
+  bool _stopTimer = false;
+
   @override
   initState() {
     super.initState();
@@ -62,16 +65,6 @@ class _RootPageState extends State<RootPage> {
     super.dispose();
   }
 
-  //To set interaction with Day/Night Switch
-  bool _canInteract = true;
-  void _setInteract(bool value) {
-    dev.log("Setting canInteract to $value for Day/Night Cycle switch", name: "widgets.app");
-    setState(() {
-      _canInteract = value;
-    });
-  }
-
-
   @override
   Widget build(BuildContext context) {
     // Display splash screen until assets are loaded.
@@ -82,36 +75,52 @@ class _RootPageState extends State<RootPage> {
     var view = <Widget>[];
 
     // Set the app-wide background image
-    var bg = Image.asset(
-      'assets/misc/Graveyard.png',
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      fit: BoxFit.fill,
-    );
+    var bg = _isDayCycle
+        ? Image.asset(
+            'assets/misc/Graveyard2.png',
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            fit: BoxFit.fill,
+          )
+        : Image.asset(
+            'assets/misc/Graveyard.png',
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            fit: BoxFit.fill,
+          );
     view.add(bg);
 
     Widget screen;
     // Select our main view container.
-    if (_prefs.getBool('has_ghost')) {
-      screen = GhostMain(_prefs, _ghostReleased, _database, _ghost);
+    var ghost_chosen = _prefs.getBool('has_ghost');
+    if (ghost_chosen) {
+      screen =
+          GhostMain(_prefs, _ghostReleased, _database, _ghost, !_isDayCycle);
+      // Day/Night cycle switch
     } else {
       screen = GraveyardMain(_prefs, _ghostChosen);
     }
     view.add(screen);
-
-    // Day/Night cycle switch
-    view.add(CycleTimer(_setInteract),);
-
-    view.add(SettingsButton(_prefs, _ghostReleased));
+    if (ghost_chosen) {
+      view.add(CycleTimer(_setDayCycle, _stopTimer));
+    }
+    if (!_isDayCycle) {
+      view.add(SettingsButton(_prefs, _ghostReleased));
+    }
 
     // Add Dev Settings button _only_ if in development
     assert(() {
-      view.add(DevButton(_prefs, _ghostReleased, _database, _showNotification,
-          _hideNotification));
+      view.add(DevButton(_prefs, _ghostReleased, _database, _showNotification));
       return true;
     }());
 
     return Stack(children: view);
+  }
+
+  void _setDayCycle(bool value) {
+    setState(() {
+      _isDayCycle = value;
+    });
   }
 
   _setGhost(int gid) async {
@@ -131,6 +140,7 @@ class _RootPageState extends State<RootPage> {
     }
     // Pre-load all images
     precacheImage(AssetImage('assets/misc/Graveyard.png'), context);
+    precacheImage(AssetImage('assets/misc/Graveyard2.png'), context);
     precacheImage(AssetImage('assets/misc/GrimReaper.png'), context);
     precacheImage(AssetImage('assets/misc/MainIcon.png'), context);
     precacheImage(AssetImage('assets/misc/Candle.png'), context);
@@ -183,6 +193,7 @@ class _RootPageState extends State<RootPage> {
     _prefs.setBool('first_launch', false);
     _prefs.setBool('has_ghost', false);
     _prefs.setInt('ghost_id', 0);
+    _prefs.setString('cycle_value', null);
   }
 
   /// Call from [GraveyardMain] when a ghost is selected to render [GhostMain].
@@ -198,6 +209,7 @@ class _RootPageState extends State<RootPage> {
     setState(() {
       _prefs.setInt('ghost_id', id);
       _prefs.setBool('has_ghost', true);
+      _prefs.setString('cycle_value', 'night');
     });
   }
 
@@ -216,8 +228,10 @@ class _RootPageState extends State<RootPage> {
     }
 
     setState(() {
+      _isDayCycle = false;
       _prefs.setInt('ghost_id', 0);
       _prefs.setBool('has_ghost', false);
+      _prefs.setString('cycle_value', null);
     });
   }
 
@@ -233,5 +247,11 @@ class _RootPageState extends State<RootPage> {
 
   Future _hideNotification() async {
     await _flutterLocalNotificationsPlugin.cancel(0);
+  }
+
+  void _cancelTimer() {
+    setState(() {
+      _stopTimer = true;
+    });
   }
 }

@@ -5,7 +5,20 @@ import 'package:flutter/widgets.dart';
 import 'package:ghost_app/db/constants.dart' as Constants;
 import 'package:ghost_app/db/db.dart';
 
-const List<int> LEVEL_POINTS = [0, 10, 20, 40, 80, 160, 320, 640, 1280, 2560, 5120];
+const List<int> LEVEL_POINTS = [
+  0,
+  10,
+  20,
+  40,
+  80,
+  160,
+  320,
+  640,
+  1280,
+  2560,
+  5120
+];
+
 /// Returns the current level based upon a given score
 int checkLevel(int score) {
   for (int i = 10; i > 0; i--) {
@@ -22,11 +35,7 @@ enum Temperament {
   Angry
 } // Temperament of the ghost. Friendly: 0, Neutral: 1, Angry: 2
 
-enum Difficulty {
-  Easy,
-  Med,
-  Hard
-} // Difficulty. Easy: 0, Medium: 1, Hard: 2
+enum Difficulty { Easy, Med, Hard } // Difficulty. Easy: 0, Medium: 1, Hard: 2
 
 /// The ghost model for the currently active ghost.
 ///
@@ -63,12 +72,8 @@ class Ghost {
   Ghost(this._id, this._database);
 
   init() async {
-    var maps = await _database.pool.query(
-        Constants.GHOST_TABLE,
-        columns: null,
-        where: '${Constants.GHOST_ID} = ?',
-        whereArgs: [id]
-    );
+    var maps = await _database.pool.query(Constants.GHOST_TABLE,
+        columns: null, where: '${Constants.GHOST_ID} = ?', whereArgs: [id]);
 
     if (maps.length != 1) {
       throw Exception('Querying ghost id `$id` failed: ${maps.length} rows.');
@@ -106,12 +111,9 @@ class Ghost {
     };
 
     int rows;
-    await _database.pool.update(
-        Constants.GHOST_TABLE,
-        columns,
+    await _database.pool.update(Constants.GHOST_TABLE, columns,
         where: '${Constants.GHOST_ID} = ?',
-        whereArgs: [_id]
-    ).then((rowsUpdated) => rows = rowsUpdated);
+        whereArgs: [_id]).then((rowsUpdated) => rows = rowsUpdated);
     return rows;
   }
 
@@ -120,12 +122,8 @@ class Ghost {
     _candleLit = value;
 
     Map<String, String> row = {Constants.GHOST_CANDLE_LIT: value.toString()};
-    await _database.pool.update(
-        Constants.GHOST_TABLE,
-        row,
-        where: '${Constants.GHOST_ID} = ?',
-        whereArgs: [_id]
-    );
+    await _database.pool.update(Constants.GHOST_TABLE, row,
+        where: '${Constants.GHOST_ID} = ?', whereArgs: [_id]);
   }
 
   /// Returns the ghost's id
@@ -133,6 +131,7 @@ class Ghost {
 
   /// Returns the ghost's current temperament
   Temperament get temperament => _temperament;
+
   /// Sets the ghost's current temperament
   set temperament(Temperament t) {
     this._temperament = t;
@@ -169,7 +168,13 @@ class Ghost {
       ? Image.asset(
           "assets/ghosts/ghost$_id.png",
           color: Color.fromRGBO(255, 255, 255, 0.5),
-          colorBlendMode: BlendMode.modulate
+          colorBlendMode: BlendMode.modulate,
+          width: 150,
+          height: 150,
         )
-      : Image.asset("assets/ghosts/ghost$_id.png");
+      : Image.asset(
+          "assets/ghosts/ghost$_id.png",
+          width: 150,
+          height: 150,
+        );
 }
