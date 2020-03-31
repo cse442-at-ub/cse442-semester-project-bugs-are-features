@@ -14,7 +14,7 @@ class CycleTimer extends StatefulWidget {
 
 class _CycleTimerState extends State<CycleTimer> {
   Timer _timer;
-  bool _isDay; //set to true to test toggle day cycle
+  bool _isDay; //bool vale to check if it is a day cycle or a night cycle
   int _offset = 50;
 
   Duration _dayCycle;

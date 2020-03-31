@@ -90,20 +90,20 @@ class _RootPageState extends State<RootPage> {
           );
     view.add(bg);
 
+    ///Timer for Day and Night cycle switch
+    view.add(CycleTimer(_setDayCycle, _stopTimer));
+
     Widget screen;
     // Select our main view container.
-    var ghost_chosen = _prefs.getBool('has_ghost');
-    if (ghost_chosen) {
-      screen =
-          GhostMain(_prefs, _ghostReleased, _database, _ghost, !_isDayCycle);
+    var ghostChosen = _prefs.getBool('has_ghost');
+    if (ghostChosen) {
+      screen = GhostMain(_prefs, _ghostReleased, _database, _ghost, !_isDayCycle);
       // Day/Night cycle switch
     } else {
       screen = GraveyardMain(_prefs, _ghostChosen);
     }
     view.add(screen);
-    if (ghost_chosen) {
-      view.add(CycleTimer(_setDayCycle, _stopTimer));
-    }
+
     if (!_isDayCycle) {
       view.add(SettingsButton(_prefs, _ghostReleased));
     }
