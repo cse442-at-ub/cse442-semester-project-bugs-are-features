@@ -1,97 +1,102 @@
 import 'dart:async';
-import 'dart:developer';
-import 'package:async/async.dart';
-import 'package:quiver/async.dart';
-
 import 'package:flutter/material.dart';
-import 'package:ghost_app/models/ghost.dart';
+import 'package:ghost_app/models/cycle.dart' as Cycle;
 
 class CycleTimer extends StatefulWidget {
   final ValueSetter<bool> _setInteract;
 
-  CycleTimer(this._setInteract);
+  final ValueSetter<bool> _setDayCycle;
 
+  CycleTimer(this._setInteract, this._setDayCycle);
   @override
   _CycleTimerState createState() => _CycleTimerState();
 }
 
 class _CycleTimerState extends State<CycleTimer> {
-  bool _isDay = true; //set to true to test toggle day cycle
-
   Timer _timer;
-  int _currentTime = 10;
+  bool _isDay; //set to true to test toggle day cycle
+  int _offset = 50;
 
-  /*Duration _start = new Duration(
-      hours: 2 + DateTime.now().hour,
-      minutes: DateTime.now().minute,
-      seconds: DateTime.now().second
-  );
-*/
-  int _start = 20;
-  //Countdown timer to show progress
-  void startTimer() {
+  Duration _dayCycle;
+  Duration _nightCycle;
+  var _timeElapsed;
 
-    CountdownTimer countDownTimer = new CountdownTimer(new Duration(seconds: _start), new Duration(seconds: 1),);
+  Widget _loadCycle() {
+    var _cycleImg;
+    if (_isDay) {
+      _cycleImg = Image.asset(
+        'assets/misc/Sun.png',
+        height: 40,
+        width: 40,
+      );
+    } else {
+      _cycleImg = Image.asset(
+        'assets/misc/Moon.png',
+        height: 40,
+        width: 40,
+      );
+    }
+    return _cycleImg;
+  }
 
-    var sub = countDownTimer.listen(null);
-    sub.onData((duration) {
-      setState(() {
-        _currentTime = _start - duration.elapsed.inSeconds;
-      });
+  Widget _makeText() {
+    if (_isDay) {
+      return Text("Day Cycle is On!");
+    } else {
+      return Text("Night Cycle is On!");
+    }
+  }
+
+  void _startCycle(bool firstStart) {
+    if (_isDay) {
+      _timer = Timer(_nightCycle, _switchCycle);
+      widget._setDayCycle(true);
+    } else {
+      _timer = Timer(_dayCycle, _switchCycle);
+      if (!firstStart) {
+        widget._setDayCycle(false);
+      }
+    }
+  }
+
+  void _switchCycle() {
+    setState(() {
+      _isDay = !_isDay;
     });
+    _startCycle(false);
+  }
 
-    sub.onDone(() {
-      print("Done");
-      sub.cancel();
-    });
+  @override
+  void initState() {
+    super.initState();
+    _isDay = false;
+    _dayCycle = Duration(seconds: Cycle.DAY_CYCLE);
+    _nightCycle = Duration(seconds: Cycle.NIGHT_CYCLE);
+    _timeElapsed = 0;
+    _startCycle(true);
   }
 
   @override
   void dispose() {
-    _timer.cancel();
     super.dispose();
+    if (_timer != null && _timer.isActive) {
+      _timer.cancel();
+    }
   }
-
-
 
   ///Toggle button to toggle between day and night cycles. Moon = Night cycle, Sun = Day cycle
   @override
   Widget build(BuildContext context) {
-
-    if (_isDay) {
-      return Column(
-        children: <Widget>[
-          SwitchListTile.adaptive(
-            title: Image.asset('assets/misc/Sun.png', height: 40, width: 40, alignment: new Alignment(-1.0, -1.0)),
-            secondary: Text(_currentTime.toString()),
-            value: _isDay,
-            onChanged: (bool value) {
-             // _toNightCycle(_timer);
-              startTimer();
-              setState(() {
-                _isDay = value;
-              });
-            },
-          )
-        ],
-      );
-    } else {
-      return Column(
-        children: <Widget>[
-          SwitchListTile.adaptive(
-              title: Image.asset('assets/misc/Moon.png', height: 40, width: 40, alignment: new Alignment(-1.0, -1.0)),
-              secondary: Text(_currentTime.toString()),
-              onChanged: (bool value) {
-                startTimer();
-                setState(() {
-                  _isDay = value;
-                });
-              },
-              value: _isDay)
-        ],
-      );
-    }
+    return Container(
+        alignment: Alignment.topCenter,
+        margin:
+            EdgeInsets.only(top: MediaQuery.of(context).padding.top + _offset),
+        child: Column(
+          children: <Widget>[
+            GestureDetector(
+                onTap: _isDay ? _switchCycle : null, child: _loadCycle()),
+            _makeText()
+          ],
+        ));
   }
 }
-
-

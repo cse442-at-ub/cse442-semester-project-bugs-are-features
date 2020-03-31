@@ -15,7 +15,7 @@ class SettingsButton extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(
           top: MediaQuery.of(context).padding.top - 20, right: 10),
-      alignment: Alignment.topRight,
+      alignment: Alignment.topLeft,
       child: GestureDetector(
         onTap: () {
           showGeneralDialog(

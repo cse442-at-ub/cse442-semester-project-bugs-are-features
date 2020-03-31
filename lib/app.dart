@@ -49,6 +49,7 @@ class _RootPageState extends State<RootPage> {
   /// Instance of app preferences. Is passed to children.
   SharedPreferences _prefs;
 
+  bool _isDayCycle = false;
   @override
   initState() {
     super.initState();
@@ -65,12 +66,12 @@ class _RootPageState extends State<RootPage> {
   //To set interaction with Day/Night Switch
   bool _canInteract = true;
   void _setInteract(bool value) {
-    dev.log("Setting canInteract to $value for Day/Night Cycle switch", name: "widgets.app");
+    dev.log("Setting canInteract to $value for Day/Night Cycle switch",
+        name: "widgets.app");
     setState(() {
       _canInteract = value;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -82,26 +83,34 @@ class _RootPageState extends State<RootPage> {
     var view = <Widget>[];
 
     // Set the app-wide background image
-    var bg = Image.asset(
-      'assets/misc/Graveyard.png',
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      fit: BoxFit.fill,
-    );
+    var bg = _isDayCycle
+        ? Image.asset(
+            'assets/misc/Graveyard2.png',
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            fit: BoxFit.fill,
+          )
+        : Image.asset(
+            'assets/misc/Graveyard.png',
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            fit: BoxFit.fill,
+          );
     view.add(bg);
 
     Widget screen;
     // Select our main view container.
-    if (_prefs.getBool('has_ghost')) {
+    var ghost_chosen = _prefs.getBool('has_ghost');
+    if (ghost_chosen) {
       screen = GhostMain(_prefs, _ghostReleased, _database, _ghost);
+      // Day/Night cycle switch
     } else {
       screen = GraveyardMain(_prefs, _ghostChosen);
     }
     view.add(screen);
-
-    // Day/Night cycle switch
-    view.add(CycleTimer(_setInteract),);
-
+    if (ghost_chosen) {
+      view.add(CycleTimer(_setInteract, _setDayCycle));
+    }
     view.add(SettingsButton(_prefs, _ghostReleased));
 
     // Add Dev Settings button _only_ if in development
@@ -112,6 +121,12 @@ class _RootPageState extends State<RootPage> {
     }());
 
     return Stack(children: view);
+  }
+
+  void _setDayCycle(bool value) {
+    setState(() {
+      _isDayCycle = value;
+    });
   }
 
   _setGhost(int gid) async {
@@ -183,6 +198,7 @@ class _RootPageState extends State<RootPage> {
     _prefs.setBool('first_launch', false);
     _prefs.setBool('has_ghost', false);
     _prefs.setInt('ghost_id', 0);
+    _prefs.setString('cycle_value', null);
   }
 
   /// Call from [GraveyardMain] when a ghost is selected to render [GhostMain].
@@ -198,6 +214,7 @@ class _RootPageState extends State<RootPage> {
     setState(() {
       _prefs.setInt('ghost_id', id);
       _prefs.setBool('has_ghost', true);
+      _prefs.setString('cycle_value', 'night');
     });
   }
 
@@ -216,8 +233,10 @@ class _RootPageState extends State<RootPage> {
     }
 
     setState(() {
+      _isDayCycle = false;
       _prefs.setInt('ghost_id', 0);
       _prefs.setBool('has_ghost', false);
+      _prefs.setString('cycle_value', null);
     });
   }
 
