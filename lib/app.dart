@@ -123,7 +123,7 @@ class _RootPageState extends State<RootPage> {
     });
   }
 
-  _setGhost(int gid) async {  
+  _setGhost(int gid) async {
     _ghost = Ghost(gid, _database);
     await _ghost.init();
     dev.log("Current ghost ID = $gid", name: "app.init");
@@ -140,6 +140,7 @@ class _RootPageState extends State<RootPage> {
     }
     // Pre-load all images
     precacheImage(AssetImage('assets/misc/Graveyard.png'), context);
+    precacheImage(AssetImage('assets/misc/Graveyard2.png'), context);
     precacheImage(AssetImage('assets/misc/GrimReaper.png'), context);
     precacheImage(AssetImage('assets/misc/MainIcon.png'), context);
     precacheImage(AssetImage('assets/misc/Candle.png'), context);

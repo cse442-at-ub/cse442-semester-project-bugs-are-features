@@ -21,13 +21,33 @@ class _CycleTimerState extends State<CycleTimer> {
   Duration _nightCycle;
   var _timeElapsed;
 
+  @override
+  void initState() {
+    super.initState();
+    _isDay = false;
+    _dayCycle = Duration(seconds: Cycle.DAY_CYCLE);
+    _nightCycle = Duration(seconds: Cycle.NIGHT_CYCLE);
+    _timeElapsed = 0;
+    if (widget._cancelTimer) {
+      _destroyTimer();
+    } else {
+      _startCycle(true);
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _destroyTimer();
+  }
+
   Widget _loadCycle() {
     var _cycleImg;
     if (_isDay) {
       _cycleImg = Image.asset(
         'assets/misc/Sun.png',
-        height: 40,
-        width: 40,
+        height: 80,
+        width: 80,
       );
     } else {
       _cycleImg = Image.asset(
@@ -41,7 +61,10 @@ class _CycleTimerState extends State<CycleTimer> {
 
   Widget _makeText() {
     if (_isDay) {
-      return Text("Day Cycle is On!");
+      return Text(
+        "Day Cycle is On!",
+        style: TextStyle(fontSize: 30),
+      );
     } else {
       return Text("Night Cycle is On!");
     }
@@ -67,26 +90,6 @@ class _CycleTimerState extends State<CycleTimer> {
     _startCycle(false);
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _isDay = false;
-    _dayCycle = Duration(seconds: Cycle.DAY_CYCLE);
-    _nightCycle = Duration(seconds: Cycle.NIGHT_CYCLE);
-    _timeElapsed = 0;
-    if (widget._cancelTimer) {
-      _destroyTimer();
-    } else {
-      _startCycle(true);
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _destroyTimer();
-  }
-
   void _destroyTimer() {
     if (_timer != null && _timer.isActive) {
       _timer.cancel();
@@ -97,10 +100,12 @@ class _CycleTimerState extends State<CycleTimer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        alignment: _isDay ? Alignment.center : Alignment.topCenter,
+        alignment: Alignment.topCenter,
         margin:
             EdgeInsets.only(top: MediaQuery.of(context).padding.top + _offset),
         child: Column(
+          mainAxisAlignment:
+              _isDay ? MainAxisAlignment.center : MainAxisAlignment.start,
           children: <Widget>[
             GestureDetector(
                 onTap: _isDay ? _switchCycle : null, child: _loadCycle()),
