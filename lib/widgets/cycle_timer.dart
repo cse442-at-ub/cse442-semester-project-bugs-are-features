@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:ghost_app/models/cycle.dart' as Cycle;
 
+
+
 class CycleTimer extends StatefulWidget {
   /// Sets the Day and Night cycle
   final ValueSetter<bool> _setDayCycle;
@@ -14,12 +16,13 @@ class CycleTimer extends StatefulWidget {
 
 class _CycleTimerState extends State<CycleTimer> {
   Timer _timer;
-  bool _isDay; //bool vale to check if it is a day cycle or a night cycle
+  bool _isDay; //bool value to check if it is a day cycle or a night cycle
   int _offset = 50;
 
   Duration _dayCycle;
   Duration _nightCycle;
-  int _timeElapsed;
+  int _timeRemainingDay; //
+  int _timeRemainingNight;
 
   @override
   void initState() {
@@ -27,7 +30,8 @@ class _CycleTimerState extends State<CycleTimer> {
     _isDay = false;
     _dayCycle = Duration(seconds: 1);
     _nightCycle = Duration(seconds: 1);
-    _timeElapsed = Cycle.NIGHT_CYCLE;
+    _timeRemainingDay = Cycle.DAY_CYCLE;
+    _timeRemainingNight = Cycle.NIGHT_CYCLE;
 
     if (widget._cancelTimer) {
       _destroyTimer();
@@ -43,7 +47,9 @@ class _CycleTimerState extends State<CycleTimer> {
   }
 
   Widget _loadCycle() {
-    print(_timeElapsed);
+    //print(_timeElapsedDay);
+    //print(_timeElapsedNight);
+
     var _cycleImg;
     if (_isDay) {
       _cycleImg = Image.asset(
@@ -78,21 +84,24 @@ class _CycleTimerState extends State<CycleTimer> {
 
   void _switchCycle(Timer _t) {
     setState(() {
-      if (_timeElapsed < 1) {
+      if (_timeRemainingDay < 1 || _timeRemainingNight <1) {
         _timer.cancel();
         _isDay = !_isDay;
-        _timeElapsed = Cycle.NIGHT_CYCLE;
+        _timeRemainingDay = Cycle.DAY_CYCLE;
+        _timeRemainingNight = Cycle.NIGHT_CYCLE;
       } else {
-        _timeElapsed -= 1;
+        _timeRemainingDay--;
+        _timeRemainingNight--;
       }
     });
     _startCycle(false);
   }
 
-  void _switchCycle2() {
+  void _switchCycleUI() {
     setState(() {
       _isDay = !_isDay;
-      _timeElapsed = Cycle.NIGHT_CYCLE;
+      _timeRemainingDay = Cycle.DAY_CYCLE;
+      _timeRemainingNight = Cycle.NIGHT_CYCLE;
     });
     _startCycle(false);
   }
@@ -106,11 +115,11 @@ class _CycleTimerState extends State<CycleTimer> {
   Widget _makeText() {
     if (_isDay) {
       return Text(
-        "Day Cycle is On! $_timeElapsed",
+        "Day Cycle is On! $_timeRemainingDay",
         style: TextStyle(fontSize: 30),
       );
     } else {
-      return Text("Night Cycle is On! $_timeElapsed");
+      return Text("Night Cycle is On! $_timeRemainingNight");
     }
   }
 
@@ -126,7 +135,7 @@ class _CycleTimerState extends State<CycleTimer> {
               _isDay ? MainAxisAlignment.center : MainAxisAlignment.start,
           children: <Widget>[
             GestureDetector(
-                onTap: _isDay ? _switchCycle2 : null, child: _loadCycle()),
+                onTap: _isDay ? _switchCycleUI : null, child: _loadCycle()),
             _makeText()
           ],
         ));
