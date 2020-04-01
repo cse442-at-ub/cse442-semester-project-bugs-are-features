@@ -19,15 +19,16 @@ class _CycleTimerState extends State<CycleTimer> {
 
   Duration _dayCycle;
   Duration _nightCycle;
-  var _timeElapsed;
+  int _timeElapsed;
 
   @override
   void initState() {
     super.initState();
     _isDay = false;
-    _dayCycle = Duration(seconds: Cycle.DAY_CYCLE);
-    _nightCycle = Duration(seconds: Cycle.NIGHT_CYCLE);
-    _timeElapsed = 0;
+    _dayCycle = Duration(seconds: 1);
+    _nightCycle = Duration(seconds: 1);
+    _timeElapsed = Cycle.NIGHT_CYCLE;
+
     if (widget._cancelTimer) {
       _destroyTimer();
     } else {
@@ -42,6 +43,7 @@ class _CycleTimerState extends State<CycleTimer> {
   }
 
   Widget _loadCycle() {
+    print(_timeElapsed);
     var _cycleImg;
     if (_isDay) {
       _cycleImg = Image.asset(
@@ -59,33 +61,38 @@ class _CycleTimerState extends State<CycleTimer> {
     return _cycleImg;
   }
 
-  Widget _makeText() {
-    if (_isDay) {
-      return Text(
-        "Day Cycle is On!",
-        style: TextStyle(fontSize: 30),
-      );
-    } else {
-      return Text("Night Cycle is On!");
-    }
-  }
+
 
   void _startCycle(bool firstStart) {
     _destroyTimer();
     if (_isDay) {
-      _timer = Timer(_nightCycle, _switchCycle);
+      _timer = Timer.periodic(_nightCycle, _switchCycle);
       widget._setDayCycle(true);
     } else {
-      _timer = Timer(_dayCycle, _switchCycle);
+      _timer = Timer.periodic(_dayCycle, _switchCycle);
       if (!firstStart) {
         widget._setDayCycle(false);
       }
     }
   }
 
-  void _switchCycle() {
+  void _switchCycle(Timer _t) {
+    setState(() {
+      if (_timeElapsed < 1) {
+        _timer.cancel();
+        _isDay = !_isDay;
+        _timeElapsed = Cycle.NIGHT_CYCLE;
+      } else {
+        _timeElapsed -= 1;
+      }
+    });
+    _startCycle(false);
+  }
+
+  void _switchCycle2() {
     setState(() {
       _isDay = !_isDay;
+      _timeElapsed = Cycle.NIGHT_CYCLE;
     });
     _startCycle(false);
   }
@@ -93,6 +100,17 @@ class _CycleTimerState extends State<CycleTimer> {
   void _destroyTimer() {
     if (_timer != null && _timer.isActive) {
       _timer.cancel();
+    }
+  }
+
+  Widget _makeText() {
+    if (_isDay) {
+      return Text(
+        "Day Cycle is On! $_timeElapsed",
+        style: TextStyle(fontSize: 30),
+      );
+    } else {
+      return Text("Night Cycle is On! $_timeElapsed");
     }
   }
 
@@ -108,7 +126,7 @@ class _CycleTimerState extends State<CycleTimer> {
               _isDay ? MainAxisAlignment.center : MainAxisAlignment.start,
           children: <Widget>[
             GestureDetector(
-                onTap: _isDay ? _switchCycle : null, child: _loadCycle()),
+                onTap: _isDay ? _switchCycle2 : null, child: _loadCycle()),
             _makeText()
           ],
         ));
