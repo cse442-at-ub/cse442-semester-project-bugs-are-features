@@ -23,6 +23,7 @@ class _CycleTimerState extends State<CycleTimer> {
   Duration _nightCycle;
   Duration _currentTime;
   Duration _startOfNextCycle;
+  var _remaining;
 
   @override
   void initState() {
@@ -89,7 +90,7 @@ class _CycleTimerState extends State<CycleTimer> {
   void _switchCycle(Timer _t) {
 
     setState(() {
-      var _remaining = _startOfNextCycle - _currentTime;
+      _remaining = _startOfNextCycle - _currentTime;
 
       if (_remaining == Duration.zero) {
         _timer.cancel();
