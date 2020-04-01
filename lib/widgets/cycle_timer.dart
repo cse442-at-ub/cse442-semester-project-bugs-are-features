@@ -21,8 +21,10 @@ class _CycleTimerState extends State<CycleTimer> {
 
   Duration _dayCycle;
   Duration _nightCycle;
-  int _timeRemainingDay; //
-  int _timeRemainingNight;
+  Duration _currentTime;
+  Duration _startOfNextCycle;
+  Duration _remaining;
+
 
   @override
   void initState() {
@@ -30,8 +32,14 @@ class _CycleTimerState extends State<CycleTimer> {
     _isDay = false;
     _dayCycle = Duration(seconds: 1);
     _nightCycle = Duration(seconds: 1);
-    _timeRemainingDay = Cycle.DAY_CYCLE;
-    _timeRemainingNight = Cycle.NIGHT_CYCLE;
+    _currentTime = new Duration(
+        hours: DateTime.now().hour,
+        minutes: DateTime.now().minute,
+        seconds: DateTime.now().second);
+    _startOfNextCycle = new Duration(
+        hours: DateTime.now().hour,
+        minutes: DateTime.now().minute,
+        seconds: DateTime.now().second + Cycle.NIGHT_CYCLE);
 
     if (widget._cancelTimer) {
       _destroyTimer();
@@ -47,9 +55,6 @@ class _CycleTimerState extends State<CycleTimer> {
   }
 
   Widget _loadCycle() {
-    //print(_timeElapsedDay);
-    //print(_timeElapsedNight);
-
     var _cycleImg;
     if (_isDay) {
       _cycleImg = Image.asset(
@@ -70,6 +75,7 @@ class _CycleTimerState extends State<CycleTimer> {
 
 
   void _startCycle(bool firstStart) {
+
     _destroyTimer();
     if (_isDay) {
       _timer = Timer.periodic(_nightCycle, _switchCycle);
@@ -83,15 +89,26 @@ class _CycleTimerState extends State<CycleTimer> {
   }
 
   void _switchCycle(Timer _t) {
+    _remaining = _startOfNextCycle - _currentTime;
+
     setState(() {
-      if (_timeRemainingDay < 1 || _timeRemainingNight <1) {
+      if (_remaining == Duration.zero) {
         _timer.cancel();
         _isDay = !_isDay;
-        _timeRemainingDay = Cycle.DAY_CYCLE;
-        _timeRemainingNight = Cycle.NIGHT_CYCLE;
-      } else {
-        _timeRemainingDay--;
-        _timeRemainingNight--;
+        _startOfNextCycle = new Duration(
+            hours: DateTime.now().hour,
+            minutes: DateTime.now().minute,
+            seconds: Cycle.NIGHT_CYCLE + DateTime.now().second);
+        _currentTime = new Duration(
+            hours: DateTime.now().hour,
+            minutes: DateTime.now().minute,
+            seconds: DateTime.now().second);
+      }
+      else {
+        _currentTime = new Duration(
+            hours: DateTime.now().hour,
+            minutes: DateTime.now().minute,
+            seconds: DateTime.now().second);
       }
     });
     _startCycle(false);
@@ -100,8 +117,8 @@ class _CycleTimerState extends State<CycleTimer> {
   void _switchCycleUI() {
     setState(() {
       _isDay = !_isDay;
-      _timeRemainingDay = Cycle.DAY_CYCLE;
-      _timeRemainingNight = Cycle.NIGHT_CYCLE;
+      _currentTime = new Duration(hours: DateTime.now().hour, minutes: DateTime.now().minute, seconds: DateTime.now().second);
+
     });
     _startCycle(false);
   }
@@ -113,19 +130,21 @@ class _CycleTimerState extends State<CycleTimer> {
   }
 
   Widget _makeText() {
+
     if (_isDay) {
       return Text(
-        "Day Cycle is On! $_timeRemainingDay",
+        "Day Cycle is On!  $_remaining",
         style: TextStyle(fontSize: 30),
       );
     } else {
-      return Text("Night Cycle is On! $_timeRemainingNight");
+      return Text("Night Cycle is On!  $_remaining");
     }
   }
 
   ///Toggle button to toggle between day and night cycles. Moon = Night cycle, Sun = Day cycle
   @override
   Widget build(BuildContext context) {
+
     return Container(
         alignment: Alignment.topCenter,
         margin:
