@@ -77,17 +77,17 @@ class _CycleTimerState extends State<CycleTimer> {
 
     _destroyTimer();
     if (_isDay) {
-      _timer = Timer.periodic(_nightCycle, _switchCycle);
+      _timer = Timer(_nightCycle, _switchCycle);
       widget._setDayCycle(true);
     } else {
-      _timer = Timer.periodic(_dayCycle, _switchCycle);
+      _timer = Timer(_dayCycle, _switchCycle);
       if (!firstStart) {
         widget._setDayCycle(false);
       }
     }
   }
 
-  void _switchCycle(Timer _t) {
+  void _switchCycle() {
 
     setState(() {
       _remaining = _startOfNextCycle - _currentTime;
@@ -95,10 +95,12 @@ class _CycleTimerState extends State<CycleTimer> {
       if (_remaining == Duration.zero) {
         _timer.cancel();
         _isDay = !_isDay;
+
         _startOfNextCycle = new Duration(
             hours: DateTime.now().hour,
             minutes: DateTime.now().minute,
             seconds: Cycle.NIGHT_CYCLE + DateTime.now().second);
+
         _currentTime = new Duration(
             hours: DateTime.now().hour,
             minutes: DateTime.now().minute,
@@ -117,6 +119,11 @@ class _CycleTimerState extends State<CycleTimer> {
   void _switchCycleUI() {
     setState(() {
       _isDay = !_isDay;
+      _startOfNextCycle = new Duration(
+          hours: DateTime.now().hour,
+          minutes: DateTime.now().minute,
+          seconds: DateTime.now().second + Cycle.NIGHT_CYCLE);
+
     });
     _startCycle(false);
   }
@@ -128,17 +135,20 @@ class _CycleTimerState extends State<CycleTimer> {
   }
 
   Widget _makeText() {
-    var _remaining = _startOfNextCycle - _currentTime;
+    _remaining = _startOfNextCycle - _currentTime;
+
+    format(Duration d) => d.toString().split('.').first.padLeft(0, "0"); // removes 5 extra zeros after seconds.
+    String remainingTime = format(_remaining);
 
     if (_isDay) {
-      debugPrint(_remaining.toString());
+      debugPrint(format(_remaining));
       return Text(
-        "Day Cycle is On!  $_remaining",
+        "Day Cycle is On!  $remainingTime",
         style: TextStyle(fontSize: 30),
       );
     } else {
       debugPrint(_remaining.toString());
-      return Text("Night Cycle is On!  $_remaining");
+      return Text("Night Cycle is On!  $remainingTime");
     }
   }
 
