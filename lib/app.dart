@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:ghost_app/db/db.dart';
 import 'package:ghost_app/widgets/cycle_timer.dart';
+import 'package:ghost_app/widgets/energy_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'screens/ghost.dart';
@@ -89,6 +90,9 @@ class _RootPageState extends State<RootPage> {
             fit: BoxFit.fill,
           );
     view.add(bg);
+
+    EnergyBar energy = new EnergyBar();  ///Adding the energy bar
+    view.add(energy);
 
     Widget screen;
     // Select our main view container.
