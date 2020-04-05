@@ -4,6 +4,7 @@ import 'dart:developer' as dev;
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:ghost_app/db/db.dart';
+import 'package:ghost_app/widgets/cycle_timer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'screens/ghost.dart';
@@ -48,6 +49,9 @@ class _RootPageState extends State<RootPage> {
   /// Instance of app preferences. Is passed to children.
   SharedPreferences _prefs;
 
+  bool _isDayCycle = false;
+  bool _stopTimer = false;
+
   @override
   initState() {
     super.initState();
@@ -71,33 +75,55 @@ class _RootPageState extends State<RootPage> {
     var view = <Widget>[];
 
     // Set the app-wide background image
-    var bg = Image.asset(
-      'assets/misc/Graveyard.png',
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      fit: BoxFit.fill,
-    );
+    var bg = _isDayCycle
+        ? Image.asset(
+            'assets/misc/Graveyard2.png',
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            fit: BoxFit.fill,
+          )
+        : Image.asset(
+            'assets/misc/Graveyard.png',
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            fit: BoxFit.fill,
+          );
     view.add(bg);
 
     Widget screen;
     // Select our main view container.
-    if (_prefs.getBool('has_ghost')) {
-      screen = GhostMain(_prefs, _ghostReleased, _database, _ghost);
+    var ghostChosen = _prefs.getBool('has_ghost');
+    if (ghostChosen) {
+      screen =
+          GhostMain(_prefs, _ghostReleased, _database, _ghost, !_isDayCycle);
+      // Day/Night cycle switch
     } else {
       screen = GraveyardMain(_prefs, _ghostChosen);
     }
     view.add(screen);
 
-    view.add(SettingsButton(_prefs, _ghostReleased));
+    if (ghostChosen) {
+      ///Timer for Day and Night cycle switch
+      view.add(CycleTimer(_setDayCycle, _stopTimer));
+    }
+
+    if (!_isDayCycle) {
+      view.add(SettingsButton(_prefs, _ghostReleased));
+    }
 
     // Add Dev Settings button _only_ if in development
     assert(() {
-      view.add(DevButton(_prefs, _ghostReleased, _database, _showNotification,
-          _hideNotification));
+      view.add(DevButton(_prefs, _ghostReleased, _database, _showNotification));
       return true;
     }());
 
     return Stack(children: view);
+  }
+
+  void _setDayCycle(bool value) {
+    setState(() {
+      _isDayCycle = value;
+    });
   }
 
   _setGhost(int gid) async {
@@ -117,10 +143,13 @@ class _RootPageState extends State<RootPage> {
     }
     // Pre-load all images
     precacheImage(AssetImage('assets/misc/Graveyard.png'), context);
+    precacheImage(AssetImage('assets/misc/Graveyard2.png'), context);
     precacheImage(AssetImage('assets/misc/GrimReaper.png'), context);
     precacheImage(AssetImage('assets/misc/MainIcon.png'), context);
     precacheImage(AssetImage('assets/misc/Candle.png'), context);
     precacheImage(AssetImage('assets/misc/UnlitCandle.png'), context);
+    precacheImage(AssetImage('assets/misc/Sun.png'), context);
+    precacheImage(AssetImage('assets/misc/Moon.png'), context);
     precacheImage(AssetImage('assets/ghosts/ghost1.png'), context);
     precacheImage(AssetImage('assets/ghosts/ghost2.png'), context);
 
@@ -167,6 +196,7 @@ class _RootPageState extends State<RootPage> {
     _prefs.setBool('first_launch', false);
     _prefs.setBool('has_ghost', false);
     _prefs.setInt('ghost_id', 0);
+    _prefs.setString('cycle_value', null);
   }
 
   /// Call from [GraveyardMain] when a ghost is selected to render [GhostMain].
@@ -182,6 +212,7 @@ class _RootPageState extends State<RootPage> {
     setState(() {
       _prefs.setInt('ghost_id', id);
       _prefs.setBool('has_ghost', true);
+      _prefs.setString('cycle_value', 'night');
     });
   }
 
@@ -200,8 +231,10 @@ class _RootPageState extends State<RootPage> {
     }
 
     setState(() {
+      _isDayCycle = false;
       _prefs.setInt('ghost_id', 0);
       _prefs.setBool('has_ghost', false);
+      _prefs.setString('cycle_value', null);
     });
   }
 
@@ -217,5 +250,11 @@ class _RootPageState extends State<RootPage> {
 
   Future _hideNotification() async {
     await _flutterLocalNotificationsPlugin.cancel(0);
+  }
+
+  void _cancelTimer() {
+    setState(() {
+      _stopTimer = true;
+    });
   }
 }

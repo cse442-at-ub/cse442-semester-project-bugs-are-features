@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ghost_app/models/ghost.dart';
 import 'package:ghost_app/widgets/candle.dart';
+import 'package:ghost_app/widgets/cycle_timer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
 import '../db/db.dart';
@@ -32,7 +33,10 @@ class GhostMain extends StatefulWidget {
   /// The current ghost instance
   final Ghost _ghost;
 
-  GhostMain(this._prefs, this._ghostReleased, this._database, this._ghost);
+  bool _visibility;
+
+  GhostMain(this._prefs, this._ghostReleased, this._database, this._ghost,
+      this._visibility);
 
   @override
   _GhostMainState createState() => _GhostMainState();
@@ -53,8 +57,9 @@ class _GhostMainState extends State<GhostMain> {
   }
 
   void _loadTwineData() {
-    rootBundle.loadString("assets/data/Level${widget._ghost.level}.json")
-    .then((data) {
+    rootBundle
+        .loadString("assets/data/Level${widget._ghost.level}.json")
+        .then((data) {
       setState(() {
         var random = Random();
         _json = jsonDecode(data);
@@ -93,73 +98,75 @@ class _GhostMainState extends State<GhostMain> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: <Widget>[
-        Container(
-          color: Theme.of(context).backgroundColor.withOpacity(0.8),
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
+    return Visibility(
+      visible: widget._visibility,
+      child: Stack(
+        children: <Widget>[
+          Container(
+            color: Theme.of(context).backgroundColor.withOpacity(0.8),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              // The ghost image
+              widget._ghost.image,
+              //_canInteract ? widget._ghost.image : widget._ghost.opaqueImage,
 
-            // The ghost image
-            widget._ghost.image,
-            //_canInteract ? widget._ghost.image : widget._ghost.opaqueImage,
+              // The ghost's response
+              Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Text(
+                    _canInteract
+                        ? _currentResponse
+                        : "The ghost doesn't like the candle",
+                    style: Theme.of(context).textTheme.body1.copyWith(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          fontStyle: _canInteract
+                              ? FontStyle.normal
+                              : FontStyle.italic,
+                        ),
+                    textAlign: TextAlign.center,
+                  )),
 
-            // The ghost's response
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: Text(
-                _canInteract
-                    ? _currentResponse
-                    : "The ghost doesn't like the candle",
-                style: Theme.of(context).textTheme.body1.copyWith(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    fontStyle: _canInteract
-                        ? FontStyle.normal
-                        : FontStyle.italic,
-                ),
-                textAlign: TextAlign.center,
-              )
-            ),
-
-            // The current progress text + meter
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Container(child: Text("Level ${widget._ghost.level}")),
-                Container(
-                    width: 128,
-                    child: Row(children: <Widget>[
-                      Padding(
+              // The current progress text + meter
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Container(child: Text("Level ${widget._ghost.level}")),
+                  Container(
+                      width: 128,
+                      child: Row(children: <Widget>[
+                        Padding(
                           padding: EdgeInsets.only(right: 20),
                           child: Text("Progress"),
-                      ),
-                      // Flexible required because in a row
-                      Flexible(child: LinearProgressIndicator(
-                        value: widget._ghost.progress,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          Theme.of(context).accentColor,
-                        )
-                      ))]
-                    )
-                )
-              ],
-            ),
+                        ),
+                        // Flexible required because in a row
+                        Flexible(
+                            child: LinearProgressIndicator(
+                                backgroundColor: Colors.blueGrey,
+                                value: widget._ghost.progress,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Theme.of(context).accentColor,
+                                )))
+                      ]))
+                ],
+              ),
 
-            // The candle to be lit, or not
-            Candle(widget._ghost, _setInteract),
+              // The candle to be lit, or not
+              Candle(widget._ghost, _setInteract),
 
-            // The button responses
-            GridView.count(
-                childAspectRatio: 2,
-                shrinkWrap: true,
-                crossAxisCount: 2,
-                children: List.generate(4, (index) => makeGhostPicker(index))
-            )
-          ],
-        )
-      ],
+              // The button responses
+              GridView.count(
+                  padding: EdgeInsets.all(20),
+                  childAspectRatio: 2,
+                  shrinkWrap: true,
+                  crossAxisCount: 2,
+                  children: List.generate(4, (index) => makeGhostPicker(index)))
+            ],
+          )
+        ],
+      ),
     );
   }
 
@@ -172,9 +179,8 @@ class _GhostMainState extends State<GhostMain> {
           splashColor: Theme.of(context).accentColor.withOpacity(0.5),
           shape: ContinuousRectangleBorder(
               borderRadius: BorderRadius.circular(32.0)),
-          onPressed: _canInteract
-              ? () => buttonHandler(_responseObjects[id])
-              : null,
+          onPressed:
+              _canInteract ? () => buttonHandler(_responseObjects[id]) : null,
           child: Text(
             _responseObjects.length == 0
                 ? "Loading"
