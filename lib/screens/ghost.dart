@@ -70,6 +70,10 @@ class _GhostMainState extends State<GhostMain> {
   @override
   Widget build(BuildContext context) {
     var view = <Widget>[];
+    if (!_isDayCycle) {
+      // The current progress + health
+      view.add(Progress(widget._ghost.progress, widget._ghost.level));
+    }
     view.add(CycleTimer(_setDayCycle, _stopTimer));
 
     if (!_isDayCycle) {
@@ -77,8 +81,6 @@ class _GhostMainState extends State<GhostMain> {
       view.add(widget._ghost.image);
       // The ghost's response to the user
       view.add(GhostResponse(_curResp, _canInteract));
-      // The current progress text + meter
-      view.add(Progress(widget._ghost.progress, widget._ghost.level));
       // The candle to be lit, or not
       view.add(Candle(widget._ghost, _setInteract));
       // The user response buttons
@@ -87,23 +89,21 @@ class _GhostMainState extends State<GhostMain> {
     }
 
     return Stack(children: <Widget>[
-        _isDayCycle ? Image.asset(
-          'assets/misc/Graveyard2.png',
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          fit: BoxFit.fill,
-        )
-        : Container(
-            color: Theme.of(context).backgroundColor.withOpacity(0.8)
-        ),
+      _isDayCycle
+          ? Image.asset(
+              'assets/misc/Graveyard2.png',
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              fit: BoxFit.fill,
+            )
+          : Container(
+              color: Theme.of(context).backgroundColor.withOpacity(0.8)),
 
-        // The main elements of the view
-        Column(children: view,
-            mainAxisAlignment: _isDayCycle
-                ? MainAxisAlignment.center
-                : MainAxisAlignment.end
-        ),
-        ]
-      );
+      // The main elements of the view
+      Column(
+          children: view,
+          mainAxisAlignment:
+              _isDayCycle ? MainAxisAlignment.center : MainAxisAlignment.end),
+    ]);
   }
 }
