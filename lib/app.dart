@@ -97,7 +97,7 @@ class _RootPageState extends State<RootPage> {
       return true;
     }());
 
-    return SafeArea(child: Stack(children: view));
+    return Stack(children: view);
   }
 
   _setGhost(int gid) async {

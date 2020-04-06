@@ -20,6 +20,7 @@ class App extends StatelessWidget {
         primaryColor: Color.fromRGBO(0x4a, 0x4c, 0x52, 1),
         buttonColor: Color.fromRGBO(0xa1, 0xa6, 0xb4, 1),
         accentColor: Color.fromRGBO(0xd1, 0xcc, 0xdc, 1),
+
         textTheme: TextTheme(
             body1: TextStyle(color: Color.fromRGBO(0xf9, 0xf8, 0xf8, 1))),
       ),

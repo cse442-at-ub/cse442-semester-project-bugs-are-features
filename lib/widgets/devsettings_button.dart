@@ -30,7 +30,7 @@ class DevButton extends StatelessWidget {
         alignment: Alignment.topCenter,
         margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
         child: FlatButton(
-          color: Color.fromRGBO(0, 0, 0, 0.3),
+          color: Theme.of(context).buttonColor,
           textColor: Theme.of(context).textTheme.body1.color,
           child: Text(
             "Dev Settings",
