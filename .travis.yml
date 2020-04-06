@@ -1,13 +1,12 @@
 language: android
-
+dist: trusty
 os:
   - linux
 
 android:
   components:
     - build-tools-28.0.3
-    - build-tools-29.0.3
-    - android-29
+    - android-28
     - platform-tools
     - tools
   licenses:
@@ -35,9 +34,11 @@ stages:
 before_install:
   - git clone https://github.com/flutter/flutter.git -b stable
   - export PATH="$PATH:`pwd`/flutter/bin"
-  - yes | sdkmanager --update
-  - yes | flutter doctor --android-licenses
   - flutter doctor -v
+  - yes | sdkmanager --update
+  - flutter doctor -v
+#  - yes | flutter doctor --android-licenses
+#  - flutter doctor -v
 
 script:
   - flutter pub get
@@ -62,3 +63,6 @@ after_script:
 cache:
   directories:
     - $HOME/.pub-cache
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache
