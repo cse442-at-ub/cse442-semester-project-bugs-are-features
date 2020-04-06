@@ -1,12 +1,11 @@
 language: android
-
+dist: trusty
 os:
   - linux
 
 android:
   components:
     - build-tools-28.0.3
-    #- build-tools-29.0.3
     - android-28
     - platform-tools
     - tools
