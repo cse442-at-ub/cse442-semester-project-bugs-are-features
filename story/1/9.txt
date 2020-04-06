@@ -1,0 +1,10 @@
+batch.execute("INSERT INTO ghost_responses (gid, level, rid, response_ids, text) VALUES (1, 9, 1, \"2,3,4,5\", \"I still think back to when it happened. If only I had been a little more to the left...\")");
+batch.execute("INSERT INTO ghost_responses (gid, level, rid, response_ids, text) VALUES (1, 9, 6, \"8,9\", \"I was in my shop working on a very important clock. The clock was gold and jeweled, ordered by a very important person.\")");
+batch.execute("INSERT INTO ghost_responses (gid, level, rid, response_ids, text) VALUES (1, 9, 7, \"2,3,4,5\", \"The moment I ... become a ghost.\")");
+batch.execute("INSERT INTO ghost_responses (gid, level, rid, response_ids, text) VALUES (1, 9, 10, \"\", \"Well... I don't think I'm ready to talk about it yet.\")");
+batch.execute("INSERT INTO user_responses (gid, level, rid, grid, type, effect, points, text) VALUES (1, 9, 10, 9, 0, 0, 5, \"What exactly happened?\")");
+batch.execute("INSERT INTO user_responses (gid, level, rid, grid, type, effect, points, text) VALUES (1, 9, 7, 3, 0, 0, 0, \"What are you talking about?\")");
+batch.execute("INSERT INTO user_responses (gid, level, rid, grid, type, effect, points, text) VALUES (1, 9, 6, 4, 0, 0, 5, \"What were you doing?\")");
+batch.execute("INSERT INTO user_responses (gid, level, rid, grid, type, effect, points, text) VALUES (1, 9, 7, 5, 0, 0, 0, \"When what happened?\")");
+batch.execute("INSERT INTO user_responses (gid, level, rid, grid, type, effect, points, text) VALUES (1, 9, 10, 8, 0, 0, 5, \"Who was the clock for?\")");
+batch.execute("INSERT INTO user_responses (gid, level, rid, grid, type, effect, points, text) VALUES (1, 9, 6, 2, 0, 0, 5, \"A little to the left of what?\")");
