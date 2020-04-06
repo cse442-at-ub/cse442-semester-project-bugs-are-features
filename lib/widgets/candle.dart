@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:ghost_app/db/db.dart';
 import 'package:ghost_app/models/ghost.dart';
 
 /// The Candle class that sets the ghost away to be away, or not
@@ -76,5 +75,4 @@ class _CandleState extends State<Candle> {
       );
     }
   }
-
 }
