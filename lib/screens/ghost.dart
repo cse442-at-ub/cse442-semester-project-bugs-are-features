@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'dart:developer' as dev;
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ghost_app/models/ghost.dart';
 import 'package:ghost_app/widgets/candle.dart';
-import 'package:ghost_app/widgets/cycle_timer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:math';
+
 import '../db/db.dart';
 
 class Response {
@@ -133,6 +133,8 @@ class _GhostMainState extends State<GhostMain> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
+                  // The candle to be lit, or not
+                  Candle(widget._ghost, _setInteract),
                   Container(child: Text("Level ${widget._ghost.level}")),
                   Container(
                       width: 128,
@@ -152,9 +154,6 @@ class _GhostMainState extends State<GhostMain> {
                       ]))
                 ],
               ),
-
-              // The candle to be lit, or not
-              Candle(widget._ghost, _setInteract),
 
               // The button responses
               GridView.count(
