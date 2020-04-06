@@ -7,16 +7,13 @@ class EnergyBar extends StatefulWidget{
 }
 
 class _EnergyBarState extends State<EnergyBar>{
-  int _energy;
-
+  double _energy;
 
   @override
   void initState(){
     super.initState();
     _energy = Energy.energyInit;
   }
-
-
 
   Widget _makeText() {
     _energy = Energy.energy;

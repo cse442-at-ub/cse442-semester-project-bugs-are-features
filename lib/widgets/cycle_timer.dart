@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:ghost_app/models/cycle.dart' as Cycle;
+import 'package:ghost_app/models/energy.dart' as Energy;
 
 
 
@@ -119,6 +120,7 @@ class _CycleTimerState extends State<CycleTimer> {
   void _switchCycleUI() {
     setState(() {
       _isDay = !_isDay;
+      Energy.energy = Energy.energyInit + 0.5; //Increases the energy by 50% by switching the cycle
       _startOfNextCycle = new Duration(
           hours: DateTime.now().hour,
           minutes: DateTime.now().minute,
