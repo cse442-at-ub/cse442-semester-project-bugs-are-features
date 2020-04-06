@@ -120,7 +120,12 @@ class _CycleTimerState extends State<CycleTimer> {
   void _switchCycleUI() {
     setState(() {
       _isDay = !_isDay;
-      Energy.energy = Energy.energyInit + 0.5; //Increases the energy by 50% by switching the cycle
+
+      //Ensures energy doesn't go beyond 100.0
+      if((Energy.energyInit + 0.5) <= 100.0){
+        Energy.energy = Energy.energyInit + 0.5; //Increases the energy by 50% by switching the cycle
+      }
+
       _startOfNextCycle = new Duration(
           hours: DateTime.now().hour,
           minutes: DateTime.now().minute,
