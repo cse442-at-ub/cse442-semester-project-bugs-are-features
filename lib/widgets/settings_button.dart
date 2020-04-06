@@ -13,8 +13,6 @@ class SettingsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(
-          top: MediaQuery.of(context).padding.top - 20, right: 10),
       alignment: Alignment.topLeft,
       child: GestureDetector(
         onTap: () {
