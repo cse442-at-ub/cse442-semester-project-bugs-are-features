@@ -129,31 +129,33 @@ class _GhostMainState extends State<GhostMain> {
                     textAlign: TextAlign.center,
                   )),
 
+              Candle(widget._ghost, _setInteract),
+
               // The current progress text + meter
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  // The candle to be lit, or not
-                  Candle(widget._ghost, _setInteract),
-                  Container(child: Text("Level ${widget._ghost.level}")),
-                  Container(
-                      width: 128,
-                      child: Row(children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(right: 20),
-                          child: Text("Progress"),
-                        ),
-                        // Flexible required because in a row
-                        Flexible(
-                            child: LinearProgressIndicator(
-                                backgroundColor: Colors.blueGrey,
-                                value: widget._ghost.progress,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  Theme.of(context).accentColor,
-                                )))
-                      ]))
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //   children: <Widget>[
+              //     // The candle to be lit, or not
+              //     Candle(widget._ghost, _setInteract),
+              //     Container(child: Text("Level ${widget._ghost.level}")),
+              //     Container(
+              //         width: 128,
+              //         child: Row(children: <Widget>[
+              //           Padding(
+              //             padding: EdgeInsets.only(right: 20),
+              //             child: Text("Progress"),
+              //           ),
+              //           // Flexible required because in a row
+              //           Flexible(
+              //               child: LinearProgressIndicator(
+              //                   backgroundColor: Colors.blueGrey,
+              //                   value: widget._ghost.progress,
+              //                   valueColor: AlwaysStoppedAnimation<Color>(
+              //                     Theme.of(context).accentColor,
+              //                   )))
+              //         ]))
+              //   ],
+              // ),
 
               // The button responses
               GridView.count(

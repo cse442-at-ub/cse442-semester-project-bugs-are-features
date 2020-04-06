@@ -17,6 +17,7 @@ class Candle extends StatefulWidget {
   @override
   _CandleState createState() => _CandleState();
 }
+
 //in seconds
 const dur = 5;
 const interval = 1;
@@ -81,21 +82,21 @@ class _CandleState extends State<Candle> {
       return Stack(
         alignment: Alignment.center,
         children: <Widget>[
-          Image.asset('assets/misc/Candle.png', width: 20.0),
-          CircularProgressIndicator(value: _remaining / dur)
+          Image.asset('assets/misc/Candle.png', width: 50.0),
+          SizedBox(
+              width: 80,
+              height: 80,
+              child: CircularProgressIndicator(value: _remaining / dur))
         ],
       );
     } else {
       return GestureDetector(
         onTap: () => startCandle(),
-        child: Image.asset(
-            'assets/misc/UnlitCandle.png',
+        child: Image.asset('assets/misc/UnlitCandle.png',
             color: Color.fromRGBO(190, 190, 190, 1.0),
             colorBlendMode: BlendMode.modulate,
-            width: 30.0
-        ),
+            width: 50.0),
       );
     }
   }
-
 }
