@@ -7,7 +7,7 @@ class EnergyBar extends StatefulWidget{
 }
 
 class _EnergyBarState extends State<EnergyBar>{
-  double _energy;
+  int _energy;
 
   @override
   void initState(){

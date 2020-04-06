@@ -93,8 +93,11 @@ class Ghost {
   }
 
   /// Adds `score` amount of points to the ghost's score.
+  /// If user chooses incorrect response, the energy decreases by 1.
   addScore(int score) async {
     if (score == 0) {
+      Energy.energy = Energy.energyInit - 1;
+      debugPrint("Wrong response chosen. -1 Energy: ${Energy.energyInit}");
       return;
     }
     _score += score;

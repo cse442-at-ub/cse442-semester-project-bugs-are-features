@@ -100,6 +100,7 @@ class _CycleTimerState extends State<CycleTimer> {
         ///Updates energy to 100 when player waits the entire Day cycle
         if(!_isDay){
           Energy.energy = 100;
+          debugPrint("Waited out entire Day cycle. Energy: ${Energy.energyInit}");
         }
 
         _startOfNextCycle = new Duration(
@@ -127,9 +128,10 @@ class _CycleTimerState extends State<CycleTimer> {
     setState(() {
       _isDay = !_isDay;
 
-      //Ensures energy doesn't go beyond 100.0
-      if((Energy.energyInit + 0.5) <= 100.0){
-        Energy.energy = Energy.energyInit + 0.5; //Increases the energy by 50% by switching the cycle
+      //Ensures energy doesn't go beyond 100
+      if((Energy.energyInit + 50) <= 100){
+        Energy.energy = Energy.energyInit + 50; //Increases the energy by 50 by switching the cycle
+        debugPrint("Day cycle toggled. Energy +50: ${Energy.energyInit}");
       }
 
       _startOfNextCycle = new Duration(

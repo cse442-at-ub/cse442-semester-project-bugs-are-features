@@ -1,18 +1,18 @@
 import 'package:flutter/cupertino.dart';
 
-double energyInit = 90;
+int energyInit = 90;
 
-///Sets the energy to 100 when the candle is lit
+///Increases energy by 5 when the candle is lit
 void setEnergyCandleLit(bool isLit){
-  if(isLit && ((energyInit + 0.75) <= 100)){
-      energyInit += 0.75;
+  if(isLit && ((energyInit + 5) <= 100)){
+      energyInit += 5;
       debugPrint("Candle lit: Energy set to $energyInit");
   }
 }
 
 ///Getters and setters
-set energy(double e) {
+set energy(int e) {
     energyInit = e;
 }
 
-double get energy => energyInit;
+int get energy => energyInit;
