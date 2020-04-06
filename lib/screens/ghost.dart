@@ -70,20 +70,17 @@ class _GhostMainState extends State<GhostMain> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     var view = <Widget>[];
 
     view.add(EnergyBar()); //Energy bar
 
-    if (!_isDayCycle) {
-      // The current progress + health
-      view.add(Progress(widget._ghost.progress, widget._ghost.level));
-    }
     view.add(CycleTimer(_setDayCycle, _stopTimer));
 
     if (!_isDayCycle) {
+      // The current progress + health
+      view.add(Progress(widget._ghost.progress, widget._ghost.level));
       // The ghost image
       view.add(widget._ghost.image);
       // The ghost's response to the user
