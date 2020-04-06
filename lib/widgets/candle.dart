@@ -25,6 +25,7 @@ const interval = 1;
 class _CandleState extends State<Candle> {
   /// If the candle is currently lit or not
   bool _isLit = false;
+
   Timer _timer;
   double _remaining;
 

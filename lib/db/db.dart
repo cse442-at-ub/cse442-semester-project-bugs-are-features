@@ -5,6 +5,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'constants.dart' as Constants;
+import 'ghost1_story.dart' as Ghost1;
 
 /// The database class, which is our point of contact for all database transactions.
 ///
@@ -92,6 +93,46 @@ class DB {
     return cols;
   }
 
+  /// Returns a ghost's response while leveling
+  getLevelingGhostResp(int gid, int level, int rid) async {
+    return await _pool.query(Constants.GHOST_RESP_TABLE,
+        columns: [Constants.GHOST_RESP_IDS, Constants.GHOST_RESP_TEXT],
+        where:  '${Constants.GHOST_RESP_GHOST_ID} = ? AND '
+                '${Constants.GHOST_RESP_LEVEL} = ? AND '
+                '${Constants.GHOST_RESP_RID} = ?',
+        whereArgs: [gid, level, rid]
+    );
+  }
+
+  /// Returns a ghost's response while leveling
+  getLevelingUserResp(int gid, int level, int rid) async {
+    return await _pool.query(Constants.USER_RESP_TABLE,
+        columns: [
+          Constants.USER_RESP_RID,
+          Constants.USER_RESP_TYPE,
+          Constants.USER_RESP_EFFECT,
+          Constants.USER_RESP_POINTS,
+          Constants.USER_RESP_TEXT
+        ],
+        where: '${Constants.USER_RESP_GHOST_ID} = ? AND '
+            '${Constants.USER_RESP_LEVEL} = ? AND '
+            '${Constants.USER_RESP_GRID} = ?',
+        whereArgs: [gid, level, rid]
+    );
+  }
+
+  getDefaultInteraction(int gid, int level, int qty) async {
+    // TODO: Make it select 2-4 random ones
+    return await _pool.query(Constants.DEFAULT_RESP_TABLE,
+        columns: [Constants.DEFAULT_RESP_USER,
+          Constants.DEFAULT_RESP_GHOST, Constants.DEFAULT_RESP_POINTS],
+        where: '${Constants.DEFAULT_RESP_GHOST_ID} = ? AND '
+            '${Constants.DEFAULT_RESP_LEVEL} = ?',
+        whereArgs: [gid, level],
+        limit: 4
+    );
+  }
+
   /// Closes the database connection. Should only be called when app is killed.
   close() async {
     dev.log("Closed DB Connection", name: "db.db");
@@ -124,20 +165,37 @@ class DB {
     );
     
     await db.execute(
-        "CREATE TABLE ${Constants.GHOST_RESP_TABLE} ("
-          "${Constants.GHOST_RESP_ID} INTEGER PRIMARY KEY AUTOINCREMENT,"
-          "${Constants.GHOST_RESP_GHOST_ID} INTEGER NOT NULL,"
-          "${Constants.GHOST_RESP_LEVEL} INTEGER NOT NULL,"
-          "${Constants.GHOST_RESP_RESP_ID} INTEGER NOT NULL,"
-          "${Constants.GHOST_RESP_IDS} STRING NOT NULL,"
-          "${Constants.GHOST_RESP_TEXT} STRING NOT NULL"
+        "CREATE TABLE ${Constants.DEFAULT_RESP_TABLE} ("
+          "${Constants.DEFAULT_RESP_ID} INTEGER PRIMARY KEY AUTOINCREMENT,"
+          "${Constants.DEFAULT_RESP_GHOST_ID} INTEGER NOT NULL,"
+          "${Constants.DEFAULT_RESP_LEVEL} INTEGER NOT NULL,"
+          "${Constants.DEFAULT_RESP_USER} STRING NOT NULL,"
+          "${Constants.DEFAULT_RESP_GHOST} STRING NOT NULL,"
+          "${Constants.DEFAULT_RESP_POINTS} INTEGER NOT NULL"
         ")"
+    );
+
+    await db.execute(
+        "CREATE TABLE ${Constants.GHOST_RESP_TABLE} ("
+            "${Constants.GHOST_RESP_ID} INTEGER PRIMARY KEY AUTOINCREMENT,"
+            "${Constants.GHOST_RESP_GHOST_ID} INTEGER NOT NULL,"
+            "${Constants.GHOST_RESP_LEVEL} INTEGER NOT NULL,"
+            "${Constants.GHOST_RESP_RID} INTEGER NOT NULL,"
+            "${Constants.GHOST_RESP_IDS} STRING NOT NULL,"
+            "${Constants.GHOST_RESP_TEXT} STRING NOT NULL"
+            ")"
     );
 
     await db.execute(
         "CREATE TABLE ${Constants.USER_RESP_TABLE} ("
           "${Constants.USER_RESP_ID} INTEGER PRIMARY KEY AUTOINCREMENT,"
-          "${Constants.USER_RESP_PID} INTEGER NOT NULL,"
+          "${Constants.USER_RESP_GHOST_ID} INTEGER NOT NULL,"
+          "${Constants.USER_RESP_LEVEL} INTEGER NOT NULL,"
+          "${Constants.USER_RESP_RID} INTEGER NOT NULL,"
+          "${Constants.USER_RESP_GRID} INTEGER NOT NULL,"
+          "${Constants.USER_RESP_TYPE} INTEGER NOT NULL,"
+          "${Constants.USER_RESP_EFFECT} INTEGER NOT NULL,"
+          "${Constants.USER_RESP_POINTS} INTEGER NOT NULL,"
           "${Constants.USER_RESP_TEXT} STRING NOT NULL"
         ")"
     );
@@ -148,6 +206,44 @@ class DB {
       dev.log("Inserted ghost id ${i + 1}", name: "db.db");
       await db.insert(Constants.GHOST_TABLE, row);
     }
+
+    // TODO: Remove these! they are temporary
+    Map<String, dynamic> row1 = {
+      Constants.DEFAULT_RESP_GHOST_ID: 1,
+      Constants.DEFAULT_RESP_LEVEL: 2,
+      Constants.DEFAULT_RESP_USER: "Best choice",
+      Constants.DEFAULT_RESP_GHOST: "Me like",
+      Constants.DEFAULT_RESP_POINTS: 5
+    };
+    Map<String, dynamic> row2 = {
+      Constants.DEFAULT_RESP_GHOST_ID: 1,
+      Constants.DEFAULT_RESP_LEVEL: 2,
+      Constants.DEFAULT_RESP_USER: "Medium choice",
+      Constants.DEFAULT_RESP_GHOST: "Me sorta like",
+      Constants.DEFAULT_RESP_POINTS: 3
+    };
+    Map<String, dynamic> row3 = {
+      Constants.DEFAULT_RESP_GHOST_ID: 1,
+      Constants.DEFAULT_RESP_LEVEL: 2,
+      Constants.DEFAULT_RESP_USER: "Ehh choice",
+      Constants.DEFAULT_RESP_GHOST: "Me don't really like",
+      Constants.DEFAULT_RESP_POINTS: 2
+    };
+    Map<String, dynamic> row4 = {
+      Constants.DEFAULT_RESP_GHOST_ID: 1,
+      Constants.DEFAULT_RESP_LEVEL: 2,
+      Constants.DEFAULT_RESP_USER: "Worst choice",
+      Constants.DEFAULT_RESP_GHOST: "Me dislike",
+      Constants.DEFAULT_RESP_POINTS: 0
+    };
+
+    await db.insert(Constants.DEFAULT_RESP_TABLE, row1);
+    await db.insert(Constants.DEFAULT_RESP_TABLE, row2);
+    await db.insert(Constants.DEFAULT_RESP_TABLE, row3);
+    await db.insert(Constants.DEFAULT_RESP_TABLE, row4);
+
+    // Seed ghost 1's story
+    Ghost1.seed(db);
   }
 }
 
