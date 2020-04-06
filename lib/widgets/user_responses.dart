@@ -44,6 +44,7 @@ class _UserResponsesState extends State<UserResponses> {
     });
     _getInteractions();
   }
+
   /// Called when we see that we've leveled up, to do a leveled sequence
   _getLevelingInteraction(int rid) async {
     if (rid == -1) {
@@ -55,8 +56,8 @@ class _UserResponsesState extends State<UserResponses> {
       _loadingResponses = true;
     });
 
-    List<Map> ghostResp = await widget._db.getLevelingGhostResp(widget._ghost.id,
-        widget._ghost.level, rid);
+    List<Map> ghostResp = await widget._db
+        .getLevelingGhostResp(widget._ghost.id, widget._ghost.level, rid);
 
     if (!_leveling) {
       setState(() {
@@ -78,8 +79,9 @@ class _UserResponsesState extends State<UserResponses> {
     // Get the user responses attached to this ghost statement
     var map = <Map>[];
     for (String urid in rids) {
-      await widget._db.getLevelingUserResp(widget._ghost.id,
-          widget._ghost.level, int.parse(urid))
+      await widget._db
+          .getLevelingUserResp(
+              widget._ghost.id, widget._ghost.level, int.parse(urid))
           .then((row) => map.add(row[0]));
     }
     _responses = map;
@@ -109,7 +111,8 @@ class _UserResponsesState extends State<UserResponses> {
       _loadingResponses = true;
     });
 
-    await widget._db.getDefaultInteraction(widget._ghost.id, 2, 4)
+    await widget._db
+        .getDefaultInteraction(widget._ghost.id, 2, 4)
         .then((map) => _responses = map);
     // TODO: Change this when default stuff is added
     //await widget._db.getDefaultInteraction(widget._ghost.id,
@@ -129,17 +132,17 @@ class _UserResponsesState extends State<UserResponses> {
           color: Theme.of(context).buttonColor,
           splashColor: Theme.of(context).accentColor.withOpacity(0.5),
           shape: ContinuousRectangleBorder(
-              borderRadius: BorderRadius.circular(32.0)
-          ),
+              borderRadius: BorderRadius.circular(32.0)),
           onPressed: widget._canInteract
               ? _loadingResponses
                   ? null
                   : () => _onPress(points, ghostResp, rid)
               : null,
-          child: Text(userResp, style: TextStyle(fontSize: 20.0),
+          child: Text(
+            userResp,
+            style: TextStyle(fontSize: 20.0),
           ),
-        )
-    );
+        ));
   }
 
   /// Creates an empty button for when responses are loading
@@ -151,12 +154,10 @@ class _UserResponsesState extends State<UserResponses> {
           color: Theme.of(context).buttonColor,
           splashColor: Theme.of(context).accentColor.withOpacity(0.5),
           shape: ContinuousRectangleBorder(
-              borderRadius: BorderRadius.circular(32.0)
-          ),
+              borderRadius: BorderRadius.circular(32.0)),
           onPressed: null,
           child: Text("", style: TextStyle(fontSize: 20.0)),
-        )
-    );
+        ));
   }
 
   @override
@@ -190,7 +191,6 @@ class _UserResponsesState extends State<UserResponses> {
         childAspectRatio: 2,
         shrinkWrap: true,
         crossAxisCount: 2,
-        children: buttons
-    );
+        children: buttons);
   }
 }
