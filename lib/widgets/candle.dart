@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:ghost_app/models/ghost.dart';
+import 'package:quiver/async.dart';
 
 /// The Candle class that sets the ghost away to be away, or not
 class Candle extends StatefulWidget {
@@ -17,25 +18,42 @@ class Candle extends StatefulWidget {
   _CandleState createState() => _CandleState();
 }
 
+//in seconds
+const dur = 5;
+const interval = 1;
+
 class _CandleState extends State<Candle> {
   /// If the candle is currently lit or not
   bool _isLit = false;
 
   Timer _timer;
+  double _remaining;
+
+  startCandle() {
+    _remaining = dur.toDouble();
+    _lightCandle();
+
+    Duration time = new Duration(seconds: dur);
+    Duration increment = new Duration(seconds: interval);
+    CountdownTimer countdownTimer = new CountdownTimer(time, increment);
+
+    var subscribers = countdownTimer.listen(null);
+    subscribers.onData((timer) {
+      setState(() {
+        _remaining -= 1;
+      });
+    });
+
+    subscribers.onDone(() {
+      _extinguishCandle();
+      subscribers.cancel();
+    });
+  }
 
   /// Lights the candle, rendering the ghost inaccessible
   _lightCandle() async {
     await widget._ghost.setCandleLit(true);
     widget._setInteract(false);
-
-    Duration time = Duration(hours: 1);
-    // If we're in debug, just 1 minute
-    assert(() {
-      time = Duration(minutes: 1);
-      return true;
-    }());
-    _timer = Timer(time, _extinguishCandle);
-
     setState(() {
       _isLit = true;
     });
@@ -62,16 +80,23 @@ class _CandleState extends State<Candle> {
   @override
   Widget build(BuildContext context) {
     if (_isLit) {
-      return Image.asset('assets/misc/Candle.png', width: 50.0);
+      return Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          Image.asset('assets/misc/Candle.png', width: 50.0),
+          SizedBox(
+              width: 80,
+              height: 80,
+              child: CircularProgressIndicator(value: _remaining / dur))
+        ],
+      );
     } else {
       return GestureDetector(
-        onTap: () => _lightCandle(),
-        child: Image.asset(
-            'assets/misc/UnlitCandle.png',
+        onTap: () => startCandle(),
+        child: Image.asset('assets/misc/UnlitCandle.png',
             color: Color.fromRGBO(190, 190, 190, 1.0),
             colorBlendMode: BlendMode.modulate,
-            width: 50.0
-        ),
+            width: 50.0),
       );
     }
   }
