@@ -97,6 +97,11 @@ class _CycleTimerState extends State<CycleTimer> {
         _timer.cancel();
         _isDay = !_isDay;
 
+        ///Updates energy to 100 when player waits the entire Day cycle
+        if(!_isDay){
+          Energy.energy = 100;
+        }
+
         _startOfNextCycle = new Duration(
             hours: DateTime.now().hour,
             minutes: DateTime.now().minute,
@@ -115,6 +120,7 @@ class _CycleTimerState extends State<CycleTimer> {
       }
     });
     _startCycle(false);
+
   }
 
   void _switchCycleUI() {

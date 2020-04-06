@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-double energyInit = 100;
+double energyInit = 90;
 
 ///Sets the energy to 100 when the candle is lit
 void setEnergyCandleLit(bool isLit){
