@@ -91,7 +91,12 @@ class _UserResponsesState extends State<UserResponses> {
   }
 
   /// This function is called when a user response button is pressed
-  _onPress(int points, String resp, int rid) async {
+  _onPress(int points, String resp, int rid, int effect) async {
+    // Add negative ghost effect if one is present.
+    if (effect < 0) {
+      widget._ghost.addEffect(effect);
+    }
+
     bool didLevel = await widget._ghost.addScore(points);
     if (didLevel) {
       _getLevelingInteraction(1);
@@ -124,7 +129,8 @@ class _UserResponsesState extends State<UserResponses> {
   }
 
   /// Returns a response button
-  createRespButton(String userResp, String ghostResp, int points, int rid) {
+  createRespButton(String userResp,
+      String ghostResp, int points, int rid, int effect) {
     return Container(
         padding: EdgeInsets.all(4.0),
         child: RaisedButton(
@@ -136,7 +142,7 @@ class _UserResponsesState extends State<UserResponses> {
           onPressed: widget._canInteract
               ? _loadingResponses
                   ? null
-                  : () => _onPress(points, ghostResp, rid)
+                  : () => _onPress(points, ghostResp, rid, effect)
               : null,
           child: Text(
             userResp,
@@ -171,8 +177,9 @@ class _UserResponsesState extends State<UserResponses> {
         String userResp = btn["${Constants.USER_RESP_TEXT}"];
         String ghostResp = "";
         int points = btn["${Constants.USER_RESP_POINTS}"];
+        int effect = btn["${Constants.USER_RESP_EFFECT}"];
         int rid = btn["${Constants.USER_RESP_RID}"];
-        buttons.add(createRespButton(userResp, ghostResp, points, rid));
+        buttons.add(createRespButton(userResp, ghostResp, points, rid, effect));
       }
     } else {
       for (var btn in _responses) {
@@ -180,7 +187,7 @@ class _UserResponsesState extends State<UserResponses> {
         String ghostResp = btn["${Constants.DEFAULT_RESP_GHOST}"];
         int points = btn["${Constants.DEFAULT_RESP_POINTS}"];
         int rid = 0;
-        buttons.add(createRespButton(userResp, ghostResp, points, rid));
+        buttons.add(createRespButton(userResp, ghostResp, points, rid, 0));
       }
     }
 
