@@ -5,6 +5,8 @@ import 'package:flutter/widgets.dart';
 import 'package:ghost_app/db/constants.dart' as Constants;
 import 'package:ghost_app/db/db.dart';
 
+import 'package:ghost_app/models/energy.dart' as Energy;
+
 const List<int> LEVEL_POINTS = [
   0,
   10,
@@ -120,6 +122,7 @@ class Ghost {
   /// Sets the candle lit value to be true or false
   setCandleLit(bool value) async {
     _candleLit = value;
+    Energy.setEnergyCandleLit(value);
 
     Map<String, String> row = {Constants.GHOST_CANDLE_LIT: value.toString()};
     await _database.pool.update(Constants.GHOST_TABLE, row,

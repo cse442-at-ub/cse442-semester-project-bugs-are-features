@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:ghost_app/models/energy.dart' as Energy;
 
 class EnergyBar extends StatefulWidget{
   @override
@@ -6,25 +7,23 @@ class EnergyBar extends StatefulWidget{
 }
 
 class _EnergyBarState extends State<EnergyBar>{
-  double _energy;
+  int _energy;
 
 
   @override
   void initState(){
     super.initState();
-    _energy = 100.0;
+    _energy = Energy.energyInit;
   }
 
-  void calcEnergyLeft(){
-    _energy = _energy - 10.0;
-  }
+
 
   Widget _makeText() {
-    _energy -= 10.0;
-      return Text(
-        "Energy:  $_energy",
-        style: TextStyle(fontSize: 30),
-      );
+    _energy = Energy.energy;
+    return Text(
+      "Energy:  $_energy",
+      style: TextStyle(fontSize: 30),
+    );
 
   }
 
