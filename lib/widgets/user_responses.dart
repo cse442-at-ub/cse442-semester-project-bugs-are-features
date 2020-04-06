@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ghost_app/models/ghost.dart';
 import 'package:ghost_app/db/db.dart';
 
+import 'package:ghost_app/db/constants.dart' as Constants;
+
 /// The Candle class that sets the ghost away to be away, or not
 class UserResponses extends StatefulWidget {
   /// The database instance.
@@ -35,34 +37,83 @@ class _UserResponsesState extends State<UserResponses> {
     _getInteractions();
   }
 
+  _stopLeveling() {
+    setState(() {
+      _leveling = false;
+      _loadingResponses = true;
+    });
+    _getInteractions();
+  }
   /// Called when we see that we've leveled up, to do a leveled sequence
-  _startLevel() async {
-    List<Map> map = await widget._db.getLevelingGhostResp(widget._ghost.id,
-        widget._ghost.level, 1);
+  _getLevelingInteraction(int rid) async {
+    if (rid == -1) {
+      _stopLeveling();
+      return;
+    }
 
     setState(() {
-      _leveling = true;
+      _loadingResponses = true;
+    });
+
+    List<Map> ghostResp = await widget._db.getLevelingGhostResp(widget._ghost.id,
+        widget._ghost.level, rid);
+
+    if (!_leveling) {
+      setState(() {
+        _leveling = true;
+      });
+    }
+
+    // Set ghost's response
+    widget._setResponse(ghostResp[0]["${Constants.GHOST_RESP_TEXT}"]);
+
+    String stringRids = ghostResp[0]["${Constants.GHOST_RESP_IDS}"];
+    // We're not linking to anything else
+    if (stringRids == "") {
+      _stopLeveling();
+      return;
+    }
+
+    List<String> rids = stringRids.split(",");
+    // Get the user responses attached to this ghost statement
+    var map = <Map>[];
+    for (String urid in rids) {
+      await widget._db.getLevelingUserResp(widget._ghost.id,
+          widget._ghost.level, int.parse(urid))
+          .then((row) => map.add(row[0]));
+    }
+    _responses = map;
+    setState(() {
+      _loadingResponses = false;
     });
   }
 
   /// This function is called when a user response button is pressed
-  _onPress(int points, String resp) async {
+  _onPress(int points, String resp, int rid) async {
     bool didLevel = await widget._ghost.addScore(points);
     if (didLevel) {
-      _startLevel();
+      _getLevelingInteraction(1);
+      return;
+    } else if (_leveling) {
+      _getLevelingInteraction(rid);
+      return;
     }
 
     widget._setResponse(resp);
-    setState(() {
-      _loadingResponses = true;
-    });
     _getInteractions();
   }
 
   /// Get another set of default interactions
   _getInteractions() async {
-    await widget._db.getDefaultInteraction(widget._ghost.id,
-        widget._ghost.level, 4).then((map) => _responses = map);
+    setState(() {
+      _loadingResponses = true;
+    });
+
+    await widget._db.getDefaultInteraction(widget._ghost.id, 2, 4)
+        .then((map) => _responses = map);
+    // TODO: Change this when default stuff is added
+    //await widget._db.getDefaultInteraction(widget._ghost.id,
+    //    widget._ghost.level, 4).then((map) => _responses = map);
 
     setState(() {
       _loadingResponses = false;
@@ -70,7 +121,7 @@ class _UserResponsesState extends State<UserResponses> {
   }
 
   /// Returns a response button
-  createRespButton(String userResp, String ghostResp, int points) {
+  createRespButton(String userResp, String ghostResp, int points, int rid) {
     return Container(
         padding: EdgeInsets.all(4.0),
         child: RaisedButton(
@@ -81,7 +132,9 @@ class _UserResponsesState extends State<UserResponses> {
               borderRadius: BorderRadius.circular(32.0)
           ),
           onPressed: widget._canInteract
-              ? _loadingResponses ? null : () => _onPress(points, ghostResp)
+              ? _loadingResponses
+                  ? null
+                  : () => _onPress(points, ghostResp, rid)
               : null,
           child: Text(userResp, style: TextStyle(fontSize: 20.0),
           ),
@@ -112,13 +165,21 @@ class _UserResponsesState extends State<UserResponses> {
 
     if (_loadingResponses) {
       List.generate(4, (index) => buttons.add(createEmptyButton()));
+    } else if (_leveling) {
+      for (var btn in _responses) {
+        String userResp = btn["${Constants.USER_RESP_TEXT}"];
+        String ghostResp = "";
+        int points = btn["${Constants.USER_RESP_POINTS}"];
+        int rid = btn["${Constants.USER_RESP_RID}"];
+        buttons.add(createRespButton(userResp, ghostResp, points, rid));
+      }
     } else {
       for (var btn in _responses) {
-        String userResp = btn["user_resp"];
-        String ghostResp = btn["ghost_resp"];
-        int points = btn["points"];
-
-        buttons.add(createRespButton(userResp, ghostResp, points));
+        String userResp = btn["${Constants.DEFAULT_RESP_USER}"];
+        String ghostResp = btn["${Constants.DEFAULT_RESP_GHOST}"];
+        int points = btn["${Constants.DEFAULT_RESP_POINTS}"];
+        int rid = 0;
+        buttons.add(createRespButton(userResp, ghostResp, points, rid));
       }
     }
 

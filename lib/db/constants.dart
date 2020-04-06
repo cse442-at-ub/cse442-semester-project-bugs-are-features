@@ -72,6 +72,9 @@ const String USER_RESP_LEVEL = 'level';
 /// ID of the chosen response
 const String USER_RESP_RID = 'rid';
 
+/// ID of the ghost response this response links to
+const String USER_RESP_GRID = 'grid';
+
 /// Message type. 0 = Normal text, 1 = action text.
 const String USER_RESP_TYPE = 'type';
 

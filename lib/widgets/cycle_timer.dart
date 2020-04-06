@@ -28,7 +28,7 @@ class _CycleTimerState extends State<CycleTimer> {
     super.initState();
     _isDay = false;
     _interval = Duration(seconds: 1);
-    _cycle = new Duration(seconds: NIGHT_CYCLE);
+    _cycle = Duration(seconds: NIGHT_CYCLE);
 
     if (widget._cancelTimer) {
       _destroyTimer();
@@ -69,8 +69,6 @@ class _CycleTimerState extends State<CycleTimer> {
       _timer = Timer(_interval, _switchCycle);
     } else {
       _timer = Timer(_interval, _switchCycle);
-      if (!firstStart) {
-      }
     }
   }
 
@@ -81,7 +79,7 @@ class _CycleTimerState extends State<CycleTimer> {
         _timer.cancel();
         _isDay = !_isDay;
         widget._setDayCycle(_isDay);
-        _cycle = new Duration(seconds: NIGHT_CYCLE);
+        _cycle = Duration(seconds: NIGHT_CYCLE);
       }
       else {
         _cycle -= Duration(seconds: 1);
@@ -94,7 +92,7 @@ class _CycleTimerState extends State<CycleTimer> {
     setState(() {
       _isDay = !_isDay;
       widget._setDayCycle(_isDay);
-      _cycle = new Duration(seconds: NIGHT_CYCLE);
+      _cycle = Duration(seconds: NIGHT_CYCLE);
     });
     _startCycle(false);
   }
@@ -119,7 +117,8 @@ class _CycleTimerState extends State<CycleTimer> {
     }
   }
 
-  ///Toggle button to toggle between day and night cycles. Moon = Night cycle, Sun = Day cycle
+  ///Toggle button to toggle between day and night cycles.
+  /// Moon = Night cycle, Sun = Day cycle
   @override
   Widget build(BuildContext context) {
 
@@ -132,7 +131,8 @@ class _CycleTimerState extends State<CycleTimer> {
               _isDay ? MainAxisAlignment.center : MainAxisAlignment.start,
           children: <Widget>[
             GestureDetector(
-                onTap: _isDay ? _switchCycleUI : null, child: _loadCycle()),
+                onTap: _isDay ? _switchCycleUI : null, child: _loadCycle()
+            ),
             _makeText()
           ],
         ));

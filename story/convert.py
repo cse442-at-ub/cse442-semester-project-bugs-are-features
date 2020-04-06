@@ -65,9 +65,9 @@ def user_node(pid):
             resp_t = pair[1]
 
     statement = ('batch.execute(\"INSERT INTO user_responses '
-        '(gid, level, rid, type, effect, points, text) '
-        'VALUES ({}, {}, {}, {}, {}, {}, \\"{}\\")\");'
-        .format(gid, level, rid, resp_t, effect, points, text))
+        '(gid, level, rid, grid, type, effect, points, text) '
+        'VALUES ({}, {}, {}, {}, {}, {}, {}, \\"{}\\")\");'
+        .format(gid, level, rid, pid, resp_t, effect, points, text))
 
     user_resps.add(statement)
 

@@ -95,15 +95,30 @@ class DB {
 
   /// Returns a ghost's response while leveling
   getLevelingGhostResp(int gid, int level, int rid) async {
-    List<Map> res = await _pool.query(Constants.GHOST_RESP_TABLE,
+    return await _pool.query(Constants.GHOST_RESP_TABLE,
         columns: [Constants.GHOST_RESP_IDS, Constants.GHOST_RESP_TEXT],
         where:  '${Constants.GHOST_RESP_GHOST_ID} = ? AND '
                 '${Constants.GHOST_RESP_LEVEL} = ? AND '
                 '${Constants.GHOST_RESP_RID} = ?',
         whereArgs: [gid, level, rid]
     );
-    print(res);
-    return res;
+  }
+
+  /// Returns a ghost's response while leveling
+  getLevelingUserResp(int gid, int level, int rid) async {
+    return await _pool.query(Constants.USER_RESP_TABLE,
+        columns: [
+          Constants.USER_RESP_RID,
+          Constants.USER_RESP_TYPE,
+          Constants.USER_RESP_EFFECT,
+          Constants.USER_RESP_POINTS,
+          Constants.USER_RESP_TEXT
+        ],
+        where: '${Constants.USER_RESP_GHOST_ID} = ? AND '
+            '${Constants.USER_RESP_LEVEL} = ? AND '
+            '${Constants.USER_RESP_GRID} = ?',
+        whereArgs: [gid, level, rid]
+    );
   }
 
   getDefaultInteraction(int gid, int level, int qty) async {
@@ -116,11 +131,6 @@ class DB {
         whereArgs: [gid, level],
         limit: 4
     );
-  }
-
-  /// Returns the list of user responses while leveling
-  getLevelingUserResp(int gid, int level, List<int> rids) async {
-
   }
 
   /// Closes the database connection. Should only be called when app is killed.
@@ -182,6 +192,7 @@ class DB {
           "${Constants.USER_RESP_GHOST_ID} INTEGER NOT NULL,"
           "${Constants.USER_RESP_LEVEL} INTEGER NOT NULL,"
           "${Constants.USER_RESP_RID} INTEGER NOT NULL,"
+          "${Constants.USER_RESP_GRID} INTEGER NOT NULL,"
           "${Constants.USER_RESP_TYPE} INTEGER NOT NULL,"
           "${Constants.USER_RESP_EFFECT} INTEGER NOT NULL,"
           "${Constants.USER_RESP_POINTS} INTEGER NOT NULL,"
