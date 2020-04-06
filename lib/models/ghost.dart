@@ -87,15 +87,23 @@ class Ghost {
     _candleLit = map['${Constants.GHOST_CANDLE_LIT}'] == true;
   }
 
+  /// Adds a negative effect to the rate of score progression if the user
+  /// gives a bad response. Nothing >= 0 should get here.
+  addEffect(int effect) {
+    print("addEffect $effect");
+    if (effect >= 0) {
+      return;
+    }
+    //Decrement energyInit by 1 if wrong response chosen
+    Energy.energy = Energy.energyInit - 1;
+    debugPrint("Wrong response chosen. -1 Energy: ${Energy.energyInit}");
+    // *Chin's energy goes down*
+  }
+
   /// Adds `score` amount of points to the ghost's score.
   addScore(int score) async {
     bool didLevel = false;
     if (score == 0) {
-
-      //Decrement energyInit by 1 if wrong response chosen
-      Energy.energy = Energy.energyInit - 1;
-      debugPrint("Wrong response chosen. -1 Energy: ${Energy.energyInit}");
-
       return didLevel;
     }
     _score += score;
