@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:ghost_app/models/cycle.dart' as Cycle;
 
-
+const int DAY_CYCLE = 1000; //Duration of day cycle
+const int NIGHT_CYCLE = 1000; //Duration of night cycle
 
 class CycleTimer extends StatefulWidget {
   /// Sets the Day and Night cycle
@@ -31,14 +31,14 @@ class _CycleTimerState extends State<CycleTimer> {
     _isDay = false;
     _dayCycle = Duration(seconds: 1);
     _nightCycle = Duration(seconds: 1);
-    _currentTime = new Duration(
+    _currentTime = Duration(
         hours: DateTime.now().hour,
         minutes: DateTime.now().minute,
         seconds: DateTime.now().second);
-    _startOfNextCycle = new Duration(
+    _startOfNextCycle = Duration(
         hours: DateTime.now().hour,
         minutes: DateTime.now().minute,
-        seconds: DateTime.now().second + Cycle.NIGHT_CYCLE);
+        seconds: DateTime.now().second + NIGHT_CYCLE);
 
     if (widget._cancelTimer) {
       _destroyTimer();
@@ -74,15 +74,12 @@ class _CycleTimerState extends State<CycleTimer> {
 
 
   void _startCycle(bool firstStart) {
-
     _destroyTimer();
     if (_isDay) {
       _timer = Timer(_nightCycle, _switchCycle);
-      widget._setDayCycle(true);
     } else {
       _timer = Timer(_dayCycle, _switchCycle);
       if (!firstStart) {
-        widget._setDayCycle(false);
       }
     }
   }
@@ -95,19 +92,20 @@ class _CycleTimerState extends State<CycleTimer> {
       if (_remaining == Duration.zero) {
         _timer.cancel();
         _isDay = !_isDay;
+        widget._setDayCycle(_isDay);
 
-        _startOfNextCycle = new Duration(
+        _startOfNextCycle = Duration(
             hours: DateTime.now().hour,
             minutes: DateTime.now().minute,
-            seconds: Cycle.NIGHT_CYCLE + DateTime.now().second);
+            seconds: NIGHT_CYCLE + DateTime.now().second);
 
-        _currentTime = new Duration(
+        _currentTime = Duration(
             hours: DateTime.now().hour,
             minutes: DateTime.now().minute,
             seconds: DateTime.now().second);
       }
       else {
-        _currentTime = new Duration(
+        _currentTime = Duration(
             hours: DateTime.now().hour,
             minutes: DateTime.now().minute,
             seconds: DateTime.now().second);
@@ -119,10 +117,11 @@ class _CycleTimerState extends State<CycleTimer> {
   void _switchCycleUI() {
     setState(() {
       _isDay = !_isDay;
-      _startOfNextCycle = new Duration(
+      widget._setDayCycle(_isDay);
+      _startOfNextCycle = Duration(
           hours: DateTime.now().hour,
           minutes: DateTime.now().minute,
-          seconds: DateTime.now().second + Cycle.NIGHT_CYCLE);
+          seconds: DateTime.now().second + NIGHT_CYCLE);
 
     });
     _startCycle(false);
@@ -141,13 +140,11 @@ class _CycleTimerState extends State<CycleTimer> {
     String remainingTime = format(_remaining);
 
     if (_isDay) {
-      debugPrint(format(_remaining));
       return Text(
         "Day Cycle is On!  $remainingTime",
         style: TextStyle(fontSize: 30),
       );
     } else {
-      debugPrint(_remaining.toString());
       return Text("Night Cycle is On!  $remainingTime");
     }
   }
