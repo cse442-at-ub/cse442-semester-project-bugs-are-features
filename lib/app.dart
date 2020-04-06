@@ -4,8 +4,6 @@ import 'dart:developer' as dev;
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:ghost_app/db/db.dart';
-import 'package:ghost_app/widgets/cycle_timer.dart';
-import 'package:ghost_app/widgets/energy_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'screens/ghost.dart';
@@ -36,7 +34,7 @@ class RootPage extends StatefulWidget {
 /// The state widget of [RootPage].
 class _RootPageState extends State<RootPage> {
   /// The Database instance
-  final DB _database = DB();
+  final DB _db = DB();
 
   /// Displays splash screen when false. True when assets are loaded.
   bool _assetsLoaded = false;
@@ -50,9 +48,6 @@ class _RootPageState extends State<RootPage> {
   /// Instance of app preferences. Is passed to children.
   SharedPreferences _prefs;
 
-  bool _isDayCycle = false;
-  bool _stopTimer = false;
-
   @override
   initState() {
     super.initState();
@@ -62,7 +57,7 @@ class _RootPageState extends State<RootPage> {
 
   @override
   void dispose() {
-    _database.close();
+    _db.close();
     super.dispose();
   }
 
@@ -76,62 +71,37 @@ class _RootPageState extends State<RootPage> {
     var view = <Widget>[];
 
     // Set the app-wide background image
-    var bg = _isDayCycle
-        ? Image.asset(
-            'assets/misc/Graveyard2.png',
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            fit: BoxFit.fill,
-          )
-        : Image.asset(
-            'assets/misc/Graveyard.png',
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            fit: BoxFit.fill,
-          );
+    var bg = Image.asset(
+      'assets/misc/Graveyard.png',
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      fit: BoxFit.fill,
+    );
     view.add(bg);
-
-    EnergyBar energy = new EnergyBar();  ///Adding the energy bar
-    view.add(energy);
 
     Widget screen;
     // Select our main view container.
     var ghostChosen = _prefs.getBool('has_ghost');
     if (ghostChosen) {
-      screen =
-          GhostMain(_prefs, _ghostReleased, _database, _ghost, !_isDayCycle);
-      // Day/Night cycle switch
+      screen = GhostMain(_prefs, _db, _ghostReleased, _ghost);
     } else {
       screen = GraveyardMain(_prefs, _ghostChosen);
     }
     view.add(screen);
 
-    if (ghostChosen) {
-      ///Timer for Day and Night cycle switch
-      view.add(CycleTimer(_setDayCycle, _stopTimer));
-    }
-
-    if (!_isDayCycle) {
-      view.add(SettingsButton(_prefs, _ghostReleased));
-    }
+    view.add(SettingsButton(_prefs, _ghostReleased));
 
     // Add Dev Settings button _only_ if in development
     assert(() {
-      view.add(DevButton(_prefs, _ghostReleased, _database, _showNotification));
+      view.add(DevButton(_prefs, _ghostReleased, _db, _showNotification));
       return true;
     }());
 
     return Stack(children: view);
   }
 
-  void _setDayCycle(bool value) {
-    setState(() {
-      _isDayCycle = value;
-    });
-  }
-
   _setGhost(int gid) async {
-    _ghost = Ghost(gid, _database);
+    _ghost = Ghost(gid, _db);
     await _ghost.init();
     dev.log("Current ghost ID = $gid", name: "app.init");
   }
@@ -139,7 +109,7 @@ class _RootPageState extends State<RootPage> {
   /// For all future image, sound, and startup database calls.
   _loadAssets() async {
     _readPrefs();
-    await _database.init();
+    await _db.init();
 
     int gid = _prefs.getInt('ghost_id');
     if (gid > 0) {
@@ -206,7 +176,7 @@ class _RootPageState extends State<RootPage> {
   /// Call from [GraveyardMain] when a ghost is selected to render [GhostMain].
   _ghostChosen(int id) async {
     // Returns the amount of rows updated
-    int updated = await _database.setGhost(id);
+    int updated = await _db.setGhost(id);
     if (updated != 1) {
       throw Exception('Less than or more than one ghost was chosen.');
     }
@@ -229,13 +199,12 @@ class _RootPageState extends State<RootPage> {
     }
 
     // Returns the amount of rows updated
-    int updated = await _database.unsetGhost(_prefs.getInt('ghost_id'));
+    int updated = await _db.unsetGhost(_prefs.getInt('ghost_id'));
     if (updated != 1) {
       throw Exception('Less than or more than one ghost was chosen.');
     }
 
     setState(() {
-      _isDayCycle = false;
       _prefs.setInt('ghost_id', 0);
       _prefs.setBool('has_ghost', false);
       _prefs.setString('cycle_value', null);
@@ -254,11 +223,5 @@ class _RootPageState extends State<RootPage> {
 
   Future _hideNotification() async {
     await _flutterLocalNotificationsPlugin.cancel(0);
-  }
-
-  void _cancelTimer() {
-    setState(() {
-      _stopTimer = true;
-    });
   }
 }

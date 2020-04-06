@@ -1,0 +1,399 @@
+{
+  "passages": [
+    {
+      "text": "You know what the worst part of being a ghost is?\n[[You're dead?]]\n[[Seems kind of cool to me, actually.]]\n[[It must be boring.]]\n[[The lack of company?]]",
+      "links": [
+        {
+          "name": "You're dead?",
+          "link": "You're dead?",
+          "pid": "2"
+        },
+        {
+          "name": "Seems kind of cool to me, actually.",
+          "link": "Seems kind of cool to me, actually.",
+          "pid": "3"
+        },
+        {
+          "name": "It must be boring.",
+          "link": "It must be boring.",
+          "pid": "4"
+        },
+        {
+          "name": "The lack of company?",
+          "link": "The lack of company?",
+          "pid": "5"
+        }
+      ],
+      "name": "root",
+      "pid": "1",
+      "position": {
+        "x": "364",
+        "y": "61.5"
+      }
+    },
+    {
+      "text": "You're dead?\n[[Well, yeah. But I miss my wife.]]",
+      "links": [
+        {
+          "name": "Well, yeah. But I miss my wife.",
+          "link": "Well, yeah. But I miss my wife.",
+          "pid": "6"
+        }
+      ],
+      "name": "You're dead?",
+      "pid": "2",
+      "position": {
+        "x": "139",
+        "y": "211.5"
+      },
+      "tags": [
+        "points=3",
+        "effect=0",
+        "type=0"
+      ]
+    },
+    {
+      "text": "Seems kind of cool to me, actually.\n[[Maybe I can help you become one.]]",
+      "links": [
+        {
+          "name": "Maybe I can help you become one.",
+          "link": "Maybe I can help you become one.",
+          "pid": "7"
+        }
+      ],
+      "name": "Seems kind of cool to me, actually.",
+      "pid": "3",
+      "position": {
+        "x": "289",
+        "y": "211.5"
+      },
+      "tags": [
+        "points=0",
+        "effect=0",
+        "type=0"
+      ]
+    },
+    {
+      "text": "It must be boring.\n[[Well, yeah. But I miss my wife.]]",
+      "links": [
+        {
+          "name": "Well, yeah. But I miss my wife.",
+          "link": "Well, yeah. But I miss my wife.",
+          "pid": "6"
+        }
+      ],
+      "name": "It must be boring.",
+      "pid": "4",
+      "position": {
+        "x": "439",
+        "y": "211.5"
+      },
+      "tags": [
+        "points=2",
+        "type=0",
+        "effect=0"
+      ]
+    },
+    {
+      "text": "The lack of company?\n[[Yes, exactly! I miss my wife.]]",
+      "links": [
+        {
+          "name": "Yes, exactly! I miss my wife.",
+          "link": "Yes, exactly! I miss my wife.",
+          "pid": "8"
+        }
+      ],
+      "name": "The lack of company?",
+      "pid": "5",
+      "position": {
+        "x": "589",
+        "y": "211.5"
+      },
+      "tags": [
+        "points=5",
+        "type=0",
+        "effect=0"
+      ]
+    },
+    {
+      "text": "Well, yeah. But I miss my wife.\n[[Isn't there some way to see her?]]\n[[Oh yeah, she's long gone.]]\n[[I'm sorry to hear that.]]\n[[Is there anything I can do?]]",
+      "links": [
+        {
+          "name": "Isn't there some way to see her?",
+          "link": "Isn't there some way to see her?",
+          "pid": "15"
+        },
+        {
+          "name": "Oh yeah, she's long gone.",
+          "link": "Oh yeah, she's long gone.",
+          "pid": "16"
+        },
+        {
+          "name": "I'm sorry to hear that.",
+          "link": "I'm sorry to hear that.",
+          "pid": "17"
+        },
+        {
+          "name": "Is there anything I can do?",
+          "link": "Is there anything I can do?",
+          "pid": "18"
+        }
+      ],
+      "name": "Well, yeah. But I miss my wife.",
+      "pid": "6",
+      "position": {
+        "x": "22",
+        "y": "368.5"
+      }
+    },
+    {
+      "text": "Maybe I can help you become one.\n[[Sorry, I didn't mean that.]]\n[[Please do.]]\n[[Uhh... I think I'll pass.]]\n[[... what's the worst part?]]",
+      "links": [
+        {
+          "name": "Sorry, I didn't mean that.",
+          "link": "Sorry, I didn't mean that.",
+          "pid": "9"
+        },
+        {
+          "name": "Please do.",
+          "link": "Please do.",
+          "pid": "10"
+        },
+        {
+          "name": "Uhh... I think I'll pass.",
+          "link": "Uhh... I think I'll pass.",
+          "pid": "11"
+        },
+        {
+          "name": "... what's the worst part?",
+          "link": "... what's the worst part?",
+          "pid": "12"
+        }
+      ],
+      "name": "Maybe I can help you become one.",
+      "pid": "7",
+      "position": {
+        "x": "558",
+        "y": "348.5"
+      }
+    },
+    {
+      "text": "Double-click this passage to edit it.",
+      "name": "Yes, exactly! I miss my wife.",
+      "pid": "8",
+      "position": {
+        "x": "144",
+        "y": "368.5"
+      }
+    },
+    {
+      "text": "Sorry, I didn't mean that.\n[[root]]",
+      "links": [
+        {
+          "name": "root",
+          "link": "root",
+          "pid": "1"
+        }
+      ],
+      "name": "Sorry, I didn't mean that.",
+      "pid": "9",
+      "position": {
+        "x": "452",
+        "y": "490.5"
+      },
+      "tags": [
+        "effect=0",
+        "points=1",
+        "type=0"
+      ]
+    },
+    {
+      "text": "Please do.\n[[...]]",
+      "links": [
+        {
+          "name": "...",
+          "link": "...",
+          "pid": "13"
+        }
+      ],
+      "name": "Please do.",
+      "pid": "10",
+      "position": {
+        "x": "562",
+        "y": "487.5"
+      },
+      "tags": [
+        "points=0",
+        "effect=-2",
+        "type=0"
+      ]
+    },
+    {
+      "text": "Uhh... I think I'll pass.\n[[root]]",
+      "links": [
+        {
+          "name": "root",
+          "link": "root",
+          "pid": "1"
+        }
+      ],
+      "name": "Uhh... I think I'll pass.",
+      "pid": "11",
+      "position": {
+        "x": "682",
+        "y": "488.5"
+      },
+      "tags": [
+        "points=0",
+        "effect=0",
+        "type=0"
+      ]
+    },
+    {
+      "text": "... what's the worst part?\n[[I miss my wife.]]",
+      "links": [
+        {
+          "name": "I miss my wife.",
+          "link": "I miss my wife.",
+          "pid": "14"
+        }
+      ],
+      "name": "... what's the worst part?",
+      "pid": "12",
+      "position": {
+        "x": "788",
+        "y": "487.5"
+      },
+      "tags": [
+        "points=1",
+        "effect=0",
+        "type=0"
+      ]
+    },
+    {
+      "text": "...",
+      "name": "...",
+      "pid": "13",
+      "position": {
+        "x": "503",
+        "y": "606.5"
+      }
+    },
+    {
+      "text": "Double-click this passage to edit it.",
+      "name": "I miss my wife.",
+      "pid": "14",
+      "position": {
+        "x": "258",
+        "y": "370.5"
+      }
+    },
+    {
+      "text": "Isn't there some way to see her?\n[[I don't know. But as long as I'm stuck as a ghost, I won't be able to find out.]]",
+      "links": [
+        {
+          "name": "I don't know. But as long as I'm stuck as a ghost, I won't be able to find out.",
+          "link": "I don't know. But as long as I'm stuck as a ghost, I won't be able to find out.",
+          "pid": "19"
+        }
+      ],
+      "name": "Isn't there some way to see her?",
+      "pid": "15",
+      "position": {
+        "x": "0",
+        "y": "486.5"
+      },
+      "tags": [
+        "points=5",
+        "effect=0",
+        "type=0"
+      ]
+    },
+    {
+      "text": "Oh yeah, she's long gone.\n[[...]]",
+      "links": [
+        {
+          "name": "...",
+          "link": "...",
+          "pid": "13"
+        }
+      ],
+      "name": "Oh yeah, she's long gone.",
+      "pid": "16",
+      "position": {
+        "x": "109",
+        "y": "490.5"
+      },
+      "tags": [
+        "effect=-2",
+        "points=0",
+        "type=0"
+      ]
+    },
+    {
+      "text": "I'm sorry to hear that.\n[[Thanks. I hope that if I can be released from being a ghost, I'll be able to see her again.]]",
+      "links": [
+        {
+          "name": "Thanks. I hope that if I can be released from being a ghost, I'll be able to see her again.",
+          "link": "Thanks. I hope that if I can be released from being a ghost, I'll be able to see her again.",
+          "pid": "20"
+        }
+      ],
+      "name": "I'm sorry to hear that.",
+      "pid": "17",
+      "position": {
+        "x": "216",
+        "y": "488.5"
+      },
+      "tags": [
+        "points=5",
+        "effect=0",
+        "type=0"
+      ]
+    },
+    {
+      "text": "Is there anything I can do?\n[[I don't know. But as long as I'm stuck as a ghost, I won't be able to find out.]]",
+      "links": [
+        {
+          "name": "I don't know. But as long as I'm stuck as a ghost, I won't be able to find out.",
+          "link": "I don't know. But as long as I'm stuck as a ghost, I won't be able to find out.",
+          "pid": "19"
+        }
+      ],
+      "name": "Is there anything I can do?",
+      "pid": "18",
+      "position": {
+        "x": "336",
+        "y": "493.5"
+      },
+      "tags": [
+        "points=5",
+        "effect=0",
+        "type=0"
+      ]
+    },
+    {
+      "text": "I don't know. But as long as I'm stuck as a ghost, I won't be able to find out.",
+      "name": "I don't know. But as long as I'm stuck as a ghost, I won't be able to find out.",
+      "pid": "19",
+      "position": {
+        "x": "0",
+        "y": "636.5"
+      }
+    },
+    {
+      "text": "Thanks. I hope that if I can be released from being a ghost, I'll be able to see her again.",
+      "name": "Thanks. I hope that if I can be released from being a ghost, I'll be able to see her again.",
+      "pid": "20",
+      "position": {
+        "x": "216",
+        "y": "638.5"
+      }
+    }
+  ],
+  "name": "g1l7",
+  "startnode": "1",
+  "creator": "Twine",
+  "creator-version": "2.3.6",
+  "ifid": "40FBAB33-5674-4588-9A80-26F8CAF8B82A"
+}

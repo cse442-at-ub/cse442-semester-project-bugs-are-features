@@ -1,0 +1,321 @@
+{
+  "passages": [
+    {
+      "text": "I used to care a lot about time. Not so much anymore.\n[[Why?]]\n[[I don't have time for this.]]\n[[What's so good about time?]]\n[[Oh, okay.]]",
+      "links": [
+        {
+          "name": "Why?",
+          "link": "Why?",
+          "pid": "2"
+        },
+        {
+          "name": "I don't have time for this.",
+          "link": "I don't have time for this.",
+          "pid": "3"
+        },
+        {
+          "name": "What's so good about time?",
+          "link": "What's so good about time?",
+          "pid": "4"
+        },
+        {
+          "name": "Oh, okay.",
+          "link": "Oh, okay.",
+          "pid": "5"
+        }
+      ],
+      "name": "root",
+      "pid": "1",
+      "position": {
+        "x": "740",
+        "y": "377"
+      }
+    },
+    {
+      "text": "Why?\n[[Keeping track of time was my job.]]",
+      "links": [
+        {
+          "name": "Keeping track of time was my job.",
+          "link": "Keeping track of time was my job.",
+          "pid": "6"
+        }
+      ],
+      "name": "Why?",
+      "pid": "2",
+      "position": {
+        "x": "515",
+        "y": "527"
+      },
+      "tags": [
+        "type=0",
+        "effect=0",
+        "points=3"
+      ]
+    },
+    {
+      "text": "I don't have time for this.\n[[Then I don't have time for you. Which is ironic because I used to be a clock-maker.]]",
+      "links": [
+        {
+          "name": "Then I don't have time for you. Which is ironic because I used to be a clock-maker.",
+          "link": "Then I don't have time for you. Which is ironic because I used to be a clock-maker.",
+          "pid": "7"
+        }
+      ],
+      "name": "I don't have time for this.",
+      "pid": "3",
+      "position": {
+        "x": "665",
+        "y": "527"
+      },
+      "tags": [
+        "type=0",
+        "effect=-1",
+        "points=0"
+      ]
+    },
+    {
+      "text": "What's so good about time?\n[[Keeping track of time was my job.]]",
+      "links": [
+        {
+          "name": "Keeping track of time was my job.",
+          "link": "Keeping track of time was my job.",
+          "pid": "6"
+        }
+      ],
+      "name": "What's so good about time?",
+      "pid": "4",
+      "position": {
+        "x": "815",
+        "y": "527"
+      },
+      "tags": [
+        "type=0",
+        "points=5",
+        "effect=0"
+      ]
+    },
+    {
+      "text": "Oh, okay.\n[[Keeping track of time was my job.]]",
+      "links": [
+        {
+          "name": "Keeping track of time was my job.",
+          "link": "Keeping track of time was my job.",
+          "pid": "6"
+        }
+      ],
+      "name": "Oh, okay.",
+      "pid": "5",
+      "position": {
+        "x": "965",
+        "y": "527"
+      },
+      "tags": [
+        "points=2",
+        "type=0",
+        "effect=0"
+      ]
+    },
+    {
+      "text": "Keeping track of time was my job.\n[[How so?]]\n[[What was your job?]]\n[[You had a job?]]\n[[I don't care.]]",
+      "links": [
+        {
+          "name": "How so?",
+          "link": "How so?",
+          "pid": "8"
+        },
+        {
+          "name": "What was your job?",
+          "link": "What was your job?",
+          "pid": "9"
+        },
+        {
+          "name": "You had a job?",
+          "link": "You had a job?",
+          "pid": "10"
+        },
+        {
+          "name": "I don't care.",
+          "link": "I don't care.",
+          "pid": "11"
+        }
+      ],
+      "name": "Keeping track of time was my job.",
+      "pid": "6",
+      "position": {
+        "x": "787",
+        "y": "674"
+      }
+    },
+    {
+      "text": "Then I don't have time for you. Which is ironic because I used to be a clock-maker.",
+      "name": "Then I don't have time for you. Which is ironic because I used to be a clock-maker.",
+      "pid": "7",
+      "position": {
+        "x": "530",
+        "y": "669"
+      }
+    },
+    {
+      "text": "How so?\n[[I was a clock maker, and among the best of them, too.]]",
+      "links": [
+        {
+          "name": "I was a clock maker, and among the best of them, too.",
+          "link": "I was a clock maker, and among the best of them, too.",
+          "pid": "12"
+        }
+      ],
+      "name": "How so?",
+      "pid": "8",
+      "position": {
+        "x": "608",
+        "y": "813"
+      },
+      "tags": [
+        "points=3",
+        "effect=0",
+        "type=0"
+      ]
+    },
+    {
+      "text": "What was your job?\n[[I was a clock maker, and among the best of them, too.]]",
+      "links": [
+        {
+          "name": "I was a clock maker, and among the best of them, too.",
+          "link": "I was a clock maker, and among the best of them, too.",
+          "pid": "12"
+        }
+      ],
+      "name": "What was your job?",
+      "pid": "9",
+      "position": {
+        "x": "758",
+        "y": "813"
+      },
+      "tags": [
+        "points=5",
+        "effect=0",
+        "type=0"
+      ]
+    },
+    {
+      "text": "You had a job?\n[[I was a clock maker, and among the best of them, too.]]",
+      "links": [
+        {
+          "name": "I was a clock maker, and among the best of them, too.",
+          "link": "I was a clock maker, and among the best of them, too.",
+          "pid": "12"
+        }
+      ],
+      "name": "You had a job?",
+      "pid": "10",
+      "position": {
+        "x": "909",
+        "y": "813"
+      },
+      "tags": [
+        "points=2",
+        "effect=0",
+        "type=0"
+      ]
+    },
+    {
+      "text": "I don't care.\n[[Then I don't have time for you. Which is ironic because I used to be a clock-maker.]]",
+      "links": [
+        {
+          "name": "Then I don't have time for you. Which is ironic because I used to be a clock-maker.",
+          "link": "Then I don't have time for you. Which is ironic because I used to be a clock-maker.",
+          "pid": "7"
+        }
+      ],
+      "name": "I don't care.",
+      "pid": "11",
+      "position": {
+        "x": "1058",
+        "y": "813"
+      },
+      "tags": [
+        "points=0",
+        "effect=-1",
+        "type=0"
+      ]
+    },
+    {
+      "text": "I was a clock maker, and among the best of them, too.\n[[Neat!]]\n[[Okay.]]\n[[That's a cool job.]]\n[[I don't care.]]",
+      "links": [
+        {
+          "name": "Neat!",
+          "link": "Neat!",
+          "pid": "13"
+        },
+        {
+          "name": "Okay.",
+          "link": "Okay.",
+          "pid": "14"
+        },
+        {
+          "name": "That's a cool job.",
+          "link": "That's a cool job.",
+          "pid": "15"
+        },
+        {
+          "name": "I don't care.",
+          "link": "I don't care.",
+          "pid": "11"
+        }
+      ],
+      "name": "I was a clock maker, and among the best of them, too.",
+      "pid": "12",
+      "position": {
+        "x": "608",
+        "y": "963"
+      }
+    },
+    {
+      "text": "Neat!",
+      "name": "Neat!",
+      "pid": "13",
+      "position": {
+        "x": "458",
+        "y": "1113"
+      },
+      "tags": [
+        "points=3",
+        "type=0",
+        "effect=0"
+      ]
+    },
+    {
+      "text": "Okay.",
+      "name": "Okay.",
+      "pid": "14",
+      "position": {
+        "x": "608",
+        "y": "1113"
+      },
+      "tags": [
+        "points=2",
+        "effect=0",
+        "type=0"
+      ]
+    },
+    {
+      "text": "That's a cool job.",
+      "name": "That's a cool job.",
+      "pid": "15",
+      "position": {
+        "x": "758",
+        "y": "1113"
+      },
+      "tags": [
+        "points=5",
+        "effect=0",
+        "type=0"
+      ]
+    }
+  ],
+  "name": "g1l4",
+  "startnode": "1",
+  "creator": "Twine",
+  "creator-version": "2.3.6",
+  "ifid": "0AE70881-905D-41F6-AADB-8D21C4B3BA4F"
+}
