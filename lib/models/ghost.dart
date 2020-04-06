@@ -5,6 +5,8 @@ import 'package:flutter/widgets.dart';
 import 'package:ghost_app/db/constants.dart' as Constants;
 import 'package:ghost_app/db/db.dart';
 
+import 'package:ghost_app/models/energy.dart' as Energy;
+
 const List<int> LEVEL_POINTS = [
   0,
   10,
@@ -63,6 +65,9 @@ class Ghost {
   /// The current score points the player has reached
   int _score;
 
+  /// ???
+  int _chatOptionScore;
+
   ///  Whether or not the candle is currently lit.
   bool _candleLit;
 
@@ -83,23 +88,26 @@ class Ghost {
     _difficulty = Difficulty.values[map['${Constants.GHOST_DIFFICULTY}']];
     _level = map['${Constants.GHOST_LEVEL}'];
     _score = map['${Constants.GHOST_SCORE}'];
+    _chatOptionScore = 0;
     _candleLit = map['${Constants.GHOST_CANDLE_LIT}'] == true;
   }
 
   /// Adds `score` amount of points to the ghost's score.
+  /// If user chooses incorrect response, the energy decreases by 1.
   addScore(int score) async {
-    bool didLevel = false;
     if (score == 0) {
-      return didLevel;
+      Energy.energy = Energy.energyInit - 1;
+      debugPrint("Wrong response chosen. -1 Energy: ${Energy.energyInit}");
+      return;
     }
     _score += score;
 
     int newLevel = checkLevel(_score);
+    bool leveledUp = _level < newLevel;
     // Check if additional points have leveled us up
-    if (_level < newLevel) {
+    if (leveledUp) {
       dev.log("Leveled up from $_level to $newLevel", name: "models.ghost");
       _level = newLevel;
-      didLevel = true;
     }
 
     Map<String, dynamic> columns = {
@@ -107,15 +115,17 @@ class Ghost {
       Constants.GHOST_LEVEL: _level
     };
 
+    int rows;
     await _database.pool.update(Constants.GHOST_TABLE, columns,
-        where: '${Constants.GHOST_ID} = ?', whereArgs: [_id]);
-
-    return didLevel;
+        where: '${Constants.GHOST_ID} = ?',
+        whereArgs: [_id]).then((rowsUpdated) => rows = rowsUpdated);
+    return rows;
   }
 
   /// Sets the candle lit value to be true or false
   setCandleLit(bool value) async {
     _candleLit = value;
+    Energy.setEnergyCandleLit(value);
 
     Map<String, String> row = {Constants.GHOST_CANDLE_LIT: value.toString()};
     await _database.pool.update(Constants.GHOST_TABLE, row,
@@ -152,6 +162,9 @@ class Ghost {
 
     return top.toDouble() / btm.toDouble();
   }
+
+  /// Returns the ghost's chat option score
+  int get chatOptionScore => _chatOptionScore;
 
   /// Returns whether or not the ghost sees that the candle is lit
   bool get candleLit => _candleLit;

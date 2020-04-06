@@ -1,9 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:ghost_app/models/cycle.dart' as Cycle;
+import 'package:ghost_app/models/energy.dart' as Energy;
 
-const int DAY_CYCLE = 1000; //Duration of day cycle
-const int NIGHT_CYCLE = 1000; //Duration of night cycle
+
 
 class CycleTimer extends StatefulWidget {
   /// Sets the Day and Night cycle
@@ -20,15 +20,26 @@ class _CycleTimerState extends State<CycleTimer> {
   bool _isDay; //bool value to check if it is a day cycle or a night cycle
   int _offset = 50;
 
-  Duration _interval;
-  Duration _cycle;
+  Duration _dayCycle;
+  Duration _nightCycle;
+  Duration _currentTime;
+  Duration _startOfNextCycle;
+  var _remaining;
 
   @override
   void initState() {
     super.initState();
     _isDay = false;
-    _interval = Duration(seconds: 1);
-    _cycle = Duration(seconds: NIGHT_CYCLE);
+    _dayCycle = Duration(seconds: 1);
+    _nightCycle = Duration(seconds: 1);
+    _currentTime = new Duration(
+        hours: DateTime.now().hour,
+        minutes: DateTime.now().minute,
+        seconds: DateTime.now().second);
+    _startOfNextCycle = new Duration(
+        hours: DateTime.now().hour,
+        minutes: DateTime.now().minute,
+        seconds: DateTime.now().second + Cycle.NIGHT_CYCLE);
 
     if (widget._cancelTimer) {
       _destroyTimer();
@@ -64,35 +75,70 @@ class _CycleTimerState extends State<CycleTimer> {
 
 
   void _startCycle(bool firstStart) {
+
     _destroyTimer();
     if (_isDay) {
-      _timer = Timer(_interval, _switchCycle);
+      _timer = Timer(_nightCycle, _switchCycle);
+      widget._setDayCycle(true);
     } else {
-      _timer = Timer(_interval, _switchCycle);
+      _timer = Timer(_dayCycle, _switchCycle);
+      if (!firstStart) {
+        widget._setDayCycle(false);
+      }
     }
   }
 
   void _switchCycle() {
 
     setState(() {
-      if (_cycle == Duration.zero) {
+      _remaining = _startOfNextCycle - _currentTime;
+
+      if (_remaining == Duration.zero) {
         _timer.cancel();
         _isDay = !_isDay;
-        widget._setDayCycle(_isDay);
-        _cycle = Duration(seconds: NIGHT_CYCLE);
+
+        ///Updates energy to 100 when player waits the entire Day cycle
+        if(!_isDay){
+          Energy.energy = 100;
+          debugPrint("Waited out entire Day cycle. Energy: ${Energy.energyInit}");
+        }
+
+        _startOfNextCycle = new Duration(
+            hours: DateTime.now().hour,
+            minutes: DateTime.now().minute,
+            seconds: Cycle.NIGHT_CYCLE + DateTime.now().second);
+
+        _currentTime = new Duration(
+            hours: DateTime.now().hour,
+            minutes: DateTime.now().minute,
+            seconds: DateTime.now().second);
       }
       else {
-        _cycle -= Duration(seconds: 1);
+        _currentTime = new Duration(
+            hours: DateTime.now().hour,
+            minutes: DateTime.now().minute,
+            seconds: DateTime.now().second);
       }
     });
     _startCycle(false);
+
   }
 
   void _switchCycleUI() {
     setState(() {
       _isDay = !_isDay;
-      widget._setDayCycle(_isDay);
-      _cycle = Duration(seconds: NIGHT_CYCLE);
+
+      //Ensures energy doesn't go beyond 100
+      if((Energy.energyInit + 50) <= 100){
+        Energy.energy = Energy.energyInit + 50; //Increases the energy by 50 by switching the cycle
+        debugPrint("Day cycle toggled. Energy +50: ${Energy.energyInit}");
+      }
+
+      _startOfNextCycle = new Duration(
+          hours: DateTime.now().hour,
+          minutes: DateTime.now().minute,
+          seconds: DateTime.now().second + Cycle.NIGHT_CYCLE);
+
     });
     _startCycle(false);
   }
@@ -104,21 +150,24 @@ class _CycleTimerState extends State<CycleTimer> {
   }
 
   Widget _makeText() {
+    _remaining = _startOfNextCycle - _currentTime;
+
     format(Duration d) => d.toString().split('.').first.padLeft(0, "0"); // removes 5 extra zeros after seconds.
-    String remainingTime = format(_cycle);
+    String remainingTime = format(_remaining);
 
     if (_isDay) {
+      debugPrint(format(_remaining));
       return Text(
         "Day Cycle is On!  $remainingTime",
         style: TextStyle(fontSize: 30),
       );
     } else {
+      debugPrint(_remaining.toString());
       return Text("Night Cycle is On!  $remainingTime");
     }
   }
 
-  ///Toggle button to toggle between day and night cycles.
-  /// Moon = Night cycle, Sun = Day cycle
+  ///Toggle button to toggle between day and night cycles. Moon = Night cycle, Sun = Day cycle
   @override
   Widget build(BuildContext context) {
 
@@ -131,8 +180,7 @@ class _CycleTimerState extends State<CycleTimer> {
               _isDay ? MainAxisAlignment.center : MainAxisAlignment.start,
           children: <Widget>[
             GestureDetector(
-                onTap: _isDay ? _switchCycleUI : null, child: _loadCycle()
-            ),
+                onTap: _isDay ? _switchCycleUI : null, child: _loadCycle()),
             _makeText()
           ],
         ));
