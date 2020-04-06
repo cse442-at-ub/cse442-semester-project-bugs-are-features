@@ -1,9 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:ghost_app/models/energy.dart' as Energy;
 
-const int DAY_CYCLE = 1000; //Duration of day cycle
-const int NIGHT_CYCLE = 1000; //Duration of night cycle
+const int DAY_CYCLE = 10; //Duration of day cycle
+const int NIGHT_CYCLE = 10; //Duration of night cycle
 
 class CycleTimer extends StatefulWidget {
   /// Sets the Day and Night cycle
@@ -78,6 +79,13 @@ class _CycleTimerState extends State<CycleTimer> {
       if (_cycle == Duration.zero) {
         _timer.cancel();
         _isDay = !_isDay;
+
+        ///Updates energy to 100 when player waits the entire Day cycle
+        if(!_isDay){
+          Energy.energy = 100;
+          debugPrint("Waited out entire Day cycle. Energy: ${Energy.energyInit}");
+        }
+
         widget._setDayCycle(_isDay);
         _cycle = Duration(seconds: NIGHT_CYCLE);
       }
@@ -91,6 +99,13 @@ class _CycleTimerState extends State<CycleTimer> {
   void _switchCycleUI() {
     setState(() {
       _isDay = !_isDay;
+
+      //Ensures energy doesn't go beyond 100
+      if((Energy.energyInit + 50) <= 100){
+        Energy.energy = Energy.energyInit + 50; //Increases the energy by 50 by switching the cycle
+        debugPrint("Day cycle toggled. Energy +50: ${Energy.energyInit}");
+      }
+
       widget._setDayCycle(_isDay);
       _cycle = Duration(seconds: NIGHT_CYCLE);
     });

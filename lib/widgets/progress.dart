@@ -43,7 +43,7 @@ class Progress extends StatelessWidget {
             child: Row(children: <Widget>[
               Padding(
                 padding: EdgeInsets.only(right: 17),
-                child: Text("Life Bar"),
+                child: Text("Energy"),
               ),
               // Flexible required because in a row
               Flexible(

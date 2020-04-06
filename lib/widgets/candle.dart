@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:ghost_app/models/ghost.dart';
 import 'package:quiver/async.dart';
+import 'package:ghost_app/models/energy.dart' as Energy;
 
 /// The Candle class that sets the ghost away to be away, or not
 class Candle extends StatefulWidget {
@@ -53,6 +54,7 @@ class _CandleState extends State<Candle> {
   /// Lights the candle, rendering the ghost inaccessible
   _lightCandle() async {
     await widget._ghost.setCandleLit(true);
+    Energy.setEnergyCandleLit(true); //Increment energy by 5 on lighting candle
     widget._setInteract(false);
     setState(() {
       _isLit = true;
