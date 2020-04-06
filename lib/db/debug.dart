@@ -19,4 +19,10 @@ class DbDebug {
     res = await _database.pool.rawQuery("SELECT * FROM ${Constants.GHOST_TABLE}");
     res.forEach((row) => print(row));
   }
+
+  printUserRespTable() async {
+    List<Map> res;
+    res = await _database.pool.rawQuery("SELECT * FROM ${Constants.GHOST_TABLE}");
+    res.forEach((row) => print(row));
+  }
 }
