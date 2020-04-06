@@ -35,7 +35,10 @@ def ghost_node(pid):
         'VALUES ({}, {}, {}, \\"{}\\", \\"{}\\")\");'
         .format(gid, level, pid, pids, text))
 
-    ghost_resps.add(statement)
+    if statement in ghost_resps:
+        return
+    else:
+        ghost_resps.add(statement)
 
     # Now add the user responses
     for rid in rids:
@@ -69,7 +72,10 @@ def user_node(pid):
         'VALUES ({}, {}, {}, {}, {}, {}, {}, \\"{}\\")\");'
         .format(gid, level, rid, pid, resp_t, effect, points, text))
 
-    user_resps.add(statement)
+    if statement in user_resps:
+        return
+    else:
+        user_resps.add(statement)
 
     if rid != -1:
         ghost_node(rid)

@@ -1,3 +1,13 @@
+# convert.py
+This script converts a Twine json file into a text document of SQL statements.
+
+### Usage
+`python3 convert.py <ghost id> <level>`
+
+The script will look for `<ghost id>/<level>.json` and output `<ghost id>/<level>.txt`
+
+`python3 convert.py 1 2` will look at `1/2.json` and create `1/2.txt`
+
 # Levels & Story points
 At levels 0 and 1 the ghost does not initiate a conversation. The ghost barely responds to you.
 
