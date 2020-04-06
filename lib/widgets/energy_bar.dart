@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:ghost_app/models/energy.dart' as Energy;
 
 class EnergyBar extends StatefulWidget{

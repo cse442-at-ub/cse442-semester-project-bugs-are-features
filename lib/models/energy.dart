@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 ///Initialize to 100. Is 10 for debugging
 int energyInit = 10;
