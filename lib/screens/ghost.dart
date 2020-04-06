@@ -6,6 +6,7 @@ import 'package:ghost_app/db/db.dart';
 import 'package:ghost_app/models/ghost.dart';
 import 'package:ghost_app/widgets/candle.dart';
 import 'package:ghost_app/widgets/cycle_timer.dart';
+import 'package:ghost_app/widgets/energy_bar.dart';
 import 'package:ghost_app/widgets/ghost_response.dart';
 import 'package:ghost_app/widgets/progress.dart';
 import 'package:ghost_app/widgets/user_responses.dart';
@@ -36,6 +37,8 @@ class _GhostMainState extends State<GhostMain> {
   bool _isDayCycle = false;
   bool _stopTimer = false;
   String _curResp = "";
+  ///Add energy widget
+
 
   void _setInteract(bool value) {
     dev.log("Setting canInteract to $value", name: "screens.ghost");
@@ -67,9 +70,13 @@ class _GhostMainState extends State<GhostMain> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     var view = <Widget>[];
+
+    view.add(EnergyBar()); //Energy bar
+
     if (!_isDayCycle) {
       // The current progress + health
       view.add(Progress(widget._ghost.progress, widget._ghost.level));

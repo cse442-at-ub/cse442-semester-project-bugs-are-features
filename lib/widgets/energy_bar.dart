@@ -16,7 +16,8 @@ class _EnergyBarState extends State<EnergyBar>{
   }
 
   Widget _makeText() {
-    _energy = Energy.energy;
+    _energy = Energy.energyInit;
+    debugPrint(_energy.toString());
     return Text(
       "Energy:  $_energy",
       style: TextStyle(fontSize: 30),

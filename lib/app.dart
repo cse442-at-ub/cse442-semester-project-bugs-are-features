@@ -4,6 +4,7 @@ import 'dart:developer' as dev;
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:ghost_app/db/db.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'screens/ghost.dart';
@@ -79,6 +80,7 @@ class _RootPageState extends State<RootPage> {
     );
     view.add(bg);
 
+
     Widget screen;
     // Select our main view container.
     var ghostChosen = _prefs.getBool('has_ghost');
@@ -88,6 +90,7 @@ class _RootPageState extends State<RootPage> {
       screen = GraveyardMain(_prefs, _ghostChosen);
     }
     view.add(screen);
+
 
     view.add(SettingsButton(_prefs, _ghostReleased));
 

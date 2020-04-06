@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ghost_app/db/constants.dart' as Constants;
 import 'package:ghost_app/db/db.dart';
+import 'package:ghost_app/models/energy.dart' as Energy;
 
 const List<int> LEVEL_POINTS = [
   0,
@@ -90,6 +91,11 @@ class Ghost {
   addScore(int score) async {
     bool didLevel = false;
     if (score == 0) {
+
+      //Decrement energyInit by 1 if wrong response chosen
+      Energy.energy = Energy.energyInit - 1;
+      debugPrint("Wrong response chosen. -1 Energy: ${Energy.energyInit}");
+
       return didLevel;
     }
     _score += score;
