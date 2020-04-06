@@ -90,7 +90,6 @@ class Ghost {
   /// Adds a negative effect to the rate of score progression if the user
   /// gives a bad response. Nothing >= 0 should get here.
   addEffect(int effect) {
-    print("addEffect $effect");
     if (effect >= 0) {
       return;
     }
