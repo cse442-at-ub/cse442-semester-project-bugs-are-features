@@ -1,29 +1,18 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class GraveyardMain extends StatelessWidget {
-  /// The app wide preferences.
-  final SharedPreferences _prefs;
 
   /// Called as a function when a ghost is chosen.
   final ValueSetter<int> _ghostChosen;
 
-  GraveyardMain(this._prefs, this._ghostChosen);
+  GraveyardMain(this._ghostChosen);
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Scaffold(
-        body: Stack(
+    return Stack(
       children: <Widget>[
-        Image.asset(
-          'assets/misc/Graveyard.png',
-          width: size.width,
-          height: size.height,
-          fit: BoxFit.fill,
-        ),
         Center(
           child: GridView.count(
               shrinkWrap: true,
@@ -35,33 +24,23 @@ class GraveyardMain extends StatelessWidget {
               })),
         ),
       ],
-    ));
+    );
   }
 
   Container makeGhostPicker(BuildContext context, int id) {
     return Container(
         padding: EdgeInsets.all(4.0),
         child: RaisedButton(
-          color: Theme
-              .of(context)
-              .buttonColor,
-          textColor: Theme
-              .of(context)
-              .textTheme
-              .body1
-              .color,
+          color: Theme.of(context).buttonColor,
+          textColor: Theme.of(context).textTheme.body1.color,
           disabledColor: Colors.grey,
           disabledTextColor: Colors.black,
-          splashColor: Theme
-              .of(context)
-              .accentColor,
+          splashColor: Theme.of(context).accentColor,
           shape: BeveledRectangleBorder(
               borderRadius: new BorderRadius.only(
                   topLeft: Radius.circular(16.0),
                   topRight: Radius.circular(16.0)),
-              side: BorderSide(color: Theme
-                  .of(context)
-                  .backgroundColor)),
+              side: BorderSide(color: Theme.of(context).backgroundColor)),
           onPressed: () {
             _ghostChosen(id);
           },

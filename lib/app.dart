@@ -1,14 +1,17 @@
 import 'dart:async';
+import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:ghost_app/db/db.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'ghost_main.dart';
-import 'graveyard_main.dart';
-import 'widgets/dev_button.dart';
+import 'models/ghost.dart';
+import 'screens/ghost.dart';
+import 'screens/graveyard.dart';
+import 'screens/splash.dart';
+import 'widgets/devsettings_button.dart';
 import 'widgets/settings_button.dart';
-import 'widgets/splash_screen.dart';
 
 /// RootPage is the "actual" root widget of the app. See also [_RootPageState].
 ///
@@ -29,10 +32,16 @@ class RootPage extends StatefulWidget {
 /// The state widget of [RootPage].
 class _RootPageState extends State<RootPage> {
   /// The Database instance
-  final DB _database = DB();
+  final DB _db = DB();
 
   /// Displays splash screen when false. True when assets are loaded.
   bool _assetsLoaded = false;
+
+  /// An instance of our ghost, if we have one
+  Ghost _ghost;
+
+  /// Instance of the local notifications builder
+  FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
 
   /// Instance of app preferences. Is passed to children.
   SharedPreferences _prefs;
@@ -41,11 +50,12 @@ class _RootPageState extends State<RootPage> {
   initState() {
     super.initState();
     _loadAssets();
+    _initNotification();
   }
 
   @override
   void dispose() {
-    _database.close();
+    _db.close();
     super.dispose();
   }
 
@@ -58,39 +68,94 @@ class _RootPageState extends State<RootPage> {
 
     var view = <Widget>[];
 
-    // Select our main view container.
-    if (_prefs.getBool('has_ghost')) {
-      GhostMain ghost = GhostMain(_prefs, _ghostReleased, _database);
-      view.add(ghost);
-    } else {
-      GraveyardMain graveyard = GraveyardMain(_prefs, _ghostChosen);
-      view.add(graveyard);
-    }
+    // Set the app-wide background image
+    var bg = Image.asset(
+      'assets/misc/Graveyard.png',
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      fit: BoxFit.fill,
+    );
+    view.add(bg);
 
-    view.add(SettingsButton(_prefs));
+
+    Widget screen;
+    // Select our main view container.
+    var ghostChosen = _prefs.getBool('has_ghost');
+    if (ghostChosen) {
+      screen = GhostMain(_db, _ghostReleased, _ghost);
+    } else {
+      screen = GraveyardMain(_ghostChosen);
+    }
+    view.add(screen);
+
+
+    view.add(SettingsButton(_prefs, _ghostReleased));
 
     // Add Dev Settings button _only_ if in development
     assert(() {
-      view.add(DevButton(_prefs, _ghostReleased, _database));
+      view.add(DevButton(_prefs, _ghostReleased, _db, _showNotification));
       return true;
     }());
 
-    return Stack(children: view);
+    return SafeArea(child: Stack(children: view));
+  }
+
+  _setGhost(int gid) async {
+    _ghost = Ghost(gid, _db);
+    await _ghost.init();
+    dev.log("Current ghost ID = $gid", name: "app.init");
   }
 
   /// For all future image, sound, and startup database calls.
   _loadAssets() async {
     _readPrefs();
+    await _db.init();
+
+    int gid = _prefs.getInt('ghost_id');
+    if (gid > 0) {
+      await _setGhost(gid);
+    }
+    // Pre-load all images
+    precacheImage(AssetImage('assets/misc/Graveyard.png'), context);
+    precacheImage(AssetImage('assets/misc/Graveyard2.png'), context);
+    precacheImage(AssetImage('assets/misc/GrimReaper.png'), context);
+    precacheImage(AssetImage('assets/misc/MainIcon.png'), context);
+    precacheImage(AssetImage('assets/misc/Candle.png'), context);
+    precacheImage(AssetImage('assets/misc/UnlitCandle.png'), context);
+    precacheImage(AssetImage('assets/misc/Sun.png'), context);
+    precacheImage(AssetImage('assets/misc/Moon.png'), context);
+    precacheImage(AssetImage('assets/ghosts/ghost1.png'), context);
+    precacheImage(AssetImage('assets/ghosts/ghost2.png'), context);
 
     // Hold splash screen.
-    Timer(Duration(seconds: 2), () {
-      setState(() {
-        _assetsLoaded = true;
-      });
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      _assetsLoaded = true;
     });
   }
 
-  /// Grabs our instance of SharedPreferences to pass to children.
+  /// Initialize the settings needed to send a notification
+  void _initNotification() {
+    _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    var android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    var ios = IOSInitializationSettings();
+    var initSettings = InitializationSettings(android, ios);
+    _flutterLocalNotificationsPlugin.initialize(initSettings,
+        onSelectNotification: onSelectNotification);
+  }
+
+  /// Used to specify the page which will open after notification is selected.
+  Future<void> onSelectNotification(String payload) async {
+    if (payload != null) {
+      debugPrint('notification payload: ' + payload);
+    }
+    await Navigator.maybePop(
+      context,
+      MaterialPageRoute(builder: (context) => RootPage()),
+    );
+  }
+
+  /// Creates our instance of SharedPreferences to pass to children.
   _readPrefs() async {
     _prefs = await SharedPreferences.getInstance();
     // Check if this is our first app launch so we can init preferences.
@@ -105,20 +170,23 @@ class _RootPageState extends State<RootPage> {
     _prefs.setBool('first_launch', false);
     _prefs.setBool('has_ghost', false);
     _prefs.setInt('ghost_id', 0);
+    _prefs.setString('cycle_value', null);
   }
 
   /// Call from [GraveyardMain] when a ghost is selected to render [GhostMain].
   _ghostChosen(int id) async {
     // Returns the amount of rows updated
-    int updated = await _database.setGhost(id);
-
+    int updated = await _db.setGhost(id);
     if (updated != 1) {
       throw Exception('Less than or more than one ghost was chosen.');
     }
 
+    await _setGhost(id);
+
     setState(() {
       _prefs.setInt('ghost_id', id);
       _prefs.setBool('has_ghost', true);
+      _prefs.setString('cycle_value', 'night');
     });
   }
 
@@ -131,7 +199,7 @@ class _RootPageState extends State<RootPage> {
     }
 
     // Returns the amount of rows updated
-    int updated = await _database.unsetGhost(_prefs.getInt('ghost_id'));
+    int updated = await _db.unsetGhost(_prefs.getInt('ghost_id'));
     if (updated != 1) {
       throw Exception('Less than or more than one ghost was chosen.');
     }
@@ -139,6 +207,21 @@ class _RootPageState extends State<RootPage> {
     setState(() {
       _prefs.setInt('ghost_id', 0);
       _prefs.setBool('has_ghost', false);
+      _prefs.setString('cycle_value', null);
     });
   }
+
+  Future _showNotification() async {
+    var android = AndroidNotificationDetails(
+        'channel id', 'channel NAME', 'CHANNEL DISCRIPTION',
+        importance: Importance.Max, priority: Priority.High, playSound: false);
+    var ios = IOSNotificationDetails();
+    var platform = NotificationDetails(android, ios);
+    await _flutterLocalNotificationsPlugin.show(
+        0, "Ghost is calling you!", null, platform);
+  }
+
+/*  Future _hideNotification() async {
+    await _flutterLocalNotificationsPlugin.cancel(0);
+  }*/
 }

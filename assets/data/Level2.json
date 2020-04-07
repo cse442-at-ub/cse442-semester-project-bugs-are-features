@@ -1,0 +1,173 @@
+{
+    "passages": [
+        {
+            "text": "Hello, human...\n[[Hello]]\n[[you scream in fear]]\n[[Go away!]]\n[[What's your name?]]\n[[you scream at the sight of a ghost]]\n[[I can sense a presence]]\n[[Why are you here?]]\n[[What would you like me to know?]]\n[[Is there anything I can do for you?]]",
+            "links": [
+                {
+                    "name": "Hello",
+                    "link": "Hello",
+                    "pid": "2"
+                },
+                {
+                    "name": "you scream in fear",
+                    "link": "you scream in fear",
+                    "pid": "3"
+                },
+                {
+                    "name": "Go away!",
+                    "link": "Go away!",
+                    "pid": "4"
+                },
+                {
+                    "name": "What's your name?",
+                    "link": "What's your name?",
+                    "pid": "5"
+                },
+                {
+                    "name": "you scream at the sight of a ghost",
+                    "link": "you scream at the sight of a ghost",
+                    "pid": "6"
+                },
+                {
+                    "name": "I can sense a presence",
+                    "link": "I can sense a presence",
+                    "pid": "7"
+                },
+                {
+                    "name": "Why are you here?",
+                    "link": "Why are you here?",
+                    "pid": "8"
+                },
+                {
+                    "name": "What would you like me to know?",
+                    "link": "What would you like me to know?",
+                    "pid": "9"
+                },
+                {
+                    "name": "Is there anything I can do for you?",
+                    "link": "Is there anything I can do for you?",
+                    "pid": "10"
+                }
+            ],
+            "name": "Initial ",
+            "pid": "1",
+            "position": {
+                "x": "860",
+                "y": "371.5"
+            }
+        },
+        {
+            "text": "you feel cold",
+            "name": "Hello",
+            "pid": "2",
+            "position": {
+                "x": "860",
+                "y": "521.5"
+            },
+            "tags": [
+                "5"
+            ]
+        },
+        {
+            "text": "the ghost stares at you",
+            "name": "you scream in fear",
+            "pid": "3",
+            "position": {
+                "x": "710",
+                "y": "520.5"
+            },
+            "tags": [
+                "0"
+            ]
+        },
+        {
+            "text": "you hear a snap",
+            "name": "Go away!",
+            "pid": "4",
+            "position": {
+                "x": "980",
+                "y": "521.5"
+            },
+            "tags": [
+                "0"
+            ]
+        },
+        {
+            "text": "you feel apprehensive",
+            "name": "What's your name?",
+            "pid": "5",
+            "position": {
+                "x": "1100",
+                "y": "521.5"
+            },
+            "tags": [
+                "5"
+            ]
+        },
+        {
+            "text": "your neck tingles",
+            "name": "you scream at the sight of a ghost",
+            "pid": "6",
+            "position": {
+                "x": "1220",
+                "y": "521.5"
+            },
+            "tags": [
+                "0"
+            ]
+        },
+        {
+            "text": ".....",
+            "name": "I can sense a presence",
+            "pid": "7",
+            "position": {
+                "x": "590",
+                "y": "521.5"
+            },
+            "tags": [
+                "1"
+            ]
+        },
+        {
+            "text": "everything is silent ",
+            "name": "Why are you here?",
+            "pid": "8",
+            "position": {
+                "x": "1124",
+                "y": "317.5"
+            },
+            "tags": [
+                "0"
+            ]
+        },
+        {
+            "text": "you experience darkness around yourself",
+            "name": "What would you like me to know?",
+            "pid": "9",
+            "position": {
+                "x": "1340",
+                "y": "521.5"
+            },
+            "tags": [
+                "1"
+            ]
+        },
+        {
+            "text": "you start to sweat",
+            "name": "Is there anything I can do for you?",
+            "pid": "10",
+            "position": {
+                "x": "1460",
+                "y": "521.5"
+            },
+            "tags": [
+                "2"
+            ]
+        }
+    ],
+    "name": "Level 2",
+    "startnode": "1",
+    "creator": "Twine",
+    "creator-version": "2.3.5",
+    "ifid": "F63FFD2E-0A73-4CC8-8AA6-7ACB6E48CA05"
+}
