@@ -1,5 +1,6 @@
 import 'dart:developer' as dev;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ghost_app/db/db.dart';
@@ -10,11 +11,8 @@ import 'package:ghost_app/widgets/energy_bar.dart';
 import 'package:ghost_app/widgets/ghost_response.dart';
 import 'package:ghost_app/widgets/progress.dart';
 import 'package:ghost_app/widgets/user_responses.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class GhostMain extends StatefulWidget {
-  /// The app wide preferences.
-  final SharedPreferences _prefs;
 
   /// Called as a function when a ghost is released.
   /// Will only be needed in this widget at the end of the game.
@@ -26,10 +24,25 @@ class GhostMain extends StatefulWidget {
   /// The database instance.
   final DB _db;
 
-  GhostMain(this._prefs, this._db, this._ghostReleased, this._ghost);
+  GhostMain(this._db, this._ghostReleased, this._ghost);
 
   @override
   _GhostMainState createState() => _GhostMainState();
+
+  /*
+   * below is temp code for getting rid the unused
+   * _ghostReleased analysis error
+   * TODO delete the debugFillProperties method after using _ghostReleased
+   */
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(
+        ObjectFlagProperty<VoidCallback>.has('_ghostReleased', _ghostReleased));
+  }
+
+//delete above
 }
 
 class _GhostMainState extends State<GhostMain> {
@@ -64,11 +77,11 @@ class _GhostMainState extends State<GhostMain> {
     });
   }
 
-  void _cancelTimer() {
+/*  void _cancelTimer() {
     setState(() {
       _stopTimer = true;
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
