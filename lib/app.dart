@@ -4,15 +4,12 @@ import 'dart:developer' as dev;
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:ghost_app/db/db.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'models/ghost.dart';
 import 'screens/ghost.dart';
 import 'screens/graveyard.dart';
 import 'screens/splash.dart';
-
-import 'models/ghost.dart';
-
 import 'widgets/devsettings_button.dart';
 import 'widgets/settings_button.dart';
 
@@ -85,9 +82,9 @@ class _RootPageState extends State<RootPage> {
     // Select our main view container.
     var ghostChosen = _prefs.getBool('has_ghost');
     if (ghostChosen) {
-      screen = GhostMain(_prefs, _db, _ghostReleased, _ghost);
+      screen = GhostMain(_db, _ghostReleased, _ghost);
     } else {
-      screen = GraveyardMain(_prefs, _ghostChosen);
+      screen = GraveyardMain(_ghostChosen);
     }
     view.add(screen);
 
@@ -224,7 +221,7 @@ class _RootPageState extends State<RootPage> {
         0, "Ghost is calling you!", null, platform);
   }
 
-  Future _hideNotification() async {
+/*  Future _hideNotification() async {
     await _flutterLocalNotificationsPlugin.cancel(0);
-  }
+  }*/
 }
