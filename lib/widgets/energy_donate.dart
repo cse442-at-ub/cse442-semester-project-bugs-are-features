@@ -31,14 +31,18 @@ class _EnergyDonateState extends State<EnergyDonate>{
   ///Energy -40
   ///Score +75
   void checkDonateEnergy() async{
-    if((Energy.energyInit - 40) >= 0){
-      Energy.energy = Energy.energyInit - 40;
-      _donate = !_donate;
-      debugPrint("-40 Energy donated. Energy set to ${Energy.energyInit}");
-    }
-    debugPrint("Donation Aborted. Energy < 40");
+    setState(() {
+      if((Energy.energyInit - 40) >= 0){
+        Energy.energy = Energy.energyInit - 40;
+        Energy.donate = false;
+        _donate = !_donate;
+        debugPrint("-40 Energy donated. Energy set to ${Energy.energyInit}");
+      }
+      debugPrint("No Energy donated. Energy cant be <0");
+    });
+
   }
-  
+
 
   @override
   Widget build(BuildContext context) {

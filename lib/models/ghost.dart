@@ -98,7 +98,14 @@ class Ghost {
 
       return didLevel;
     }
+
+    if(Energy.donateEnergy){
+      _score += 75;
+      debugPrint("+75 Energy donated. Energy: ${Energy.energyInit}");
+    }
     _score += score;
+
+
 
     int newLevel = checkLevel(_score);
     // Check if additional points have leveled us up
