@@ -32,12 +32,19 @@ class _EnergyDonateState extends State<EnergyDonate>{
 
   ///Energy -40
   ///Score +75
-  void checkDonateEnergy(){
-    if( ((Energy.energyInit - 40) <= 25)){
+  void checkDonateEnergy() async{
+    if( ((Energy.energyInit - 40) >= 0)){
       Energy.energy = Energy.energyInit - 40;
-      _donate = false;
+      _donate = !_donate;
       debugPrint("-40 Energy donated. Energy set to ${Energy.energyInit}");
     }
+    debugPrint("Donation Aborted. Energy < 40");
+  }
+  
+  void _switchCycleUI() async{
+    setState(() {
+      checkDonateEnergy();
+    });
   }
 
   @override
@@ -51,7 +58,7 @@ class _EnergyDonateState extends State<EnergyDonate>{
           _donate ? MainAxisAlignment.center : MainAxisAlignment.start,
           children: <Widget>[
             GestureDetector(
-                onTap: _donate ? checkDonateEnergy : null, child: _loadCycle()
+                onTap: _donate ? _switchCycleUI : null, child: _loadCycle()
             ),
 
           ],
