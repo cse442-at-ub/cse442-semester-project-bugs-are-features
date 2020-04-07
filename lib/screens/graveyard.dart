@@ -1,16 +1,13 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class GraveyardMain extends StatelessWidget {
-  /// The app wide preferences.
-  final SharedPreferences _prefs;
 
   /// Called as a function when a ghost is chosen.
   final ValueSetter<int> _ghostChosen;
 
-  GraveyardMain(this._prefs, this._ghostChosen);
+  GraveyardMain(this._ghostChosen);
 
   @override
   Widget build(BuildContext context) {
