@@ -11,6 +11,13 @@ void setEnergyCandleLit(bool isLit){
   }
 }
 
+/*void checkDonateEnergy(){
+  if( ((energyInit - 40) <= 25)){
+    energyInit -= 40;
+    debugPrint("-40 Energy donated. Energy set to $energyInit");
+  }
+}*/
+
 ///Getters and setters
 set energy(int e) {
     energyInit = e;

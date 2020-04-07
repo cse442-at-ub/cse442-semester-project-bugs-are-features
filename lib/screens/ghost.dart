@@ -7,6 +7,7 @@ import 'package:ghost_app/models/ghost.dart';
 import 'package:ghost_app/widgets/candle.dart';
 import 'package:ghost_app/widgets/cycle_timer.dart';
 import 'package:ghost_app/widgets/energy_bar.dart';
+import 'package:ghost_app/widgets/energy_donate.dart';
 import 'package:ghost_app/widgets/ghost_response.dart';
 import 'package:ghost_app/widgets/progress.dart';
 import 'package:ghost_app/widgets/user_responses.dart';
@@ -75,6 +76,7 @@ class _GhostMainState extends State<GhostMain> {
     var view = <Widget>[];
 
     view.add(EnergyBar()); //Energy bar
+    view.add(EnergyDonate());
 
     view.add(CycleTimer(_setDayCycle, _stopTimer));
 
