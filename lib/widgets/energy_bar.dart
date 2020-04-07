@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ghost_app/models/energy.dart' as Energy;
+import 'package:ghost_app/models/ghost.dart';
 
 class EnergyBar extends StatefulWidget{
+  final Ghost _ghost;
+  EnergyBar(this._ghost);
   @override
   _EnergyBarState createState() => _EnergyBarState();
 }
@@ -36,13 +39,20 @@ class _EnergyBarState extends State<EnergyBar>{
     return _img;
   }
 
+  //temp function to add score on the current ghost instance
+  tempForDonationScore() async {
+      await widget._ghost.addScoreEnergyDonation();
+      debugPrint("+75 Score. Energy donated. Score: ${widget._ghost.score}");
+  }
+
   ///Gives energy to the ghost if player clicks on the give energy icon.
   ///Player energy: -40
   ///Player score: +75
   void checkDonateEnergy() async{
-    setState(() {
+    setState(()  {
       if((Energy.energyInit - 40) >= 0){
         Energy.energy = Energy.energyInit - 40; //-40 Energy
+        tempForDonationScore(); //Add +75 to score
         Energy.donate = false;
         _donate = !_donate;
         debugPrint("-40 Energy donated. Energy set to ${Energy.energyInit}");
@@ -53,7 +63,7 @@ class _EnergyBarState extends State<EnergyBar>{
     });
   }
 
-  
+
   Widget _makeText() {
     setState(() {
       _energy = Energy.energyInit;

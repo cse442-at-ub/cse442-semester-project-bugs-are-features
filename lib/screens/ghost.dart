@@ -87,7 +87,7 @@ class _GhostMainState extends State<GhostMain> {
   Widget build(BuildContext context) {
     var view = <Widget>[];
 
-    view.add(EnergyBar()); //Energy bar
+    view.add(EnergyBar(widget._ghost)); //Energy bar
 
     view.add(CycleTimer(_setDayCycle, _stopTimer));
 
