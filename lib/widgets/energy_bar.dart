@@ -52,7 +52,7 @@ class _EnergyBarState extends State<EnergyBar>{
       }
     });
   }
-  
+
 
   Widget _makeText() {
     setState(() {
