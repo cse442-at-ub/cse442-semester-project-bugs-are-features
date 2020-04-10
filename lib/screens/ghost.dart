@@ -37,8 +37,8 @@ class _GhostMainState extends State<GhostMain> {
   bool _isDayCycle = false;
   bool _stopTimer = false;
   String _curResp = "";
-  ///Add energy widget
 
+  ///Add energy widget
 
   void _setInteract(bool value) {
     dev.log("Setting canInteract to $value", name: "screens.ghost");
@@ -70,12 +70,11 @@ class _GhostMainState extends State<GhostMain> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     var view = <Widget>[];
 
-    view.add(EnergyBar()); //Energy bar
+    view.add(EnergyBar(widget._ghostReleased)); //Energy bar
 
     if (!_isDayCycle) {
       // The current progress + health
