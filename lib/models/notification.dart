@@ -41,7 +41,7 @@ class Notifier {
     _disabled = true;
   }
 
-  _hideNotification() async {
+  /*_hideNotification() async {
     await _plugin.cancel(0);
-  }
+  }*/
 }
