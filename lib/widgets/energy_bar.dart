@@ -25,23 +25,6 @@ class _EnergyBarState extends State<EnergyBar>{
 
   }
 
-  Widget _loadImage() {
-    var _img;
-    if (_donate) {
-      _img = Image.asset(
-        'assets/misc/GiveEnergyFull.png',
-        height: 80,
-        width: 80,
-      );
-    } else {
-      _img = Image.asset(
-        'assets/misc/GiveEnergyEmpty.png',
-        height: 40,
-        width: 40,
-      );
-    }
-    return _img;
-  }
 
   //temp function to add score on the current ghost instance
   tempForDonationScore() async {
@@ -97,22 +80,53 @@ class _EnergyBarState extends State<EnergyBar>{
       debugPrint(_energy.toString());
     });
     return Text(
-      "Energy:  $_energy Timer: $_current",
+      "Energy:  $_energy",
       style: TextStyle(fontSize: 30),
     );
 
   }
 
+  Widget _loadImage() {
+    var _img;
+    if (_donate) {
+      _img = Stack(
+        alignment: Alignment.centerRight,
+        children: <Widget>[
+          Image.asset('assets/misc/GiveEnergyFull.png', height: 65, width: 65),
+        ],
+      );
+    } else {
+      _img = Stack(
+        alignment: Alignment.centerRight,
+        children: <Widget>[
+          Image.asset('assets/misc/GiveEnergyEmpty.png', height: 65, width: 65),
+           Positioned(
+              bottom: 24,
+              left: 15,
+              right: 15,
+              child: Column(
+                children: <Widget>[
+                  Text(_current.toString(),
+                    style: TextStyle(color: Colors.white, fontSize: 15.0),)
+                ],
+              )
+           )
+        ]);
+
+    }
+    return _img;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
-        alignment: Alignment.topCenter,
-        margin:
-        EdgeInsets.only(top: MediaQuery.of(context).padding.top + 30),
+        alignment: Alignment.centerRight,
+        margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 60),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            _makeText(),
+            //_makeText(),
             GestureDetector(
                 onTap: _donate ? checkDonateEnergy : null, child: _loadImage()
             ),
