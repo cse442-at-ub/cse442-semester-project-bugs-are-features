@@ -96,8 +96,9 @@ class Ghost {
     //Decrement energyInit by 1 if wrong response chosen
     Energy.energy = Energy.energyInit - 1;
     debugPrint("Wrong response chosen. -1 Energy: ${Energy.energyInit}");
-    // *Chin's energy goes down*
+    // *Chin's energy goes down* **Haha, I read it Matt :/ **
   }
+  
 
   /// Adds `score` amount of points to the ghost's score.
   addScore(int score) async {
@@ -105,7 +106,9 @@ class Ghost {
     if (score == 0) {
       return didLevel;
     }
+
     _score += score;
+
 
     int newLevel = checkLevel(_score);
     // Check if additional points have leveled us up

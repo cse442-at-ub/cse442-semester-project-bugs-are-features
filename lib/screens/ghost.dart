@@ -98,12 +98,13 @@ class _GhostMainState extends State<GhostMain> {
   Widget build(BuildContext context) {
     var view = <Widget>[];
 
-    view.add(EnergyBar()); //Energy bar
-
     view.add(CycleTimer(_setDayCycle, _stopTimer));
 
     if (!_isDayCycle) {
       var col = <Widget>[];
+
+      // The widget for Energy donation.
+      col.add(EnergyBar(widget._ghost));
       // The current progress + health
       col.add(Progress(widget._ghost.progress, widget._ghost.level));
       // The candle to be lit, or not
