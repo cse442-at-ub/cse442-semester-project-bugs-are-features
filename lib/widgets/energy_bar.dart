@@ -1,3 +1,4 @@
+import 'package:ghost_app/db/constants.dart';
 import 'package:quiver/async.dart';
 
 import 'package:flutter/material.dart';
@@ -52,11 +53,11 @@ class _EnergyBarState extends State<EnergyBar>{
   }
 
   void _startTimer(bool firstStart) {
-
     CountdownTimer countDownTimer = new CountdownTimer(
       new Duration(seconds: _start),
       new Duration(seconds: 1),
     );
+
     var sub = countDownTimer.listen(null);
     sub.onData((duration) {
       setState(() {
@@ -67,7 +68,7 @@ class _EnergyBarState extends State<EnergyBar>{
     sub.onDone(() {
       print("Done");
       _donate = !_donate;
-      _current = 90;
+      _current = 90;  //Reset timer
       _start = 90;
       sub.cancel();
     });
@@ -80,12 +81,13 @@ class _EnergyBarState extends State<EnergyBar>{
       debugPrint(_energy.toString());
     });
     return Text(
-      "Energy:  $_energy",
-      style: TextStyle(fontSize: 30),
+      "Energy: $_energy",
+      style: TextStyle(fontSize: 25),
     );
 
   }
 
+  // Stack widget used to overlay text over image
   Widget _loadImage() {
     var _img;
     if (_donate) {
@@ -126,7 +128,7 @@ class _EnergyBarState extends State<EnergyBar>{
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            //_makeText(),
+            _makeText(),
             GestureDetector(
                 onTap: _donate ? checkDonateEnergy : null, child: _loadImage()
             ),

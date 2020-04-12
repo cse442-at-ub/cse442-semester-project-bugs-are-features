@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:ghost_app/models/energy.dart' as Energy;
 
-const int DAY_CYCLE = 10; //Duration of day cycle
-const int NIGHT_CYCLE = 10; //Duration of night cycle
+const int DAY_CYCLE = 30; //Duration of day cycle
+const int NIGHT_CYCLE = 30; //Duration of night cycle
 
 class CycleTimer extends StatefulWidget {
   /// Sets the Day and Night cycle
