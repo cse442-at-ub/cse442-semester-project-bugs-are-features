@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ghost_app/db/db.dart';
 import 'package:ghost_app/models/ghost.dart';
+import 'package:ghost_app/models/notification.dart';
 import 'package:ghost_app/widgets/candle.dart';
 import 'package:ghost_app/widgets/cycle_timer.dart';
 import 'package:ghost_app/widgets/energy_bar.dart';
@@ -24,7 +25,10 @@ class GhostMain extends StatefulWidget {
   /// The database instance.
   final DB _db;
 
-  GhostMain(this._db, this._ghostReleased, this._ghost);
+  /// The Notifier notifications instances
+  final Notifier _notifier;
+
+  GhostMain(this._db, this._ghostReleased, this._ghost, this._notifier);
 
   @override
   _GhostMainState createState() => _GhostMainState();
@@ -55,6 +59,13 @@ class _GhostMainState extends State<GhostMain> {
 
   void _setInteract(bool value) {
     dev.log("Setting canInteract to $value", name: "screens.ghost");
+    // If setting to CAN'T interact
+    if (!value) {
+      widget._notifier.disable();
+    } else {
+      widget._notifier.enable();
+    }
+
     setState(() {
       _canInteract = value;
     });
