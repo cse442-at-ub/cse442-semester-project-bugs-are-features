@@ -1,4 +1,3 @@
-import 'package:ghost_app/db/constants.dart';
 import 'package:quiver/async.dart';
 
 import 'package:flutter/material.dart';
@@ -17,13 +16,24 @@ class _EnergyBarState extends State<EnergyBar>{
   bool _donate;
   int _start = 90;
   int _current = 90;
+  CountdownTimer countDownTimer;
 
   @override
   void initState(){
     super.initState();
     _energy = Energy.energyInit;
     _donate = true;
+    countDownTimer = new CountdownTimer(
+      new Duration(seconds: _start),
+      new Duration(seconds: 1),
+    );
 
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _destroyTimer();
   }
 
 
@@ -53,11 +63,6 @@ class _EnergyBarState extends State<EnergyBar>{
   }
 
   void _startTimer(bool firstStart) {
-    CountdownTimer countDownTimer = new CountdownTimer(
-      new Duration(seconds: _start),
-      new Duration(seconds: 1),
-    );
-
     var sub = countDownTimer.listen(null);
     sub.onData((duration) {
       setState(() {
@@ -85,6 +90,12 @@ class _EnergyBarState extends State<EnergyBar>{
       style: TextStyle(fontSize: 25),
     );
 
+  }
+
+  void _destroyTimer() {
+    if (countDownTimer != null && countDownTimer.isRunning) {
+      countDownTimer.cancel();
+    }
   }
 
   // Stack widget used to overlay text over image
