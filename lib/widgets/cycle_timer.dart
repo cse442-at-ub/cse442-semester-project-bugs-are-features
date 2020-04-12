@@ -19,7 +19,7 @@ class CycleTimer extends StatefulWidget {
 class _CycleTimerState extends State<CycleTimer> {
   Timer _timer;
   bool _isDay; //bool value to check if it is a day cycle or a night cycle
-  int _offset = 50;
+  int _offset = 25;
 
   Duration _interval;
   Duration _cycle;
@@ -140,7 +140,10 @@ class _CycleTimerState extends State<CycleTimer> {
     return Container(
         alignment: Alignment.topCenter,
         margin:
-            EdgeInsets.only(top: MediaQuery.of(context).padding.top + _offset),
+        EdgeInsets.only(bottom: MediaQuery
+            .of(context)
+            .padding
+            .bottom + _offset),
         child: Column(
           mainAxisAlignment:
               _isDay ? MainAxisAlignment.center : MainAxisAlignment.start,
