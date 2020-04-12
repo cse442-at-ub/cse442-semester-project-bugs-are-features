@@ -84,7 +84,8 @@ class _EnergyBarState extends State<EnergyBar>{
     sub.onDone(() {
       print("Done");
       _donate = !_donate;
-      _current = 10;
+      _current = 90;
+      _start = 90;
       sub.cancel();
     });
   }
