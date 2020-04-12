@@ -16,6 +16,7 @@ class _EnergyBarState extends State<EnergyBar>{
   bool _donate;
   int _start = 90;
   int _current = 90;
+  int _scoreIncrease = 75;
   CountdownTimer countDownTimer;
 
   @override
@@ -39,7 +40,7 @@ class _EnergyBarState extends State<EnergyBar>{
 
   //temp function to add score on the current ghost instance
   tempForDonationScore() async {
-      await widget._ghost.addScoreEnergyDonation();
+      await widget._ghost.addScore(_scoreIncrease); //increases score by 75
       debugPrint("+75 Score. Energy donated. Score: ${widget._ghost.score}");
   }
 

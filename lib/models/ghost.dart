@@ -98,11 +98,7 @@ class Ghost {
     debugPrint("Wrong response chosen. -1 Energy: ${Energy.energyInit}");
     // *Chin's energy goes down* **Haha, I read it Matt :/ **
   }
-
-  ///Adds 75 to score if player donates Energy
-  addScoreEnergyDonation() async{
-      _score += 75;
-  }
+  
 
   /// Adds `score` amount of points to the ghost's score.
   addScore(int score) async {
