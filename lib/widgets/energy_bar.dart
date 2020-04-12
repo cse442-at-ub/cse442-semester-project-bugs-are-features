@@ -1,3 +1,5 @@
+import 'package:quiver/async.dart';
+
 import 'package:flutter/material.dart';
 import 'package:ghost_app/models/energy.dart' as Energy;
 import 'package:ghost_app/models/ghost.dart';
@@ -12,14 +14,16 @@ class EnergyBar extends StatefulWidget{
 class _EnergyBarState extends State<EnergyBar>{
   int _energy;
   bool _donate;
+  int _start = 90;
+  int _current = 90;
 
   @override
   void initState(){
     super.initState();
     _energy = Energy.energyInit;
     _donate = true;
-  }
 
+  }
 
   Widget _loadImage() {
     var _img;
@@ -50,16 +54,38 @@ class _EnergyBarState extends State<EnergyBar>{
   ///Player score: +75
   void checkDonateEnergy() async{
     setState(()  {
-      if((Energy.energyInit - 40) >= 0){
+      if((Energy.energyInit - 40) >= 0) {
         Energy.energy = Energy.energyInit - 40; //-40 Energy
         tempForDonationScore(); //Add +75 to score
         Energy.donate = false;
         _donate = !_donate;
         debugPrint("-40 Energy donated. Energy set to ${Energy.energyInit}");
+        _startTimer(true);
       }
-      else {
+        else{
         debugPrint("No Energy donated. Energy cant be < 0");
       }
+    });
+  }
+
+  void _startTimer(bool firstStart) {
+
+    CountdownTimer countDownTimer = new CountdownTimer(
+      new Duration(seconds: _start),
+      new Duration(seconds: 1),
+    );
+    var sub = countDownTimer.listen(null);
+    sub.onData((duration) {
+      setState(() {
+        _current = _start - duration.elapsed.inSeconds;
+      });
+    });
+
+    sub.onDone(() {
+      print("Done");
+      _donate = !_donate;
+      _current = 10;
+      sub.cancel();
     });
   }
 
@@ -69,9 +95,8 @@ class _EnergyBarState extends State<EnergyBar>{
       _energy = Energy.energyInit;
       debugPrint(_energy.toString());
     });
-
     return Text(
-      "Energy:  $_energy",
+      "Energy:  $_energy Timer: $_current",
       style: TextStyle(fontSize: 30),
     );
 
