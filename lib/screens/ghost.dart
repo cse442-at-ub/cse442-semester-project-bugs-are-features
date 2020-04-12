@@ -103,14 +103,21 @@ class _GhostMainState extends State<GhostMain> {
     view.add(CycleTimer(_setDayCycle, _stopTimer));
 
     if (!_isDayCycle) {
+      var col = <Widget>[];
       // The current progress + health
-      view.add(Progress(widget._ghost.progress, widget._ghost.level));
+      col.add(Progress(widget._ghost.progress, widget._ghost.level));
+      // The candle to be lit, or not
+      col.add(Candle(widget._ghost, _setInteract));
+      var row = <Widget>[
+        widget._ghost.image,
+        Column(children: col, crossAxisAlignment: CrossAxisAlignment.center,)
+      ];
       // The ghost image
-      view.add(widget._ghost.image);
+      view.add(Row(
+        children: row, mainAxisAlignment: MainAxisAlignment.spaceEvenly,));
       // The ghost's response to the user
       view.add(GhostResponse(_curResp, _canInteract));
-      // The candle to be lit, or not
-      view.add(Candle(widget._ghost, _setInteract));
+
       // The user response buttons
       view.add(
           UserResponses(widget._db, widget._ghost, _canInteract, _setResponse));
