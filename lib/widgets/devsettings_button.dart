@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:ghost_app/db/db.dart';
+import 'package:ghost_app/models/notification.dart';
 
-import 'dev_settings.dart';
+import 'devsettings.dart';
 
 /// The Development Settings menu button.
 ///
@@ -17,17 +18,30 @@ class DevButton extends StatelessWidget {
   /// The DB instance.
   final DB _database;
 
-  /// Called as a function when a ghost is released.
+  /// Called as a function when a ghost is released.`
   final VoidCallback _ghostReleased;
 
-  DevButton(this._prefs, this._ghostReleased, this._database);
+  final Notifier _notifier;
+
+  DevButton(
+      this._prefs, this._ghostReleased, this._database, this._notifier);
 
   @override
   Widget build(BuildContext context) {
-    return Align(
+    return Container(
         alignment: Alignment.topCenter,
-        child: GestureDetector(
-          onTap: () {
+        margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+        child: FlatButton(
+          color: Color.fromRGBO(0, 0, 0, 0.3),
+          textColor: Theme.of(context).textTheme.body1.color,
+          child: Text(
+            "Dev Settings",
+            style: TextStyle(
+              color: Colors.red,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          onPressed: () {
             showGeneralDialog(
                 barrierColor:
                     Theme.of(context).backgroundColor.withOpacity(0.5),
@@ -39,11 +53,8 @@ class DevButton extends StatelessWidget {
                       opacity: a1.value,
                       child: Center(
                         child: Material(
-                          child: DevSettings(
-                            _prefs,
-                            _ghostReleased,
-                            _database,
-                          ),
+                          child: DevSettings(_prefs, _ghostReleased, _database,
+                              _notifier),
                         ),
                       ),
                     ),
@@ -57,19 +68,6 @@ class DevButton extends StatelessWidget {
                 // However, it's still required by the showGeneralDialog widget
                 pageBuilder: (context, animation1, animation2) => null);
           },
-          child: Container(
-              margin:
-                  EdgeInsets.only(top: MediaQuery.of(context).padding.top - 20),
-              child: FlatButton(
-                  color: Theme.of(context).buttonColor,
-                  textColor: Theme.of(context).textTheme.body1.color,
-                  child: Text(
-                    "Dev Settings",
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ))),
         ));
   }
 }

@@ -1,18 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ghost_app/db/db.dart';
+import 'package:ghost_app/models/notification.dart';
 
-/// The Settings modal that fades in when the Settings button is pressed.
+/// The Dev Settings modal that fades in when the Dev Settings button is pressed.
 ///
-/// This widget is pretty straightforward. The user can changed settings here.
+/// This widget is pretty straightforward. Developers can change settings here.
 /// This may need to be updated to a StatefulWidget in the future to reflect
 /// any settings that a user has changed right away.
-class Settings extends StatelessWidget {
+class DevSettings extends StatelessWidget {
   /// The app wide preferences.
   final SharedPreferences _prefs;
 
+  /// The DB instance.
+  final DB _database;
+
+  /// Called as a function when a ghost is released.
   final VoidCallback _ghostReleased;
 
-  Settings(this._prefs, this._ghostReleased);
+  final Notifier _notifier;
+
+  DevSettings(
+    this._prefs,
+    this._ghostReleased,
+    this._database,
+    this._notifier,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +43,10 @@ class Settings extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              // TODO: Add settings!
+              // Header Menu Text
               Padding(
                 padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
-                child: Text("Settings",
+                child: Text("Dev Settings",
                     textAlign: TextAlign.center,
                     textDirection: TextDirection.ltr,
                     style: Theme.of(context)
@@ -42,6 +55,7 @@ class Settings extends StatelessWidget {
                         .copyWith(fontSize: 35.0)),
               ),
 
+              // Set has_ghost = false
               Visibility(
                 visible: ghostId == 0 ? false : true,
                 child: FlatButton(
@@ -56,6 +70,41 @@ class Settings extends StatelessWidget {
                   child: Text("Release ghost"),
                 ),
               ),
+
+              // Print Database
+              FlatButton(
+                color: Theme.of(context).buttonColor,
+                textColor: Theme.of(context).textTheme.body1.color,
+                onPressed: () {
+                  _database.debug.printGhostTable();
+                },
+                child: Text("Print `ghost` table."),
+              ),
+
+              // Reset Database
+              FlatButton(
+                color: Theme.of(context).buttonColor,
+                textColor: Theme.of(context).textTheme.body1.color,
+                onPressed: () {
+                  _ghostReleased();
+                  _database.delete();
+                },
+                child: Text("!! Reset database !!"),
+              ),
+
+              FlatButton(
+                color: Theme.of(context).buttonColor,
+                textColor: Theme.of(context).textTheme.body1.color,
+                onPressed: () => _notifier.testNotification(),
+                child: Text("Show Notification"),
+              ),
+
+              FlatButton(
+                color: Theme.of(context).buttonColor,
+                textColor: Theme.of(context).textTheme.body1.color,
+                onPressed: () => null,
+                child: Text("Stop Day/Night Cycle"),
+              )
             ]));
   }
 
