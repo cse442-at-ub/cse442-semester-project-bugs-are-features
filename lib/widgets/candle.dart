@@ -1,14 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:ghost_app/models/ghost.dart';
+import 'package:ghost_app/models/ghostModel.dart';
 import 'package:quiver/async.dart';
 import 'package:ghost_app/models/energy.dart' as Energy;
 
 /// The Candle class that sets the ghost away to be away, or not
 class Candle extends StatefulWidget {
   /// The current ghost instance
-  final Ghost _ghost;
+  final GhostModel _ghost;
 
   /// Sets whether or not we can use things on the interface
   final ValueSetter<bool> _setInteract;

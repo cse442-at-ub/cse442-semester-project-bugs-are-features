@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ghost_app/db/db.dart';
-import 'package:ghost_app/models/ghost.dart';
+import 'package:ghost_app/models/ghostModel.dart';
 import 'package:ghost_app/models/notification.dart';
 import 'package:ghost_app/widgets/candle.dart';
 import 'package:ghost_app/widgets/cycle_timer.dart';
@@ -14,13 +14,12 @@ import 'package:ghost_app/widgets/progress.dart';
 import 'package:ghost_app/widgets/user_responses.dart';
 
 class GhostMain extends StatefulWidget {
-
   /// Called as a function when a ghost is released.
   /// Will only be needed in this widget at the end of the game.
   final VoidCallback _ghostReleased;
 
   /// The current ghost instance
-  final Ghost _ghost;
+  final GhostModel _ghost;
 
   /// The database instance.
   final DB _db;
@@ -54,8 +53,8 @@ class _GhostMainState extends State<GhostMain> {
   bool _isDayCycle = false;
   bool _stopTimer = false;
   String _curResp = "";
-  ///Add energy widget
 
+  ///Add energy widget
 
   void _setInteract(bool value) {
     dev.log("Setting canInteract to $value", name: "screens.ghost");
@@ -98,7 +97,7 @@ class _GhostMainState extends State<GhostMain> {
   Widget build(BuildContext context) {
     var view = <Widget>[];
 
-    view.add(CycleTimer(_setDayCycle, _stopTimer));
+    view.add(CycleTimer(_setDayCycle, _stopTimer, widget._notifier));
 
     if (!_isDayCycle) {
       var col = <Widget>[];
@@ -111,11 +110,16 @@ class _GhostMainState extends State<GhostMain> {
       col.add(Candle(widget._ghost, _setInteract));
       var row = <Widget>[
         widget._ghost.image,
-        Column(children: col, crossAxisAlignment: CrossAxisAlignment.center,)
+        Column(
+          children: col,
+          crossAxisAlignment: CrossAxisAlignment.center,
+        )
       ];
       // The ghost image
       view.add(Row(
-        children: row, mainAxisAlignment: MainAxisAlignment.spaceEvenly,));
+        children: row,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      ));
       // The ghost's response to the user
       view.add(GhostResponse(_curResp, _canInteract));
 

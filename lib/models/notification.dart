@@ -3,7 +3,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 class Notifier {
   /// Instance of the local notifications builder
   final FlutterLocalNotificationsPlugin _plugin =
-    FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
 
   /// Whether or not notifications should send right now
   bool _disabled = false;
@@ -29,8 +29,23 @@ class Notifier {
     if (_disabled) {
       return;
     }
-    await Future.delayed(Duration(seconds: 2));
     await _plugin.show(0, "Ghost is calling you!", null, _platform);
+  }
+
+  Future dayNotification() async {
+    if (_disabled) {
+      return;
+    }
+    await _plugin.show(
+        0, "Day cycle is on", "You can regenerate your energy now!", _platform);
+  }
+
+  Future nightNotification() async {
+    if (_disabled) {
+      return;
+    }
+    await _plugin.show(0, "Night cycle is on",
+        "You can interact with the ghost now!", _platform);
   }
 
   enable() {
