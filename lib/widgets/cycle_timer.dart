@@ -11,9 +11,12 @@ class CycleTimer extends StatefulWidget {
   /// Sets the Day and Night cycle
   final ValueSetter<bool> _setDayCycle;
   final bool _cancelTimer;
+  final VoidCallback _updateEnergy;
   final Notifier _notification;
 
-  CycleTimer(this._setDayCycle, this._cancelTimer, this._notification);
+  CycleTimer(this._setDayCycle, this._cancelTimer, this._updateEnergy,
+      this._notification);
+
   @override
   _CycleTimerState createState() => _CycleTimerState();
 }
@@ -81,8 +84,11 @@ class _CycleTimerState extends State<CycleTimer> {
 
         ///Updates energy to 100 when player waits the entire Day cycle
         if (!_isDay) {
-          widget._notification.nightNotification();
           Energy.energy = 100;
+          widget._updateEnergy();
+          debugPrint(
+              "Waited out entire Day cycle. Energy: ${Energy.energyInit}");
+          widget._notification.nightNotification();
           debugPrint(
               "Waited out entire Day cycle. Energy: ${Energy.energyInit}");
         } else {
@@ -107,6 +113,7 @@ class _CycleTimerState extends State<CycleTimer> {
       if ((Energy.energyInit + 50) <= 100) {
         Energy.energy = Energy.energyInit +
             50; //Increases the energy by 50 by switching the cycle
+        widget._updateEnergy();
         debugPrint("Day cycle toggled. Energy +50: ${Energy.energyInit}");
       }
 

@@ -93,8 +93,7 @@ class GhostModel {
     if (effect >= 0) {
       return;
     }
-    //Decrement energyInit by 1 if wrong response chosen
-    Energy.energy = Energy.energyInit - 1;
+
     debugPrint("Wrong response chosen. -1 Energy: ${Energy.energyInit}");
     // *Chin's energy goes down* **Haha, I read it Matt :/ **
   }
@@ -103,6 +102,8 @@ class GhostModel {
   addScore(int score) async {
     bool didLevel = false;
     if (score == 0) {
+      //Decrement energyInit by 1 if wrong response chosen
+      Energy.energy = Energy.energyInit - 10;
       return didLevel;
     }
 

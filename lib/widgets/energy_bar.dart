@@ -5,15 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:ghost_app/models/energy.dart' as Energy;
 
 class EnergyBar extends StatefulWidget {
+  final VoidCallback _ghostReleased;
+  final VoidCallback _updateEnergy;
   final GhostModel _ghost;
-
-  EnergyBar(this._ghost);
+  final int _energy;
+  EnergyBar(this._ghostReleased, this._ghost, this._energy, this._updateEnergy);
   @override
   _EnergyBarState createState() => _EnergyBarState();
 }
 
 class _EnergyBarState extends State<EnergyBar> {
-  int _energy;
   bool _donate;
   int _start = 90;
   int _current = 90;
@@ -23,7 +24,6 @@ class _EnergyBarState extends State<EnergyBar> {
   @override
   void initState() {
     super.initState();
-    _energy = Energy.energyInit;
     _donate = true;
     countDownTimer = new CountdownTimer(
       new Duration(seconds: _start),
@@ -53,10 +53,11 @@ class _EnergyBarState extends State<EnergyBar> {
         tempForDonationScore(); //Add +75 to score
         Energy.donate = false;
         _donate = !_donate;
+        widget._updateEnergy();
         debugPrint("-40 Energy donated. Energy set to ${Energy.energyInit}");
         _startTimer(true);
       } else {
-        debugPrint("No Energy donated. Energy cant be < 0");
+        debugPrint("No Energy donated. Energy cant be <= 40");
       }
     });
   }
@@ -79,12 +80,13 @@ class _EnergyBarState extends State<EnergyBar> {
   }
 
   Widget _makeText() {
-    setState(() {
-      _energy = Energy.energyInit;
-      debugPrint(_energy.toString());
-    });
+    if (widget._energy <= 0) {
+      Energy.resetEnergy();
+      widget._ghostReleased();
+    }
+
     return Text(
-      "Energy: $_energy",
+      "Energy: ${widget._energy.toString()}",
       style: TextStyle(fontSize: 25),
     );
   }

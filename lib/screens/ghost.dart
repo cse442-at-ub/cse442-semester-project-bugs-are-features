@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ghost_app/db/db.dart';
+import 'package:ghost_app/models/energy.dart' as Energy;
 import 'package:ghost_app/models/ghostModel.dart';
 import 'package:ghost_app/models/notification.dart';
 import 'package:ghost_app/widgets/candle.dart';
@@ -53,15 +54,21 @@ class _GhostMainState extends State<GhostMain> {
   bool _isDayCycle = false;
   bool _stopTimer = false;
   String _curResp = "";
+  // The current energy
+  int _energy = Energy.energyInit;
 
   ///Add energy widget
-
   void _setInteract(bool value) {
     dev.log("Setting canInteract to $value", name: "screens.ghost");
     // If setting to CAN'T interact
     if (!value) {
       widget._notifier.disable();
     } else {
+      // Once candle lights off
+      setState(() {
+        _energy += _energy >= 100 ? 0 : 5;
+        Energy.energy = _energy;
+      });
       widget._notifier.enable();
     }
 
@@ -87,6 +94,12 @@ class _GhostMainState extends State<GhostMain> {
     });
   }
 
+  void _updateEnergy() {
+    setState(() {
+      _energy = Energy.energy;
+    });
+  }
+
 /*  void _cancelTimer() {
     setState(() {
       _stopTimer = true;
@@ -97,13 +110,16 @@ class _GhostMainState extends State<GhostMain> {
   Widget build(BuildContext context) {
     var view = <Widget>[];
 
-    view.add(CycleTimer(_setDayCycle, _stopTimer, widget._notifier));
+    //view.add(EnergyBar(widget._ghostReleased, widget._ghost)); //Energy bar
+    view.add(
+        CycleTimer(_setDayCycle, _stopTimer, _updateEnergy, widget._notifier));
 
     if (!_isDayCycle) {
       var col = <Widget>[];
 
       // The widget for Energy donation.
-      col.add(EnergyBar(widget._ghost));
+      col.add(EnergyBar(
+          widget._ghostReleased, widget._ghost, _energy, _updateEnergy));
       // The current progress + health
       col.add(Progress(widget._ghost.progress, widget._ghost.level));
       // The candle to be lit, or not
@@ -124,8 +140,8 @@ class _GhostMainState extends State<GhostMain> {
       view.add(GhostResponse(_curResp, _canInteract));
 
       // The user response buttons
-      view.add(
-          UserResponses(widget._db, widget._ghost, _canInteract, _setResponse));
+      view.add(UserResponses(widget._db, widget._ghost, _canInteract,
+          _setResponse, _updateEnergy));
     }
 
     return Stack(children: <Widget>[

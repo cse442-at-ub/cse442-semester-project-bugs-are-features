@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ghost_app/db/db.dart';
-
+//import 'package:ghost_app/screens/ghost.dart';
 import 'package:ghost_app/db/constants.dart' as Constants;
 import 'package:ghost_app/models/ghostModel.dart';
 
@@ -17,7 +17,10 @@ class UserResponses extends StatefulWidget {
 
   final ValueSetter<String> _setResponse;
 
-  UserResponses(this._db, this._ghost, this._canInteract, this._setResponse);
+  final VoidCallback _updateEnergyBar;
+
+  UserResponses(this._db, this._ghost, this._canInteract, this._setResponse,
+      this._updateEnergyBar);
 
   @override
   _UserResponsesState createState() => _UserResponsesState();
@@ -98,6 +101,11 @@ class _UserResponsesState extends State<UserResponses> {
     }
 
     bool didLevel = await widget._ghost.addScore(points);
+    if (!didLevel) {
+      // If Chose wrong
+      debugPrint("Called UPDATE ENERGY BAR");
+      widget._updateEnergyBar();
+    }
     if (didLevel) {
       _getLevelingInteraction(1);
       return;

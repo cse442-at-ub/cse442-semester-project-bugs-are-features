@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ghost_app/models/energy.dart' as Energy;
 
 /// Displays the user's progress on the main ghost screen.
 class Progress extends StatelessWidget {
@@ -49,7 +50,7 @@ class Progress extends StatelessWidget {
               Flexible(
                   child: LinearProgressIndicator(
                       backgroundColor: Color.fromRGBO(110, 0, 0, 1),
-                      value: 0.5,
+                      value: (Energy.energy / 100).toDouble(),
                       valueColor: AlwaysStoppedAnimation<Color>(
                           Color.fromRGBO(255, 0, 0, 1))))
             ]))
