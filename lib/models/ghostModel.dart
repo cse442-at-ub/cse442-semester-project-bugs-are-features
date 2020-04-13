@@ -42,7 +42,7 @@ enum Difficulty { Easy, Med, Hard } // Difficulty. Easy: 0, Medium: 1, Hard: 2
 ///
 /// Makes all of the ghost state accessible throughout the app, as well as
 /// handles any database transactions that affect the state of the ghost.
-class Ghost {
+class GhostModel {
   /// The current ghost id
   final int _id;
 
@@ -67,7 +67,7 @@ class Ghost {
   ///  Whether or not the candle is currently lit.
   bool _candleLit;
 
-  Ghost(this._id, this._database);
+  GhostModel(this._id, this._database);
 
   init() async {
     var maps = await _database.pool.query(Constants.GHOST_TABLE,

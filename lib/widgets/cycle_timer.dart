@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:ghost_app/models/energy.dart' as Energy;
+import 'package:ghost_app/models/notification.dart';
 
 const int DAY_CYCLE = 30; //Duration of day cycle
 const int NIGHT_CYCLE = 30; //Duration of night cycle
@@ -11,8 +12,11 @@ class CycleTimer extends StatefulWidget {
   final ValueSetter<bool> _setDayCycle;
   final bool _cancelTimer;
   final VoidCallback _updateEnergy;
+  final Notifier _notification;
 
-  CycleTimer(this._setDayCycle, this._cancelTimer, this._updateEnergy);
+  CycleTimer(this._setDayCycle, this._cancelTimer, this._updateEnergy,
+      this._notification);
+
   @override
   _CycleTimerState createState() => _CycleTimerState();
 }
@@ -84,6 +88,11 @@ class _CycleTimerState extends State<CycleTimer> {
           widget._updateEnergy();
           debugPrint(
               "Waited out entire Day cycle. Energy: ${Energy.energyInit}");
+          widget._notification.nightNotification();
+          debugPrint(
+              "Waited out entire Day cycle. Energy: ${Energy.energyInit}");
+        } else {
+          widget._notification.dayNotification();
         }
 
         widget._setDayCycle(_isDay);
@@ -96,6 +105,7 @@ class _CycleTimerState extends State<CycleTimer> {
   }
 
   void _switchCycleUI() {
+    widget._notification.nightNotification();
     setState(() {
       _isDay = !_isDay;
 

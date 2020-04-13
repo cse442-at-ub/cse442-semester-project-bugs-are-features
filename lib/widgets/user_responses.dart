@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ghost_app/models/ghost.dart';
 import 'package:ghost_app/db/db.dart';
 //import 'package:ghost_app/screens/ghost.dart';
 import 'package:ghost_app/db/constants.dart' as Constants;
+import 'package:ghost_app/models/ghostModel.dart';
 
 /// The Candle class that sets the ghost away to be away, or not
 class UserResponses extends StatefulWidget {
@@ -10,7 +10,7 @@ class UserResponses extends StatefulWidget {
   final DB _db;
 
   /// The current ghost instance
-  final Ghost _ghost;
+  final GhostModel _ghost;
 
   /// Whether or not the user can currently interact with the ghost
   final bool _canInteract;

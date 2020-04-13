@@ -3,9 +3,9 @@ import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
 import 'package:ghost_app/db/db.dart';
+import 'package:ghost_app/models/ghostModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'models/ghost.dart';
 import 'models/notification.dart';
 import 'screens/ghost.dart';
 import 'screens/graveyard.dart';
@@ -38,7 +38,7 @@ class _RootPageState extends State<RootPage> {
   bool _assetsLoaded = false;
 
   /// An instance of our ghost, if we have one
-  Ghost _ghost;
+  GhostModel _ghost;
 
   /// Instance of the local notifications builder
   final Notifier _notifier = Notifier();
@@ -76,7 +76,6 @@ class _RootPageState extends State<RootPage> {
     );
     view.add(bg);
 
-
     Widget screen;
     // Select our main view container.
     var ghostChosen = _prefs.getBool('has_ghost');
@@ -86,7 +85,6 @@ class _RootPageState extends State<RootPage> {
       screen = GraveyardMain(_ghostChosen);
     }
     view.add(screen);
-
 
     view.add(SettingsButton(_prefs, _ghostReleased));
 
@@ -100,7 +98,7 @@ class _RootPageState extends State<RootPage> {
   }
 
   _setGhost(int gid) async {
-    _ghost = Ghost(gid, _db);
+    _ghost = GhostModel(gid, _db);
     await _ghost.init();
     dev.log("Current ghost ID = $gid", name: "app.init");
   }

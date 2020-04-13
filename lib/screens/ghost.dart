@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ghost_app/db/db.dart';
-import 'package:ghost_app/models/ghost.dart';
+import 'package:ghost_app/models/ghostModel.dart';
 import 'package:ghost_app/models/notification.dart';
 import 'package:ghost_app/models/energy.dart' as Energy;
 import 'package:ghost_app/widgets/candle.dart';
@@ -20,7 +20,7 @@ class GhostMain extends StatefulWidget {
   final VoidCallback _ghostReleased;
 
   /// The current ghost instance
-  final Ghost _ghost;
+  final GhostModel _ghost;
 
   /// The database instance.
   final DB _db;
@@ -111,7 +111,8 @@ class _GhostMainState extends State<GhostMain> {
     var view = <Widget>[];
 
     //view.add(EnergyBar(widget._ghostReleased, widget._ghost)); //Energy bar
-    view.add(CycleTimer(_setDayCycle, _stopTimer, _updateEnergy));
+    view.add(
+        CycleTimer(_setDayCycle, _stopTimer, _updateEnergy, widget._notifier));
 
     if (!_isDayCycle) {
       var col = <Widget>[];

@@ -1,13 +1,13 @@
+import 'package:ghost_app/models/ghostModel.dart';
 import 'package:quiver/async.dart';
 
 import 'package:flutter/material.dart';
 import 'package:ghost_app/models/energy.dart' as Energy;
-import 'package:ghost_app/models/ghost.dart';
 
 class EnergyBar extends StatefulWidget {
   final VoidCallback _ghostReleased;
   final VoidCallback _updateEnergy;
-  final Ghost _ghost;
+  final GhostModel _ghost;
   final int _energy;
   EnergyBar(this._ghostReleased, this._ghost, this._energy, this._updateEnergy);
   @override
