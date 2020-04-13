@@ -1,7 +1,4 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:ghost_app/models/ghost.dart';
 
 /// The Candle class that sets the ghost away to be away, or not
 class GhostResponse extends StatelessWidget {
@@ -16,11 +13,11 @@ class GhostResponse extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.all(10),
         child: Text(
           _canInteract ? _curResp : "The ghost doesn't like the candle",
           style: Theme.of(context).textTheme.body1.copyWith(
-            fontSize: 30,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
             fontStyle: _canInteract ? FontStyle.normal : FontStyle.italic,
           ),

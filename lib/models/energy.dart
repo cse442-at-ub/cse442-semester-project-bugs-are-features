@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-///Initialize to 100. Is 10 for debugging
+///Initialize to 100. Is 5 for debugging
 int energyInit = 5;
+bool donateEnergy;
 
 ///Increases energy by 5 when the candle is lit
 void setEnergyCandleLit(bool isLit) {
@@ -9,6 +10,7 @@ void setEnergyCandleLit(bool isLit) {
     energyInit += 5;
     debugPrint("Candle lit: Energy set to $energyInit");
   }
+  debugPrint("Donation Aborted. Energy < 40");
 }
 
 void resetEnergy() {
@@ -20,4 +22,9 @@ set energy(int e) {
   energyInit = e;
 }
 
+set donate(bool d) {
+  donateEnergy = d;
+}
+
 int get energy => energyInit;
+bool get donate => donateEnergy;

@@ -1,21 +1,23 @@
 import 'dart:developer' as dev;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ghost_app/db/db.dart';
 import 'package:ghost_app/models/ghost.dart';
+<<<<<<< HEAD
 import 'package:ghost_app/models/energy.dart' as Energy;
+=======
+import 'package:ghost_app/models/notification.dart';
+>>>>>>> 7c8521603e3dff03a8be3b4d46eb3625baf58a7f
 import 'package:ghost_app/widgets/candle.dart';
 import 'package:ghost_app/widgets/cycle_timer.dart';
 import 'package:ghost_app/widgets/energy_bar.dart';
 import 'package:ghost_app/widgets/ghost_response.dart';
 import 'package:ghost_app/widgets/progress.dart';
 import 'package:ghost_app/widgets/user_responses.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class GhostMain extends StatefulWidget {
-  /// The app wide preferences.
-  final SharedPreferences _prefs;
 
   /// Called as a function when a ghost is released.
   /// Will only be needed in this widget at the end of the game.
@@ -27,10 +29,28 @@ class GhostMain extends StatefulWidget {
   /// The database instance.
   final DB _db;
 
-  GhostMain(this._prefs, this._db, this._ghostReleased, this._ghost);
+  /// The Notifier notifications instances
+  final Notifier _notifier;
+
+  GhostMain(this._db, this._ghostReleased, this._ghost, this._notifier);
 
   @override
   _GhostMainState createState() => _GhostMainState();
+
+  /*
+   * below is temp code for getting rid the unused
+   * _ghostReleased analysis error
+   * TODO delete the debugFillProperties method after using _ghostReleased
+   */
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(
+        ObjectFlagProperty<VoidCallback>.has('_ghostReleased', _ghostReleased));
+  }
+
+//delete above
 }
 
 class _GhostMainState extends State<GhostMain> {
@@ -42,6 +62,13 @@ class _GhostMainState extends State<GhostMain> {
   ///Add energy widget
   void _setInteract(bool value) {
     dev.log("Setting canInteract to $value", name: "screens.ghost");
+    // If setting to CAN'T interact
+    if (!value) {
+      widget._notifier.disable();
+    } else {
+      widget._notifier.enable();
+    }
+
     setState(() {
       _canInteract = value;
     });
@@ -64,31 +91,50 @@ class _GhostMainState extends State<GhostMain> {
     });
   }
 
-  void _cancelTimer() {
+/*  void _cancelTimer() {
     setState(() {
       _stopTimer = true;
     });
+<<<<<<< HEAD
   }
+=======
+  }*/
+>>>>>>> 7c8521603e3dff03a8be3b4d46eb3625baf58a7f
 
   @override
   Widget build(BuildContext context) {
     var view = <Widget>[];
 
+<<<<<<< HEAD
     view.add(EnergyBar(widget._ghostReleased)); //Energy bar
 
     if (!_isDayCycle) {
       // The current progress + health
       view.add(Progress(widget._ghost.progress, widget._ghost.level));
     }
+=======
+>>>>>>> 7c8521603e3dff03a8be3b4d46eb3625baf58a7f
     view.add(CycleTimer(_setDayCycle, _stopTimer));
 
     if (!_isDayCycle) {
+      var col = <Widget>[];
+
+      // The widget for Energy donation.
+      col.add(EnergyBar(widget._ghost));
+      // The current progress + health
+      col.add(Progress(widget._ghost.progress, widget._ghost.level));
+      // The candle to be lit, or not
+      col.add(Candle(widget._ghost, _setInteract));
+      var row = <Widget>[
+        widget._ghost.image,
+        Column(children: col, crossAxisAlignment: CrossAxisAlignment.center,)
+      ];
       // The ghost image
-      view.add(widget._ghost.image);
+      view.add(Row(
+        children: row, mainAxisAlignment: MainAxisAlignment.spaceEvenly,));
       // The ghost's response to the user
       view.add(GhostResponse(_curResp, _canInteract));
-      // The candle to be lit, or not
-      view.add(Candle(widget._ghost, _setInteract));
+
       // The user response buttons
       view.add(
           UserResponses(widget._db, widget._ghost, _canInteract, _setResponse));

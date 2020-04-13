@@ -66,7 +66,7 @@ class Progress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: MediaQuery.of(context).size.width - 200),
+      //margin: EdgeInsets.only(left: MediaQuery.of(context).size.width - 200),
       child: Column(
         children: <Widget>[
           _lifeBar(context),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:ghost_app/db/db.dart';
+import 'package:ghost_app/models/notification.dart';
 
 import 'devsettings.dart';
 
@@ -19,10 +20,11 @@ class DevButton extends StatelessWidget {
 
   /// Called as a function when a ghost is released.`
   final VoidCallback _ghostReleased;
-  final VoidCallback _showNotification;
+
+  final Notifier _notifier;
 
   DevButton(
-      this._prefs, this._ghostReleased, this._database, this._showNotification);
+      this._prefs, this._ghostReleased, this._database, this._notifier);
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +54,7 @@ class DevButton extends StatelessWidget {
                       child: Center(
                         child: Material(
                           child: DevSettings(_prefs, _ghostReleased, _database,
-                              _showNotification),
+                              _notifier),
                         ),
                       ),
                     ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ghost_app/db/db.dart';
+import 'package:ghost_app/models/notification.dart';
 
 /// The Dev Settings modal that fades in when the Dev Settings button is pressed.
 ///
@@ -16,13 +17,14 @@ class DevSettings extends StatelessWidget {
 
   /// Called as a function when a ghost is released.
   final VoidCallback _ghostReleased;
-  final VoidCallback _showNotification;
+
+  final Notifier _notifier;
 
   DevSettings(
     this._prefs,
     this._ghostReleased,
     this._database,
-    this._showNotification,
+    this._notifier,
   );
 
   @override
@@ -93,7 +95,7 @@ class DevSettings extends StatelessWidget {
               FlatButton(
                 color: Theme.of(context).buttonColor,
                 textColor: Theme.of(context).textTheme.body1.color,
-                onPressed: () => _showNotification(),
+                onPressed: () => _notifier.testNotification(),
                 child: Text("Show Notification"),
               ),
 

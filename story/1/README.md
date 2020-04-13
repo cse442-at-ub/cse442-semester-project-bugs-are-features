@@ -12,6 +12,7 @@
 He was a clockmaker in 1634. At this time clockmaking was considered the most technically advanced trade out there.
 
 ## Level 0 User Question Pool
+
 | Question | Progress |
 | -------- | -------- |
 | `Hello?` | `1`     |
@@ -25,6 +26,7 @@ He was a clockmaker in 1634. At this time clockmaking was considered the most te
 | `Is there anything I can do for you?` | `0` |
 
 ## Level 0 Ghost Response Pool
+
 | Responses |
 | --------- |
 | `...` |
@@ -39,6 +41,7 @@ He was a clockmaker in 1634. At this time clockmaking was considered the most te
 The ghost becomes more visible.
 
 ## Level 1 User Question Pool
+
 | Question | Progress |
 | -------- | -------- |
 | `Hello?` | `1`     |
@@ -52,6 +55,7 @@ The ghost becomes more visible.
 | `Is there anything I can do for you?` | `1` |
 
 ## Level 1 Ghost Response Pool
+
 | Responses |
 | --------- |
 |`...` |
@@ -68,6 +72,7 @@ The ghost becomes more visible.
 The ghost now becomes fully visible. This interaction is super-short and brief: just the ghost saying something and the player's response.
 
 0. **Ghost**: `Hello, human...`
+
 | Response | pid | Progress | Effect |
 | -------- | --- | -------- | ------ |
 | `Hello` | None | `5` |  None |
@@ -76,6 +81,7 @@ The ghost now becomes fully visible. This interaction is super-short and brief: 
 | `What's your name?` | None | `5` | None |
 
 ## Level 2 User Question Pool
+
 | Question | Progress |
 | -------- | -------- |
 | `Hello`  | `1`     |
@@ -87,6 +93,7 @@ The ghost now becomes fully visible. This interaction is super-short and brief: 
 | `Is there anything I can do for you?` | `1` |
 
 ## Level 2 Ghost Response Pool
+
 | Response |
 | -------- |
 | `...` |
@@ -101,6 +108,7 @@ The ghost now becomes fully visible. This interaction is super-short and brief: 
 ## Level 3 Level-Up Event
 
 0. **Ghost**: `I wish I could go home...`
+
 | Response | pid | Progress |
 | -------- | --- | -------- |
 | `Too bad.` | `1` | `0` |
@@ -121,6 +129,7 @@ The ghost now becomes fully visible. This interaction is super-short and brief: 
 - Effect: None
 
 ## Level 3 User Question Pool
+
 | Question | Progress |
 | -------- | -------- |
 | `Hello`  | `1`     |
@@ -132,6 +141,7 @@ The ghost now becomes fully visible. This interaction is super-short and brief: 
 | `Is there anything I can do for you?` | `1` |
 
 ## Level 3 Ghost Response Pool
+
 | Response |
 | -------- |
 | `...` |
@@ -421,4 +431,3 @@ The ghost now becomes fully visible. This interaction is super-short and brief: 
 | Response | pid | Progress |
 | -------- | --- | -------- |
 | `Continue` | 10 | `0` |
-
