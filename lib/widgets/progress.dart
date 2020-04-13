@@ -9,8 +9,6 @@ class Progress extends StatelessWidget {
   /// The ghost's current level
   final int _level;
 
-  int _energy;
-
   Progress(this._progress, this._level);
 
   Widget _storyProgress(BuildContext context) {
@@ -38,9 +36,6 @@ class Progress extends StatelessWidget {
   }
 
   Widget _lifeBar(BuildContext context) {
-    _energy = Energy.energyInit;
-    debugPrint(_energy.toString());
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
@@ -55,7 +50,7 @@ class Progress extends StatelessWidget {
               Flexible(
                   child: LinearProgressIndicator(
                       backgroundColor: Color.fromRGBO(110, 0, 0, 1),
-                      value: (Energy.energyInit / 100).toDouble(),
+                      value: (Energy.energy / 100).toDouble(),
                       valueColor: AlwaysStoppedAnimation<Color>(
                           Color.fromRGBO(255, 0, 0, 1))))
             ]))

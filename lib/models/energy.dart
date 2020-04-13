@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 ///Initialize to 100. Is 5 for debugging
-int energyInit = 5;
+int energyInit = 100;
 bool donateEnergy;
 
 ///Increases energy by 5 when the candle is lit

@@ -10,8 +10,9 @@ class CycleTimer extends StatefulWidget {
   /// Sets the Day and Night cycle
   final ValueSetter<bool> _setDayCycle;
   final bool _cancelTimer;
+  final VoidCallback _updateEnergy;
 
-  CycleTimer(this._setDayCycle, this._cancelTimer);
+  CycleTimer(this._setDayCycle, this._cancelTimer, this._updateEnergy);
   @override
   _CycleTimerState createState() => _CycleTimerState();
 }
@@ -62,8 +63,6 @@ class _CycleTimerState extends State<CycleTimer> {
     return _cycleImg;
   }
 
-
-
   void _startCycle(bool firstStart) {
     _destroyTimer();
     if (_isDay) {
@@ -74,22 +73,22 @@ class _CycleTimerState extends State<CycleTimer> {
   }
 
   void _switchCycle() {
-
     setState(() {
       if (_cycle == Duration.zero) {
         _timer.cancel();
         _isDay = !_isDay;
 
         ///Updates energy to 100 when player waits the entire Day cycle
-        if(!_isDay){
+        if (!_isDay) {
           Energy.energy = 100;
-          debugPrint("Waited out entire Day cycle. Energy: ${Energy.energyInit}");
+          widget._updateEnergy();
+          debugPrint(
+              "Waited out entire Day cycle. Energy: ${Energy.energyInit}");
         }
 
         widget._setDayCycle(_isDay);
         _cycle = Duration(seconds: NIGHT_CYCLE);
-      }
-      else {
+      } else {
         _cycle -= Duration(seconds: 1);
       }
     });
@@ -101,8 +100,10 @@ class _CycleTimerState extends State<CycleTimer> {
       _isDay = !_isDay;
 
       //Ensures energy doesn't go beyond 100
-      if((Energy.energyInit + 50) <= 100){
-        Energy.energy = Energy.energyInit + 50; //Increases the energy by 50 by switching the cycle
+      if ((Energy.energyInit + 50) <= 100) {
+        Energy.energy = Energy.energyInit +
+            50; //Increases the energy by 50 by switching the cycle
+        widget._updateEnergy();
         debugPrint("Day cycle toggled. Energy +50: ${Energy.energyInit}");
       }
 
@@ -119,7 +120,11 @@ class _CycleTimerState extends State<CycleTimer> {
   }
 
   Widget _makeText() {
-    format(Duration d) => d.toString().split('.').first.padLeft(0, "0"); // removes 5 extra zeros after seconds.
+    format(Duration d) => d
+        .toString()
+        .split('.')
+        .first
+        .padLeft(0, "0"); // removes 5 extra zeros after seconds.
     String remainingTime = format(_cycle);
 
     if (_isDay) {
@@ -136,21 +141,16 @@ class _CycleTimerState extends State<CycleTimer> {
   /// Moon = Night cycle, Sun = Day cycle
   @override
   Widget build(BuildContext context) {
-
     return Container(
         alignment: Alignment.topCenter,
-        margin:
-        EdgeInsets.only(bottom: MediaQuery
-            .of(context)
-            .padding
-            .bottom + _offset),
+        margin: EdgeInsets.only(
+            bottom: MediaQuery.of(context).padding.bottom + _offset),
         child: Column(
           mainAxisAlignment:
               _isDay ? MainAxisAlignment.center : MainAxisAlignment.start,
           children: <Widget>[
             GestureDetector(
-                onTap: _isDay ? _switchCycleUI : null, child: _loadCycle()
-            ),
+                onTap: _isDay ? _switchCycleUI : null, child: _loadCycle()),
             _makeText()
           ],
         ));
