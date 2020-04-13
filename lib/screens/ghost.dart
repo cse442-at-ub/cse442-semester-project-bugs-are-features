@@ -4,9 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ghost_app/db/db.dart';
+import 'package:ghost_app/models/energy.dart' as Energy;
 import 'package:ghost_app/models/ghostModel.dart';
 import 'package:ghost_app/models/notification.dart';
-import 'package:ghost_app/models/energy.dart' as Energy;
 import 'package:ghost_app/widgets/candle.dart';
 import 'package:ghost_app/widgets/cycle_timer.dart';
 import 'package:ghost_app/widgets/energy_bar.dart';
@@ -66,7 +66,7 @@ class _GhostMainState extends State<GhostMain> {
     } else {
       // Once candle lights off
       setState(() {
-        _energy += 5;
+        _energy += _energy >= 100 ? 0 : 5;
         Energy.energy = _energy;
       });
       widget._notifier.enable();

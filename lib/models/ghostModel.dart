@@ -103,7 +103,7 @@ class GhostModel {
     bool didLevel = false;
     if (score == 0) {
       //Decrement energyInit by 1 if wrong response chosen
-      Energy.energy = Energy.energyInit - 1;
+      Energy.energy = Energy.energyInit - 10;
       return didLevel;
     }
 
