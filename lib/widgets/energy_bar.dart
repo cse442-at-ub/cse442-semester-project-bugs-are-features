@@ -1,17 +1,18 @@
+import 'package:ghost_app/models/ghostModel.dart';
 import 'package:quiver/async.dart';
 
 import 'package:flutter/material.dart';
 import 'package:ghost_app/models/energy.dart' as Energy;
-import 'package:ghost_app/models/ghost.dart';
 
-class EnergyBar extends StatefulWidget{
-  final Ghost _ghost;
+class EnergyBar extends StatefulWidget {
+  final GhostModel _ghost;
+
   EnergyBar(this._ghost);
   @override
   _EnergyBarState createState() => _EnergyBarState();
 }
 
-class _EnergyBarState extends State<EnergyBar>{
+class _EnergyBarState extends State<EnergyBar> {
   int _energy;
   bool _donate;
   int _start = 90;
@@ -20,7 +21,7 @@ class _EnergyBarState extends State<EnergyBar>{
   CountdownTimer countDownTimer;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _energy = Energy.energyInit;
     _donate = true;
@@ -28,7 +29,6 @@ class _EnergyBarState extends State<EnergyBar>{
       new Duration(seconds: _start),
       new Duration(seconds: 1),
     );
-
   }
 
   @override
@@ -37,27 +37,25 @@ class _EnergyBarState extends State<EnergyBar>{
     _destroyTimer();
   }
 
-
   //temp function to add score on the current ghost instance
   tempForDonationScore() async {
-      await widget._ghost.addScore(_scoreIncrease); //increases score by 75
-      debugPrint("+75 Score. Energy donated. Score: ${widget._ghost.score}");
+    await widget._ghost.addScore(_scoreIncrease); //increases score by 75
+    debugPrint("+75 Score. Energy donated. Score: ${widget._ghost.score}");
   }
 
   ///Gives energy to the ghost if player clicks on the give energy icon.
   ///Player energy: -40
   ///Player score: +75
-  void checkDonateEnergy() async{
-    setState(()  {
-      if((Energy.energyInit - 40) >= 0) {
+  void checkDonateEnergy() async {
+    setState(() {
+      if ((Energy.energyInit - 40) >= 0) {
         Energy.energy = Energy.energyInit - 40; //-40 Energy
         tempForDonationScore(); //Add +75 to score
         Energy.donate = false;
         _donate = !_donate;
         debugPrint("-40 Energy donated. Energy set to ${Energy.energyInit}");
         _startTimer(true);
-      }
-        else{
+      } else {
         debugPrint("No Energy donated. Energy cant be < 0");
       }
     });
@@ -74,12 +72,11 @@ class _EnergyBarState extends State<EnergyBar>{
     sub.onDone(() {
       print("Done");
       _donate = !_donate;
-      _current = 90;  //Reset timer
+      _current = 90; //Reset timer
       _start = 90;
       sub.cancel();
     });
   }
-
 
   Widget _makeText() {
     setState(() {
@@ -90,7 +87,6 @@ class _EnergyBarState extends State<EnergyBar>{
       "Energy: $_energy",
       style: TextStyle(fontSize: 25),
     );
-
   }
 
   void _destroyTimer() {
@@ -110,27 +106,24 @@ class _EnergyBarState extends State<EnergyBar>{
         ],
       );
     } else {
-      _img = Stack(
-        alignment: Alignment.centerRight,
-        children: <Widget>[
-          Image.asset('assets/misc/GiveEnergyEmpty.png', height: 65, width: 65),
-           Positioned(
-              bottom: 24,
-              left: 15,
-              right: 15,
-              child: Column(
-                children: <Widget>[
-                  Text(_current.toString(),
-                    style: TextStyle(color: Colors.white, fontSize: 15.0),)
-                ],
-              )
-           )
-        ]);
-
+      _img = Stack(alignment: Alignment.centerRight, children: <Widget>[
+        Image.asset('assets/misc/GiveEnergyEmpty.png', height: 65, width: 65),
+        Positioned(
+            bottom: 24,
+            left: 15,
+            right: 15,
+            child: Column(
+              children: <Widget>[
+                Text(
+                  _current.toString(),
+                  style: TextStyle(color: Colors.white, fontSize: 15.0),
+                )
+              ],
+            ))
+      ]);
     }
     return _img;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -142,10 +135,8 @@ class _EnergyBarState extends State<EnergyBar>{
           children: <Widget>[
             _makeText(),
             GestureDetector(
-                onTap: _donate ? checkDonateEnergy : null, child: _loadImage()
-            ),
+                onTap: _donate ? checkDonateEnergy : null, child: _loadImage()),
           ],
         ));
   }
-
 }
