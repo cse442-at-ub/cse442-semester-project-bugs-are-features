@@ -80,6 +80,7 @@ class _CandleState extends State<Candle> {
   /// Extinguishes the candle, allowing the ghost back
   _extinguishCandle() {
     widget._timers.cancelCandleTimer();
+    widget._timers.resetCandleRemaining();
 
     setState(() {
       _isLit = false;

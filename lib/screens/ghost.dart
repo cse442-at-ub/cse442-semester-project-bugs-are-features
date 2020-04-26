@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ghost_app/db/db.dart';
-import 'package:ghost_app/db/constants.dart' as Constants;
 import 'package:ghost_app/models/energy.dart' as Energy;
 import 'package:ghost_app/models/ghost_model.dart';
 import 'package:ghost_app/models/notification.dart';
