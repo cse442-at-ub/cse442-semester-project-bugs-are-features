@@ -1,3 +1,5 @@
+import 'dart:developer' as dev;
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ghost_app/db/db.dart';
@@ -79,6 +81,16 @@ class DevSettings extends StatelessWidget {
                   _database.debug.printGhostTable();
                 },
                 child: Text("Print `ghost` table."),
+              ),
+
+              // Print Game State Table
+              FlatButton(
+                color: Theme.of(context).buttonColor,
+                textColor: Theme.of(context).textTheme.body1.color,
+                onPressed: () {
+                  _database.debug.printGameTable();
+                },
+                child: Text("Print game state table."),
               ),
 
               // Reset Database
