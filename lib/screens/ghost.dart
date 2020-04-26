@@ -4,9 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ghost_app/db/db.dart';
+import 'package:ghost_app/db/constants.dart' as Constants;
 import 'package:ghost_app/models/energy.dart' as Energy;
 import 'package:ghost_app/models/ghostModel.dart';
 import 'package:ghost_app/models/notification.dart';
+import 'package:ghost_app/models/timers.dart';
 import 'package:ghost_app/widgets/candle.dart';
 import 'package:ghost_app/widgets/cycle_timer.dart';
 import 'package:ghost_app/widgets/energy_bar.dart';
@@ -50,12 +52,32 @@ class GhostMain extends StatefulWidget {
 }
 
 class _GhostMainState extends State<GhostMain> {
+  /// The Timers instance
+  Timers _timers;
+
+  /// Whether or not the user can interact with the ghost
   bool _canInteract = true;
+
+  /// Whether or not the current day/night cycle is day
   bool _isDayCycle = false;
-  bool _stopTimer = false;
+
+  /// The ghost's current response to the user
   String _curResp = "";
-  // The current energy
+
+  /// The current energy
   int _energy = Energy.energyInit;
+
+  @override
+  initState() {
+    super.initState();
+    _timers = Timers(widget._db);
+  }
+
+  @override
+  dispose() {
+    _timers.storeTimers();
+    super.dispose();
+  }
 
   ///Add energy widget
   void _setInteract(bool value) {
@@ -77,42 +99,42 @@ class _GhostMainState extends State<GhostMain> {
     });
   }
 
+  /// Sets the ghost's response to the user
   void _setResponse(String resp) async {
     setState(() {
       _curResp = resp;
     });
   }
 
-  @override
-  initState() {
-    super.initState();
-  }
-
-  void _setDayCycle(bool value) {
+  /// Sets whether it's day or not
+  void _switchDayNightCycle() {
     setState(() {
-      _isDayCycle = value;
+      _energy = Energy.energy;
+      _isDayCycle = !_isDayCycle;
     });
+
+    if (_isDayCycle) {
+      widget._notifier.dayNotification();
+      // Cancel all non-day/night timers
+      _timers.cancelTimers();
+    } else {
+      widget._notifier.nightNotification();
+    }
   }
 
+  /// Update's the user's energy
   void _updateEnergy() {
     setState(() {
       _energy = Energy.energy;
     });
   }
 
-/*  void _cancelTimer() {
-    setState(() {
-      _stopTimer = true;
-    });
-  }*/
 
   @override
   Widget build(BuildContext context) {
     var view = <Widget>[];
 
-    //view.add(EnergyBar(widget._ghostReleased, widget._ghost)); //Energy bar
-    view.add(
-        CycleTimer(_setDayCycle, _stopTimer, _updateEnergy, widget._notifier));
+    view.add(CycleTimer(_switchDayNightCycle, _isDayCycle, _timers));
 
     if (!_isDayCycle) {
       var col = <Widget>[];

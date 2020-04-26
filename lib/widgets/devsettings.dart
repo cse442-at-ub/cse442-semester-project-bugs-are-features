@@ -20,13 +20,14 @@ class DevSettings extends StatelessWidget {
   /// Called as a function when a ghost is released.
   final VoidCallback _ghostReleased;
 
+  /// The Notifier instance
   final Notifier _notifier;
 
   DevSettings(
-    this._prefs,
-    this._ghostReleased,
-    this._database,
-    this._notifier,
+      this._prefs,
+      this._ghostReleased,
+      this._database,
+      this._notifier,
   );
 
   @override

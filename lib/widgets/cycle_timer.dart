@@ -2,167 +2,128 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:ghost_app/models/energy.dart' as Energy;
-import 'package:ghost_app/models/notification.dart';
-
-const int DAY_CYCLE = 30; //Duration of day cycle
-const int NIGHT_CYCLE = 30; //Duration of night cycle
+import 'package:ghost_app/models/timers.dart';
 
 class CycleTimer extends StatefulWidget {
   /// Sets the Day and Night cycle
-  final ValueSetter<bool> _setDayCycle;
-  final bool _cancelTimer;
-  final VoidCallback _updateEnergy;
-  final Notifier _notification;
+  final VoidCallback _switchDayNightCycle;
 
-  CycleTimer(this._setDayCycle, this._cancelTimer, this._updateEnergy,
-      this._notification);
+  /// The current cycle state, from the Ghost screen
+  final bool _isDayCycle;
+
+  /// The Timers instance containing all timers
+  final Timers _timers;
+
+  CycleTimer(this._switchDayNightCycle, this._isDayCycle, this._timers);
 
   @override
   _CycleTimerState createState() => _CycleTimerState();
 }
 
 class _CycleTimerState extends State<CycleTimer> {
-  Timer _timer;
-  bool _isDay; //bool value to check if it is a day cycle or a night cycle
-  int _offset = 25;
+  /// Interval the clock ticks at
+  final Duration _oneSecond = Duration(seconds: 1);
 
-  Duration _interval;
+  /// Duration of every day & night cycle
   Duration _cycle;
+
+  /// The cycle length in seconds
+  int _cycleLength;
 
   @override
   void initState() {
     super.initState();
-    _isDay = false;
-    _interval = Duration(seconds: 1);
-    _cycle = Duration(seconds: NIGHT_CYCLE);
+    _cycleLength = 7200;
 
-    if (widget._cancelTimer) {
-      _destroyTimer();
-    } else {
-      _startCycle(true);
-    }
+    // Set cycle to 30 seconds if in debug
+    assert(() {
+      _cycleLength = 30;
+      return true;
+    }());
+
+    _cycle = Duration(seconds: _cycleLength);
+    widget._timers.dayNightTimer = Timer.periodic(_oneSecond, _switchCycle);
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _destroyTimer();
-  }
-
-  Widget _loadCycle() {
-    var _cycleImg;
-    if (_isDay) {
-      _cycleImg = Image.asset(
+  /// The image widget to be displayed on the UI
+  Widget _getIcon() {
+    var cycleImg;
+    if (widget._isDayCycle) {
+      cycleImg = Image.asset(
         'assets/misc/Sun.png',
         height: 80,
         width: 80,
       );
     } else {
-      _cycleImg = Image.asset(
+      cycleImg = Image.asset(
         'assets/misc/Moon.png',
         height: 40,
         width: 40,
       );
     }
-    return _cycleImg;
+    return cycleImg;
   }
 
-  void _startCycle(bool firstStart) {
-    _destroyTimer();
-    if (_isDay) {
-      _timer = Timer(_interval, _switchCycle);
-    } else {
-      _timer = Timer(_interval, _switchCycle);
-    }
-  }
-
-  void _switchCycle() {
+  void _switchCycle(Timer timer) {
     setState(() {
       if (_cycle == Duration.zero) {
-        _timer.cancel();
-        _isDay = !_isDay;
-
-        ///Updates energy to 100 when player waits the entire Day cycle
-        if (!_isDay) {
+        widget._switchDayNightCycle();
+        // TODO: Update with class setter
+        if (widget._isDayCycle) {
           Energy.energy = 100;
-          widget._updateEnergy();
-          debugPrint(
-              "Waited out entire Day cycle. Energy: ${Energy.energyInit}");
-          widget._notification.nightNotification();
-          debugPrint(
-              "Waited out entire Day cycle. Energy: ${Energy.energyInit}");
-        } else {
-          widget._notification.dayNotification();
         }
-
-        widget._setDayCycle(_isDay);
-        _cycle = Duration(seconds: NIGHT_CYCLE);
+        _cycle = Duration(seconds: _cycleLength);
       } else {
         _cycle -= Duration(seconds: 1);
       }
     });
-    _startCycle(false);
   }
 
-  void _switchCycleUI() {
-    widget._notification.nightNotification();
-    setState(() {
-      _isDay = !_isDay;
-
-      //Ensures energy doesn't go beyond 100
-      if ((Energy.energyInit + 50) <= 100) {
-        Energy.energy = Energy.energyInit +
-            50; //Increases the energy by 50 by switching the cycle
-        widget._updateEnergy();
-        debugPrint("Day cycle toggled. Energy +50: ${Energy.energyInit}");
-      }
-
-      widget._setDayCycle(_isDay);
-      _cycle = Duration(seconds: NIGHT_CYCLE);
-    });
-    _startCycle(false);
-  }
-
-  void _destroyTimer() {
-    if (_timer != null && _timer.isActive) {
-      _timer.cancel();
+  void _skipDay() {
+    // Add only 50 energy for skipping day cycle
+    // TODO: Update with class setter
+    Energy.energy += 50;
+    if (Energy.energy > 100) {
+      Energy.energy = 100;
     }
+    widget._switchDayNightCycle();
+
+    setState(() {
+      _cycle = Duration(seconds: _cycleLength);
+    });
   }
 
   Widget _makeText() {
-    format(Duration d) => d
-        .toString()
-        .split('.')
-        .first
-        .padLeft(0, "0"); // removes 5 extra zeros after seconds.
+    // Removes 5 extra zeros after seconds.
+    format(Duration d) => d.toString().split('.').first.padLeft(0, "0");
     String remainingTime = format(_cycle);
 
-    if (_isDay) {
-      return Text(
-        "Day Cycle is On!  $remainingTime",
-        style: TextStyle(fontSize: 30),
-      );
+    if (widget._isDayCycle) {
+      return Text("Sunset in $remainingTime.\nPress sun to skip to night",
+          style: TextStyle(fontSize: 30), textAlign: TextAlign.center);
     } else {
-      return Text("Night Cycle is On!  $remainingTime");
+      return Text("Sun rises in $remainingTime");
     }
   }
 
-  ///Toggle button to toggle between day and night cycles.
-  /// Moon = Night cycle, Sun = Day cycle
+  /// Toggle button to toggle between day and night cycles.
   @override
   Widget build(BuildContext context) {
     return Container(
         alignment: Alignment.topCenter,
         margin: EdgeInsets.only(
-            bottom: MediaQuery.of(context).padding.bottom + _offset),
+            bottom: MediaQuery.of(context).padding.bottom + 25),
         child: Column(
-          mainAxisAlignment:
-              _isDay ? MainAxisAlignment.center : MainAxisAlignment.start,
+          mainAxisAlignment: widget._isDayCycle
+                  ? MainAxisAlignment.center
+                  : MainAxisAlignment.start,
           children: <Widget>[
             GestureDetector(
-                onTap: _isDay ? _switchCycleUI : null, child: _loadCycle()),
+                onTap: widget._isDayCycle ? _skipDay : null,
+                child: _getIcon()),
             _makeText()
           ],
-        ));
+        )
+    );
   }
 }
