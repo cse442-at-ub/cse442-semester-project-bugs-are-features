@@ -6,12 +6,12 @@ import 'package:flutter/widgets.dart';
 import 'package:ghost_app/db/db.dart';
 import 'package:ghost_app/db/constants.dart' as Constants;
 import 'package:ghost_app/models/energy.dart' as Energy;
-import 'package:ghost_app/models/ghostModel.dart';
+import 'package:ghost_app/models/ghost_model.dart';
 import 'package:ghost_app/models/notification.dart';
 import 'package:ghost_app/models/timers.dart';
 import 'package:ghost_app/widgets/candle.dart';
 import 'package:ghost_app/widgets/cycle_timer.dart';
-import 'package:ghost_app/widgets/energy_bar.dart';
+import 'package:ghost_app/widgets/energy_well.dart';
 import 'package:ghost_app/widgets/ghost_response.dart';
 import 'package:ghost_app/widgets/progress.dart';
 import 'package:ghost_app/widgets/user_responses.dart';
@@ -111,6 +111,8 @@ class _GhostMainState extends State<GhostMain> {
     setState(() {
       _energy = Energy.energy;
       _isDayCycle = !_isDayCycle;
+      _curResp = "";
+      _canInteract = true;
     });
 
     if (_isDayCycle) {
@@ -129,7 +131,6 @@ class _GhostMainState extends State<GhostMain> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     var view = <Widget>[];
@@ -140,12 +141,11 @@ class _GhostMainState extends State<GhostMain> {
       var col = <Widget>[];
 
       // The widget for Energy donation.
-      col.add(EnergyBar(
-          widget._ghostReleased, widget._ghost, _energy, _updateEnergy));
+      col.add(EnergyWell(_canInteract, widget._ghost, _updateEnergy, _timers));
       // The current progress + health
       col.add(Progress(widget._ghost.progress, widget._ghost.level));
       // The candle to be lit, or not
-      col.add(Candle(widget._ghost, _setInteract));
+      col.add(Candle(widget._ghost, _setInteract, _timers));
       var row = <Widget>[
         widget._ghost.image,
         Column(

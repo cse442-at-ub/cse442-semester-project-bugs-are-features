@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:ghost_app/models/energy.dart' as Energy;
+import 'package:ghost_app/models/game.dart' as Game;
 import 'package:ghost_app/models/timers.dart';
 
 class CycleTimer extends StatefulWidget {
@@ -21,9 +22,6 @@ class CycleTimer extends StatefulWidget {
 }
 
 class _CycleTimerState extends State<CycleTimer> {
-  /// Interval the clock ticks at
-  final Duration _oneSecond = Duration(seconds: 1);
-
   /// Duration of every day & night cycle
   Duration _cycle;
 
@@ -33,16 +31,17 @@ class _CycleTimerState extends State<CycleTimer> {
   @override
   void initState() {
     super.initState();
-    _cycleLength = 7200;
+    _cycleLength = Game.DAY_NIGHT_LENGTH;
 
     // Set cycle to 30 seconds if in debug
     assert(() {
-      _cycleLength = 30;
+      _cycleLength = Game.DAY_NIGHT_LENGTH_DEV;
       return true;
     }());
 
     _cycle = Duration(seconds: _cycleLength);
-    widget._timers.dayNightTimer = Timer.periodic(_oneSecond, _switchCycle);
+    widget._timers.dayNightTimer = Timer.periodic(
+        Game.ONE_SECOND, _switchCycle);
   }
 
   /// The image widget to be displayed on the UI

@@ -164,7 +164,34 @@ class DB {
     return cols;
   }
 
+  getStoredTimers() async {
+    return await _pool.query(Constants.GAME_TABLE,
+        columns: [
+          Constants.GAME_CYCLE_TIMER,
+          Constants.GAME_ENERGY_TIMER,
+          Constants.GAME_CANDLE_TIMER,
+        ],
+        where: '${Constants.GAME_TABLE_ID} = ?',
+        whereArgs: [1]
+    );
+  }
 
+  storeTimers(int cycle, int energy, int candle) async {
+    Map<String, dynamic> row = {
+      Constants.GAME_CYCLE_TIMER: cycle,
+      Constants.GAME_ENERGY_TIMER: energy,
+      Constants.GAME_CANDLE_TIMER: candle,
+    };
+
+    dev.log("Storing timer values: Day/Night: $cycle, "
+        "Energy: $energy, Candle: $candle", name: "db.db");
+    await _pool.update(
+        Constants.GAME_TABLE,
+        row,
+        where: '${Constants.GAME_TABLE_ID} = ?',
+        whereArgs: [1]
+    );
+  }
 
   /// Closes the database connection. Should only be called when app is killed.
   close() async {

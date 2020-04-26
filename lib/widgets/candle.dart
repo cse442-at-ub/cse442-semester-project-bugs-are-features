@@ -1,9 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:ghost_app/models/ghostModel.dart';
-import 'package:quiver/async.dart';
+import 'package:ghost_app/models/ghost_model.dart';
 import 'package:ghost_app/models/energy.dart' as Energy;
+import 'package:ghost_app/models/game.dart' as Game;
+import 'package:ghost_app/models/timers.dart';
 
 /// The Candle class that sets the ghost away to be away, or not
 class Candle extends StatefulWidget {
@@ -13,70 +14,79 @@ class Candle extends StatefulWidget {
   /// Sets whether or not we can use things on the interface
   final ValueSetter<bool> _setInteract;
 
-  Candle(this._ghost, this._setInteract);
+  /// The Timers class instances
+  final Timers _timers;
+
+  Candle(this._ghost, this._setInteract, this._timers);
 
   @override
   _CandleState createState() => _CandleState();
 }
 
-//in seconds
-const dur = 5;
-const interval = 1;
-
 class _CandleState extends State<Candle> {
   /// If the candle is currently lit or not
-  bool _isLit = false;
+  bool _isLit;
 
-  Timer _timer;
-  double _remaining;
+  /// The duration remaining
+  int _maxDuration;
 
-  startCandle() {
-    _remaining = dur.toDouble();
+  @override
+  initState() {
+    super.initState();
+
+    _maxDuration = Game.CANDLE_LENGTH;
+
+    assert(() {
+      _maxDuration = Game.CANDLE_LENGTH_DEV;
+      return true;
+    }());
+
+    if (widget._timers.candleTimer != null
+        && widget._timers.candleTimer.isActive) {
+      _isLit = true;
+    } else {
+      _isLit = false;
+      widget._timers.resetCandleRemaining();
+    }
+  }
+
+  /// Called on every tick second of the countdown
+  _tick(Timer timer) {
+    setState(() {
+      widget._timers.candleRemaining -= 1;
+
+      if (widget._timers.candleRemaining == 0) {
+        _extinguishCandle();
+      }
+    });
+  }
+
+  /// Start the countdown timer for the energy well
+  _startTimer() {
+    widget._timers.candleTimer = Timer.periodic(Game.ONE_SECOND, _tick);
     _lightCandle();
-
-    Duration time = new Duration(seconds: dur);
-    Duration increment = new Duration(seconds: interval);
-    CountdownTimer countdownTimer = new CountdownTimer(time, increment);
-
-    var subscribers = countdownTimer.listen(null);
-    subscribers.onData((timer) {
-      setState(() {
-        _remaining -= 1;
-      });
-    });
-
-    subscribers.onDone(() {
-      _extinguishCandle();
-      subscribers.cancel();
-    });
   }
 
   /// Lights the candle, rendering the ghost inaccessible
   _lightCandle() async {
     await widget._ghost.setCandleLit(true);
     Energy.setEnergyCandleLit(true); //Increment energy by 5 on lighting candle
-    widget._setInteract(false);
     setState(() {
       _isLit = true;
     });
+    widget._setInteract(false);
   }
 
   /// Extinguishes the candle, allowing the ghost back
-  _extinguishCandle() async {
-    await widget._ghost.setCandleLit(false);
-    widget._setInteract(true);
-    // TODO: Send notification here
+  _extinguishCandle() {
+    widget._timers.cancelCandleTimer();
+
     setState(() {
       _isLit = false;
     });
-  }
 
-  @override
-  void dispose() {
-    if (_timer != null && _timer.isActive) {
-      _timer.cancel();
-    }
-    super.dispose();
+    widget._ghost.setCandleLit(false);
+    widget._setInteract(true);
   }
 
   @override
@@ -89,12 +99,15 @@ class _CandleState extends State<Candle> {
           SizedBox(
               width: 80,
               height: 80,
-              child: CircularProgressIndicator(value: _remaining / dur))
+              child: CircularProgressIndicator(
+                  value: widget._timers.candleRemaining / _maxDuration
+              )
+          )
         ],
       );
     } else {
       return GestureDetector(
-        onTap: () => startCandle(),
+        onTap: () => _startTimer(),
         child: Image.asset('assets/misc/UnlitCandle.png',
             color: Color.fromRGBO(190, 190, 190, 1.0),
             colorBlendMode: BlendMode.modulate,

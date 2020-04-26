@@ -37,7 +37,7 @@ class DevSettings extends StatelessWidget {
 
     return Container(
         constraints: BoxConstraints(
-            maxHeight: 300.0,
+            maxHeight: 350.0,
             maxWidth: 250.0,
             minWidth: 250.0,
             minHeight: 150.0),
