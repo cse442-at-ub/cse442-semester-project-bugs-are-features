@@ -5,15 +5,13 @@ import 'package:ghost_app/models/timers.dart';
 import 'package:quiver/async.dart';
 
 import 'package:flutter/material.dart';
-import 'package:ghost_app/models/energy.dart' as Energy;
+import 'package:ghost_app/db/db.dart';
+import 'package:ghost_app/models/energy.dart';
 import 'package:ghost_app/models/game.dart' as Game;
 
 class EnergyWell extends StatefulWidget {
   /// Whether or not the user can interact with the ghost
   final bool _canInteract;
-
-  /// Updates the energy on the main screen
-  final VoidCallback _updateEnergy;
 
   /// The current Ghost instances
   final GhostModel _ghost;
@@ -21,7 +19,14 @@ class EnergyWell extends StatefulWidget {
   /// The Timers model containing all timers
   final Timers _timers;
 
-  EnergyWell(this._canInteract, this._ghost, this._updateEnergy, this._timers);
+  final DB _db;
+
+  final Energy _energy;
+
+  final VoidCallback _refresh;
+
+  EnergyWell(this._canInteract, this._ghost, this._energy, this._timers,
+      this._db, this._refresh);
 
   @override
   _EnergyWellState createState() => _EnergyWellState();
@@ -38,10 +43,11 @@ class _EnergyWellState extends State<EnergyWell> {
   initState() {
     super.initState();
 
-    if (widget._timers.energyWellTimer != null
-        && widget._timers.energyWellTimer.isActive) {
+    if (widget._timers.energyWellTimer != null &&
+        widget._timers.energyWellTimer.isActive) {
       _active = true;
       // TODO: Get time left stored in db
+      this.widget._energy.energy = widget._db.getCurrentEnergy();
     } else {
       _reset();
     }
@@ -51,20 +57,23 @@ class _EnergyWellState extends State<EnergyWell> {
   ///Player energy: -40
   ///Player score: +75
   _donateEnergy() async {
-    int newEnergy = Energy.energy - 40;
+    int newEnergy = widget._energy.energy - 40;
     if (newEnergy < 0) {
       return;
     }
 
-    Energy.energy = newEnergy;
-    widget._updateEnergy();
+    widget._energy.energy = newEnergy;
+    if (_scoreIncrease == 0) {
+      widget._energy.energy -= 10;
+    }
     await widget._ghost.addScore(_scoreIncrease);
 
     setState(() {
       _active = !_active;
-      debugPrint("-40 Energy donated. Energy set to ${Energy.energyInit}");
+      debugPrint("-40 Energy donated. Energy set to ${widget._energy.energy}");
       _startTimer();
     });
+    widget._refresh();
   }
 
   /// Resets states allowing user to hit button again
@@ -134,10 +143,8 @@ class _EnergyWellState extends State<EnergyWell> {
           children: <Widget>[
             GestureDetector(
                 onTap: _active && widget._canInteract ? _donateEnergy : null,
-                child: _loadImage()
-            ),
+                child: _loadImage()),
           ],
-        )
-    );
+        ));
   }
 }

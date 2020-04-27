@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:ghost_app/models/ghost_model.dart';
-import 'package:ghost_app/models/energy.dart' as Energy;
+import 'package:ghost_app/models/energy.dart';
 import 'package:ghost_app/models/game.dart' as Game;
 import 'package:ghost_app/models/timers.dart';
 
@@ -17,7 +17,9 @@ class Candle extends StatefulWidget {
   /// The Timers class instances
   final Timers _timers;
 
-  Candle(this._ghost, this._setInteract, this._timers);
+  final Energy _energy;
+
+  Candle(this._ghost, this._setInteract, this._timers, this._energy);
 
   @override
   _CandleState createState() => _CandleState();
@@ -41,8 +43,8 @@ class _CandleState extends State<Candle> {
       return true;
     }());
 
-    if (widget._timers.candleTimer != null
-        && widget._timers.candleTimer.isActive) {
+    if (widget._timers.candleTimer != null &&
+        widget._timers.candleTimer.isActive) {
       _isLit = true;
     } else {
       _isLit = false;
@@ -70,7 +72,8 @@ class _CandleState extends State<Candle> {
   /// Lights the candle, rendering the ghost inaccessible
   _lightCandle() async {
     await widget._ghost.setCandleLit(true);
-    Energy.setEnergyCandleLit(true); //Increment energy by 5 on lighting candle
+    widget._energy
+        .setEnergyCandleLit(true); //Increment energy by 5 on lighting candle
     setState(() {
       _isLit = true;
     });
@@ -101,9 +104,7 @@ class _CandleState extends State<Candle> {
               width: 80,
               height: 80,
               child: CircularProgressIndicator(
-                  value: widget._timers.candleRemaining / _maxDuration
-              )
-          )
+                  value: widget._timers.candleRemaining / _maxDuration))
         ],
       );
     } else {

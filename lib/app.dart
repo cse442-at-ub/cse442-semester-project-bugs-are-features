@@ -12,6 +12,7 @@ import 'screens/graveyard.dart';
 import 'screens/splash.dart';
 import 'widgets/devsettings_button.dart';
 import 'widgets/settings_button.dart';
+import 'models/energy.dart';
 
 /// RootPage is the "actual" root widget of the app. See also [_RootPageState].
 ///
@@ -34,6 +35,8 @@ class _RootPageState extends State<RootPage> {
   /// The Database instance
   final DB _db = DB();
 
+  Energy _energy;
+
   /// Displays splash screen when false. True when assets are loaded.
   bool _assetsLoaded = false;
 
@@ -49,6 +52,7 @@ class _RootPageState extends State<RootPage> {
   @override
   initState() {
     super.initState();
+    _energy = Energy(_db);
     _loadAssets();
   }
 
@@ -80,7 +84,7 @@ class _RootPageState extends State<RootPage> {
     // Select our main view container.
     var ghostChosen = _prefs.getBool('has_ghost');
     if (ghostChosen) {
-      screen = GhostMain(_db, _ghostReleased, _ghost, _notifier);
+      screen = GhostMain(_db, _ghostReleased, _ghost, _notifier, _energy);
     } else {
       screen = GraveyardMain(_ghostChosen);
     }
@@ -108,7 +112,7 @@ class _RootPageState extends State<RootPage> {
   _loadAssets() async {
     _readPrefs();
     await _db.init();
-
+    await _energy.init();
     int gid = _prefs.getInt('ghost_id');
     if (gid > 0) {
       await _setGhost(gid);
