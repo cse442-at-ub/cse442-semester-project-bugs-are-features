@@ -53,7 +53,11 @@ class Settings extends StatelessWidget {
                     _setState(pressAttention);
                     _showAlertOnRelease(context);
                   },
-                  child: Text("Release ghost"),
+                  child: Text("Release ghost",
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .body1),
                 ),
               ),
             ]));
@@ -63,18 +67,26 @@ class Settings extends StatelessWidget {
   void _showAlertOnRelease(BuildContext context) {
     // set up the buttons
     Widget noButton = FlatButton(
-      color: Colors.deepPurple,
-      textColor: Colors.white,
-      child: Text("No, I miss the ghost."),
+      color: Theme
+          .of(context)
+          .buttonColor,
+      child: Text("No, I miss the ghost.",
+          style: Theme
+              .of(context)
+              .textTheme
+              .body1),
       onPressed: () {
         _closeDialog(context);
       },
     );
 
     Widget yesButton = FlatButton(
-      color: Colors.deepPurple,
-      textColor: Colors.white,
-      child: Text("Yes, Release the ghost"),
+      color: Colors.red,
+      child: Text("Yes, Release the ghost",
+          style: Theme
+              .of(context)
+              .textTheme
+              .body1),
       onPressed: () {
         _ghostReleased();
         _closeDialog(context);
@@ -83,9 +95,19 @@ class Settings extends StatelessWidget {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("AlertDialog"),
-      backgroundColor: Colors.purple,
-      content: Text("Are you sure you wanna release the ghost?"),
+      title: Text("AlertDialog",
+          style: Theme
+              .of(context)
+              .textTheme
+              .body1),
+      backgroundColor: Theme
+          .of(context)
+          .backgroundColor,
+      content: Text("Are you sure you wanna release the ghost?",
+          style: Theme
+              .of(context)
+              .textTheme
+              .body1),
       actions: [
         noButton,
         yesButton,

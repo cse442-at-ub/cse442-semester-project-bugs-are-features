@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ghost_app/db/db.dart';
-//import 'package:ghost_app/screens/ghost.dart';
 import 'package:ghost_app/db/constants.dart' as Constants;
+import 'package:ghost_app/db/db.dart';
 import 'package:ghost_app/models/ghost_model.dart';
 
 /// The Candle class that sets the ghost away to be away, or not
@@ -154,7 +153,11 @@ class _UserResponsesState extends State<UserResponses> {
               : null,
           child: Text(
             userResp,
-            style: TextStyle(fontSize: 20.0),
+            style: Theme
+                .of(context)
+                .textTheme
+                .body1
+                .copyWith(fontSize: 20.0),
           ),
         ));
   }
@@ -170,7 +173,12 @@ class _UserResponsesState extends State<UserResponses> {
           shape: ContinuousRectangleBorder(
               borderRadius: BorderRadius.circular(32.0)),
           onPressed: null,
-          child: Text("", style: TextStyle(fontSize: 20.0)),
+          child: Text("",
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .body1
+                  .copyWith(fontSize: 20.0)),
         ));
   }
 

@@ -1,12 +1,10 @@
 import 'dart:async';
 
-import 'package:ghost_app/models/ghost_model.dart';
-import 'package:ghost_app/models/timers.dart';
-import 'package:quiver/async.dart';
-
 import 'package:flutter/material.dart';
 import 'package:ghost_app/models/energy.dart' as Energy;
 import 'package:ghost_app/models/game.dart' as Game;
+import 'package:ghost_app/models/ghost_model.dart';
+import 'package:ghost_app/models/timers.dart';
 
 class EnergyWell extends StatefulWidget {
   /// Whether or not the user can interact with the ghost
@@ -115,7 +113,11 @@ class _EnergyWellState extends State<EnergyWell> {
               children: <Widget>[
                 Text(
                   widget._timers.energyWellRemaining.toString(),
-                  style: TextStyle(color: Colors.white, fontSize: 15.0),
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .body1
+                      .copyWith(fontSize: 15.0),
                 )
               ],
             ))

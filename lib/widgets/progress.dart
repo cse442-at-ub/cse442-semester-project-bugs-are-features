@@ -20,7 +20,11 @@ class Progress extends StatelessWidget {
             child: Row(children: <Widget>[
               Padding(
                 padding: EdgeInsets.only(right: 20),
-                child: Text("Level $_level"),
+                child: Text("Level $_level",
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .body1),
               ),
               // Flexible required because in a row
               Flexible(
@@ -44,7 +48,11 @@ class Progress extends StatelessWidget {
             child: Row(children: <Widget>[
               Padding(
                 padding: EdgeInsets.only(right: 17),
-                child: Text("Energy"),
+                child: Text("Energy",
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .body1),
               ),
               // Flexible required because in a row
               Flexible(
