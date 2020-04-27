@@ -3,6 +3,7 @@ import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
 import 'package:ghost_app/db/db.dart';
+import 'package:ghost_app/screens/tutorial.dart';
 import 'package:ghost_app/models/ghost_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -69,6 +70,9 @@ class _RootPageState extends State<RootPage> {
       return SplashScreen();
     }
 
+    if (_prefs.getBool('first_launch') ?? true) {
+      return Tutorial(_showHome);
+    }
     var view = <Widget>[];
 
     // Set the app-wide background image
@@ -84,7 +88,8 @@ class _RootPageState extends State<RootPage> {
     // Select our main view container.
     var ghostChosen = _prefs.getBool('has_ghost');
     if (ghostChosen) {
-      screen = GhostMain(_db, _ghostReleased, _ghost, _notifier, _energy);
+      screen =
+          GhostMain(_db, _ghostReleased, _ghost, _notifier, _energy, _prefs);
     } else {
       screen = GraveyardMain(_ghostChosen);
     }
@@ -145,10 +150,16 @@ class _RootPageState extends State<RootPage> {
     }
   }
 
+  _showHome() {
+    setState(() {
+      _prefs.setBool('has_ghost', false);
+      _prefs.setBool('first_launch', false);
+    });
+  }
+
   /// Initialize all needed preferences at first launch with defaults.
   _initPrefs() {
     // TODO: Delineate all the preferences we'll need.
-    _prefs.setBool('first_launch', false);
     _prefs.setBool('has_ghost', false);
     _prefs.setInt('ghost_id', 0);
     _prefs.setString('cycle_value', null);

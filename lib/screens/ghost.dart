@@ -15,6 +15,12 @@ import 'package:ghost_app/widgets/energy_well.dart';
 import 'package:ghost_app/widgets/ghost_response.dart';
 import 'package:ghost_app/widgets/progress.dart';
 import 'package:ghost_app/widgets/user_responses.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tutorial_coach_mark/animated_focus_light.dart';
+import 'package:tutorial_coach_mark/content_target.dart';
+import 'package:tutorial_coach_mark/target_focus.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+import 'package:ghost_app/models/values.dart';
 
 class GhostMain extends StatefulWidget {
   /// Called as a function when a ghost is released.
@@ -30,10 +36,11 @@ class GhostMain extends StatefulWidget {
   /// The Notifier notifications instances
   final Notifier _notifier;
 
+  final SharedPreferences _prefs;
   final Energy _energy;
 
-  GhostMain(
-      this._db, this._ghostReleased, this._ghost, this._notifier, this._energy);
+  GhostMain(this._db, this._ghostReleased, this._ghost, this._notifier,
+      this._energy, this._prefs);
 
   @override
   _GhostMainState createState() => _GhostMainState();
@@ -67,10 +74,20 @@ class _GhostMainState extends State<GhostMain> {
   /// The ghost's current response to the user
   String _curResp = "...";
 
+  List<TargetFocus> targets = List();
+  GlobalKey uiElementsKey = GlobalKey();
+  GlobalKey timerKey = GlobalKey();
+  GlobalKey ghostResponseKey = GlobalKey();
+  GlobalKey userResponseKey = GlobalKey();
+
   @override
   initState() {
     super.initState();
     _timers = Timers(widget._db);
+    initTargets();
+    if (widget._prefs.get("ghost_first_select") ?? true) {
+      WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+    }
   }
 
   @override
@@ -134,8 +151,9 @@ class _GhostMainState extends State<GhostMain> {
   @override
   Widget build(BuildContext context) {
     var view = <Widget>[];
-    view.add(
-        CycleTimer(_switchDayNightCycle, _isDayCycle, _timers, widget._energy));
+
+    view.add(CycleTimer(
+        _switchDayNightCycle, _isDayCycle, _timers, widget._energy, timerKey));
 
     if (!_isDayCycle) {
       var col = <Widget>[];
@@ -152,6 +170,7 @@ class _GhostMainState extends State<GhostMain> {
         // The ghost image
         widget._ghost.image,
         Column(
+          key: uiElementsKey,
           children: col,
           crossAxisAlignment: CrossAxisAlignment.center,
         )
@@ -163,11 +182,11 @@ class _GhostMainState extends State<GhostMain> {
       ));
 
       // The ghost's response to the user
-      view.add(GhostResponse(_curResp, _canInteract));
+      view.add(GhostResponse(_curResp, _canInteract, ghostResponseKey));
 
       // The user response buttons
       view.add(UserResponses(widget._db, widget._ghost, _canInteract,
-          _setResponse, widget._energy, _updateEnergy));
+          _setResponse, widget._energy, _updateEnergy, userResponseKey));
     }
 
     return Stack(children: <Widget>[
@@ -182,9 +201,149 @@ class _GhostMainState extends State<GhostMain> {
               color: Theme.of(context).backgroundColor.withOpacity(0.8)),
 
       // The main elements of the view
-      Column(
-          children: view,
-          mainAxisAlignment: MainAxisAlignment.center),
+      Column(children: view, mainAxisAlignment: MainAxisAlignment.center),
     ]);
+  }
+
+  void initTargets() {
+    targets.add(TargetFocus(
+        identify: "Target 1",
+        keyTarget: timerKey,
+        contents: [
+          ContentTarget(
+              align: AlignContent.bottom,
+              child: Container(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "Day/Night Cycle Timer",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 20.0),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Text(
+                        cycleDescription,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
+                  ],
+                ),
+              ))
+        ],
+        shape: ShapeLightFocus.RRect));
+    targets.add(TargetFocus(
+        identify: "Target 2",
+        keyTarget: uiElementsKey,
+        contents: [
+          ContentTarget(
+              align: AlignContent.left,
+              child: Container(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "Energy Well, Energy & Progress Bar and Candle",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 20.0),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Text(
+                        uiElementsDescription,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
+                  ],
+                ),
+              ))
+        ],
+        shape: ShapeLightFocus.RRect));
+    targets.add(TargetFocus(
+        identify: "Target 3",
+        keyTarget: ghostResponseKey,
+        contents: [
+          ContentTarget(
+              align: AlignContent.top,
+              child: Container(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "Ghost Resonses will be shown here",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 20.0),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Text(
+                        ghostResponseDescription,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
+                  ],
+                ),
+              ))
+        ],
+        shape: ShapeLightFocus.RRect));
+    targets.add(TargetFocus(
+        identify: "Target 4",
+        keyTarget: userResponseKey,
+        contents: [
+          ContentTarget(
+              align: AlignContent.top,
+              child: Container(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "Your four available responses are here",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 20.0),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Text(
+                        playerResponseDescription,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
+                  ],
+                ),
+              ))
+        ],
+        shape: ShapeLightFocus.RRect));
+  }
+
+  void showTutorial() {
+    TutorialCoachMark(context,
+        targets: targets,
+        colorShadow: Colors.black,
+        textSkip: "Skip",
+        paddingFocus: 10,
+        opacityShadow: 0.9, finish: () {
+      print("finished");
+      widget._prefs.setBool("ghost_first_select", false);
+    })
+      ..show();
+  }
+
+  void _afterLayout(_) {
+    Future.delayed(Duration(milliseconds: 100), () {
+      showTutorial();
+    });
   }
 }

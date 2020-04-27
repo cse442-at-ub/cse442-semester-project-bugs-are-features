@@ -15,10 +15,12 @@ class CycleTimer extends StatefulWidget {
   /// The Timers instance containing all timers
   final Timers _timers;
 
+  final GlobalKey _timerKey;
+
   final Energy _energy;
 
-  CycleTimer(
-      this._switchDayNightCycle, this._isDayCycle, this._timers, this._energy);
+  CycleTimer(this._switchDayNightCycle, this._isDayCycle, this._timers,
+      this._energy, this._timerKey);
 
   @override
   _CycleTimerState createState() => _CycleTimerState();
@@ -96,19 +98,12 @@ class _CycleTimerState extends State<CycleTimer> {
     String remainingTime = format(_cycle);
 
     if (widget._isDayCycle) {
-      return Text(
-          "Sunset in $remainingTime.\nPress sun to skip to night",
-          style: Theme
-              .of(context)
-              .textTheme
-              .body1
-              .copyWith(fontSize: 30), textAlign: TextAlign.center);
+      return Text("Sunset in $remainingTime.\nPress sun to skip to night",
+          style: Theme.of(context).textTheme.body1.copyWith(fontSize: 30),
+          textAlign: TextAlign.center);
     } else {
       return Text("Sun rises in $remainingTime",
-          style: Theme
-              .of(context)
-              .textTheme
-              .body1);
+          style: Theme.of(context).textTheme.body1);
     }
   }
 
@@ -117,9 +112,10 @@ class _CycleTimerState extends State<CycleTimer> {
   Widget build(BuildContext context) {
     return Container(
         alignment: Alignment.topCenter,
-//        margin: EdgeInsets.only(
-//            bottom: MediaQuery.of(context).padding.bottom + 25),
+        margin:
+            EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 25),
         child: Column(
+          key: widget._timerKey,
           mainAxisAlignment: widget._isDayCycle
               ? MainAxisAlignment.center
               : MainAxisAlignment.start,

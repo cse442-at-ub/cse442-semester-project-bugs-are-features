@@ -19,9 +19,12 @@ class UserResponses extends StatefulWidget {
 
   final Energy _energy;
 
+  final GlobalKey _userResponseKey;
+
   final VoidCallback _refresh;
+
   UserResponses(this._db, this._ghost, this._canInteract, this._setResponse,
-      this._energy, this._refresh);
+      this._energy, this._refresh, this._userResponseKey);
 
   @override
   _UserResponsesState createState() => _UserResponsesState();
@@ -151,9 +154,7 @@ class _UserResponsesState extends State<UserResponses> {
               borderRadius: new BorderRadius.only(
                   topLeft: Radius.circular(16.0),
                   topRight: Radius.circular(16.0)),
-              side: BorderSide(color: Theme
-                  .of(context)
-                  .backgroundColor)),
+              side: BorderSide(color: Theme.of(context).backgroundColor)),
           onPressed: widget._canInteract
               ? _loadingResponses
                   ? null
@@ -161,11 +162,7 @@ class _UserResponsesState extends State<UserResponses> {
               : null,
           child: Text(
             userResp,
-            style: Theme
-                .of(context)
-                .textTheme
-                .body1
-                .copyWith(fontSize: 20.0),
+            style: Theme.of(context).textTheme.body1.copyWith(fontSize: 20.0),
           ),
         ));
   }
@@ -182,11 +179,8 @@ class _UserResponsesState extends State<UserResponses> {
               borderRadius: BorderRadius.circular(32.0)),
           onPressed: null,
           child: Text("",
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .body1
-                  .copyWith(fontSize: 20.0)),
+              style:
+                  Theme.of(context).textTheme.body1.copyWith(fontSize: 20.0)),
         ));
   }
 
@@ -218,6 +212,7 @@ class _UserResponsesState extends State<UserResponses> {
     buttons.shuffle();
     // The button responses
     return GridView.count(
+        key: widget._userResponseKey,
         padding: EdgeInsets.all(10),
         childAspectRatio: 2,
         shrinkWrap: true,
