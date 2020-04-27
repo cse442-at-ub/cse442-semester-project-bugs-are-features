@@ -8,7 +8,7 @@ const Duration ONE_SECOND = Duration(seconds: 1);
 const int DAY_NIGHT_LENGTH = 7200;
 
 /// Length of day/night cycle in dev: 30 seconds
-const int DAY_NIGHT_LENGTH_DEV = 30;
+const int DAY_NIGHT_LENGTH_DEV = 3000;
 
 /// Length of the energy well timer
 const int ENERGY_WELL_LENGTH = DAY_NIGHT_LENGTH ~/ 2;

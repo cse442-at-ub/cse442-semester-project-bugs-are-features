@@ -19,8 +19,10 @@ class UserResponses extends StatefulWidget {
 
   final VoidCallback _updateEnergyBar;
 
+  final GlobalKey _userResponseKey;
+
   UserResponses(this._db, this._ghost, this._canInteract, this._setResponse,
-      this._updateEnergyBar);
+      this._updateEnergyBar, this._userResponseKey);
 
   @override
   _UserResponsesState createState() => _UserResponsesState();
@@ -202,6 +204,7 @@ class _UserResponsesState extends State<UserResponses> {
     buttons.shuffle();
     // The button responses
     return GridView.count(
+        key: widget._userResponseKey,
         padding: EdgeInsets.all(20),
         childAspectRatio: 2,
         shrinkWrap: true,

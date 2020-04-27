@@ -21,10 +21,7 @@ class EnergyWell extends StatefulWidget {
   /// The Timers model containing all timers
   final Timers _timers;
 
-  final GlobalKey _key;
-
-  EnergyWell(this._canInteract, this._ghost, this._updateEnergy, this._timers,
-      this._key);
+  EnergyWell(this._canInteract, this._ghost, this._updateEnergy, this._timers);
 
   @override
   _EnergyWellState createState() => _EnergyWellState();
@@ -130,7 +127,6 @@ class _EnergyWellState extends State<EnergyWell> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        key: widget._key,
         alignment: Alignment.centerRight,
         margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 60),
         child: Column(

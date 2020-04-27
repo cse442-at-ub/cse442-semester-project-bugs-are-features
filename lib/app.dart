@@ -66,8 +66,7 @@ class _RootPageState extends State<RootPage> {
       return SplashScreen();
     }
 
-    bool firstLaunch = _prefs.getBool('first_launch') ?? true;
-    if (firstLaunch) {
+    if (_prefs.getBool('first_launch') ?? true) {
       return Tutorial(_showHome);
     }
     var view = <Widget>[];
@@ -85,7 +84,7 @@ class _RootPageState extends State<RootPage> {
     // Select our main view container.
     var ghostChosen = _prefs.getBool('has_ghost');
     if (ghostChosen) {
-      screen = GhostMain(_db, _ghostReleased, _ghost, _notifier);
+      screen = GhostMain(_db, _ghostReleased, _ghost, _notifier, _prefs);
     } else {
       screen = GraveyardMain(_ghostChosen);
     }

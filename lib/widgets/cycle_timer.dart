@@ -15,7 +15,10 @@ class CycleTimer extends StatefulWidget {
   /// The Timers instance containing all timers
   final Timers _timers;
 
-  CycleTimer(this._switchDayNightCycle, this._isDayCycle, this._timers);
+  final GlobalKey _timerKey;
+
+  CycleTimer(this._switchDayNightCycle, this._isDayCycle, this._timers,
+      this._timerKey);
 
   @override
   _CycleTimerState createState() => _CycleTimerState();
@@ -40,8 +43,8 @@ class _CycleTimerState extends State<CycleTimer> {
     }());
 
     _cycle = Duration(seconds: _cycleLength);
-    widget._timers.dayNightTimer = Timer.periodic(
-        Game.ONE_SECOND, _switchCycle);
+    widget._timers.dayNightTimer =
+        Timer.periodic(Game.ONE_SECOND, _switchCycle);
   }
 
   /// The image widget to be displayed on the UI
@@ -110,19 +113,18 @@ class _CycleTimerState extends State<CycleTimer> {
   Widget build(BuildContext context) {
     return Container(
         alignment: Alignment.topCenter,
-        margin: EdgeInsets.only(
-            bottom: MediaQuery.of(context).padding.bottom + 25),
+        margin:
+            EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 25),
         child: Column(
+          key: widget._timerKey,
           mainAxisAlignment: widget._isDayCycle
-                  ? MainAxisAlignment.center
-                  : MainAxisAlignment.start,
+              ? MainAxisAlignment.center
+              : MainAxisAlignment.start,
           children: <Widget>[
             GestureDetector(
-                onTap: widget._isDayCycle ? _skipDay : null,
-                child: _getIcon()),
+                onTap: widget._isDayCycle ? _skipDay : null, child: _getIcon()),
             _makeText()
           ],
-        )
-    );
+        ));
   }
 }

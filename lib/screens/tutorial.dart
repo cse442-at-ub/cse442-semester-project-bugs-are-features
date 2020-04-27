@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ghost_app/models/values.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 class Tutorial extends StatefulWidget {
@@ -27,15 +28,25 @@ class _TutorialState extends State<Tutorial> {
         pages: [
           PageViewModel(
             title: "Cool App Name here",
-            body:
-                "Welcome to our amazing app which lets you talk to ghost and other fun stuff!",
+            body: welcomeIntro,
+            image: _buildImage('assets/misc/Candle.png'),
+            decoration: pageDecoration,
+          ),
+          PageViewModel(
+            title: "The Grim Reaper controls the game options",
+            body: grimReaperIntro,
+            image: _buildImage('assets/misc/GrimReaper.png'),
+            decoration: pageDecoration,
+          ),
+          PageViewModel(
             image: _buildImage('assets/ghosts/ghost1.png'),
+            title: "Select a Graveyard to interact with that ghost",
+            body: graveIntro,
             decoration: pageDecoration,
           ),
           PageViewModel(
             title: "Your Ghost awaits You...",
-            body: "Right after this you will enter a graveyard where" +
-                " you would be able to choose your ghost and continue your adventure!",
+            body: graveyardIntro,
             image: _buildImage('assets/misc/Graveyard.png'),
             decoration: pageDecoration,
           ),
