@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:ghost_app/db/db.dart';
 import 'package:ghost_app/models/notification.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'devsettings.dart';
 
@@ -36,10 +35,11 @@ class DevButton extends StatelessWidget {
           textColor: Theme.of(context).textTheme.body1.color,
           child: Text(
             "Dev Settings",
-            style: TextStyle(
-              color: Colors.red,
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme
+                .of(context)
+                .textTheme
+                .body1
+                .copyWith(color: Colors.red, fontWeight: FontWeight.bold),
           ),
           onPressed: () {
             showGeneralDialog(

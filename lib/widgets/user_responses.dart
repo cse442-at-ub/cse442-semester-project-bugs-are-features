@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ghost_app/db/db.dart';
-//import 'package:ghost_app/screens/ghost.dart';
 import 'package:ghost_app/db/constants.dart' as Constants;
+import 'package:ghost_app/db/db.dart';
+import 'package:ghost_app/models/energy.dart';
 import 'package:ghost_app/models/ghost_model.dart';
 
 /// The Candle class that sets the ghost away to be away, or not
@@ -17,12 +17,14 @@ class UserResponses extends StatefulWidget {
 
   final ValueSetter<String> _setResponse;
 
-  final VoidCallback _updateEnergyBar;
+  final Energy _energy;
 
   final GlobalKey _userResponseKey;
 
+  final VoidCallback _refresh;
+
   UserResponses(this._db, this._ghost, this._canInteract, this._setResponse,
-      this._updateEnergyBar, this._userResponseKey);
+      this._energy, this._refresh, this._userResponseKey);
 
   @override
   _UserResponsesState createState() => _UserResponsesState();
@@ -105,8 +107,9 @@ class _UserResponsesState extends State<UserResponses> {
     bool didLevel = await widget._ghost.addScore(points);
     if (!didLevel) {
       // If Chose wrong
+      this.widget._energy.badResponse();
       debugPrint("Called UPDATE ENERGY BAR");
-      widget._updateEnergyBar();
+      widget._refresh();
     }
     if (didLevel) {
       _getLevelingInteraction(1);
@@ -147,8 +150,11 @@ class _UserResponsesState extends State<UserResponses> {
           textColor: Theme.of(context).textTheme.body1.color,
           color: Theme.of(context).buttonColor,
           splashColor: Theme.of(context).accentColor.withOpacity(0.5),
-          shape: ContinuousRectangleBorder(
-              borderRadius: BorderRadius.circular(32.0)),
+          shape: BeveledRectangleBorder(
+              borderRadius: new BorderRadius.only(
+                  topLeft: Radius.circular(16.0),
+                  topRight: Radius.circular(16.0)),
+              side: BorderSide(color: Theme.of(context).backgroundColor)),
           onPressed: widget._canInteract
               ? _loadingResponses
                   ? null
@@ -156,7 +162,7 @@ class _UserResponsesState extends State<UserResponses> {
               : null,
           child: Text(
             userResp,
-            style: TextStyle(fontSize: 20.0),
+            style: Theme.of(context).textTheme.body1.copyWith(fontSize: 20.0),
           ),
         ));
   }
@@ -172,7 +178,9 @@ class _UserResponsesState extends State<UserResponses> {
           shape: ContinuousRectangleBorder(
               borderRadius: BorderRadius.circular(32.0)),
           onPressed: null,
-          child: Text("", style: TextStyle(fontSize: 20.0)),
+          child: Text("",
+              style:
+                  Theme.of(context).textTheme.body1.copyWith(fontSize: 20.0)),
         ));
   }
 
@@ -205,7 +213,7 @@ class _UserResponsesState extends State<UserResponses> {
     // The button responses
     return GridView.count(
         key: widget._userResponseKey,
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.all(10),
         childAspectRatio: 2,
         shrinkWrap: true,
         crossAxisCount: 2,
