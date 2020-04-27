@@ -20,9 +20,18 @@ class DbDebug {
     res.forEach((row) => print(row));
   }
 
-  printUserRespTable() async {
+  /// Prints the Game State table.
+  printGameTable() async {
     List<Map> res;
-    res = await _database.pool.rawQuery("SELECT * FROM ${Constants.GHOST_TABLE}");
+    res = await _database.pool.rawQuery("SELECT * FROM ${Constants.GAME_TABLE}");
     res.forEach((row) => print(row));
+  }
+
+  /// Prints the current amount of energy stored in the db
+  printCurrentEnergy() async {
+    var row = await _database.getCurrentEnergy();
+    print(row);
+    int energy = row[0]['${Constants.GAME_ENERGY}'];
+    print("Current Energy: $energy");
   }
 }

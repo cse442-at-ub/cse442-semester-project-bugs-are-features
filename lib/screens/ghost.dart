@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ghost_app/db/db.dart';
 import 'package:ghost_app/models/energy.dart' as Energy;
-import 'package:ghost_app/models/ghostModel.dart';
+import 'package:ghost_app/models/ghost_model.dart';
 import 'package:ghost_app/models/notification.dart';
+import 'package:ghost_app/models/timers.dart';
 import 'package:ghost_app/widgets/candle.dart';
 import 'package:ghost_app/widgets/cycle_timer.dart';
-import 'package:ghost_app/widgets/energy_bar.dart';
+import 'package:ghost_app/widgets/energy_well.dart';
 import 'package:ghost_app/widgets/ghost_response.dart';
 import 'package:ghost_app/widgets/progress.dart';
 import 'package:ghost_app/widgets/user_responses.dart';
@@ -50,12 +51,32 @@ class GhostMain extends StatefulWidget {
 }
 
 class _GhostMainState extends State<GhostMain> {
+  /// The Timers instance
+  Timers _timers;
+
+  /// Whether or not the user can interact with the ghost
   bool _canInteract = true;
+
+  /// Whether or not the current day/night cycle is day
   bool _isDayCycle = false;
-  bool _stopTimer = false;
+
+  /// The ghost's current response to the user
   String _curResp = "";
-  // The current energy
+
+  /// The current energy
   int _energy = Energy.energyInit;
+
+  @override
+  initState() {
+    super.initState();
+    _timers = Timers(widget._db);
+  }
+
+  @override
+  dispose() {
+    _timers.storeTimers();
+    super.dispose();
+  }
 
   ///Add energy widget
   void _setInteract(bool value) {
@@ -77,53 +98,53 @@ class _GhostMainState extends State<GhostMain> {
     });
   }
 
+  /// Sets the ghost's response to the user
   void _setResponse(String resp) async {
     setState(() {
       _curResp = resp;
     });
   }
 
-  @override
-  initState() {
-    super.initState();
-  }
-
-  void _setDayCycle(bool value) {
+  /// Sets whether it's day or not
+  void _switchDayNightCycle() {
     setState(() {
-      _isDayCycle = value;
+      _energy = Energy.energy;
+      _isDayCycle = !_isDayCycle;
+      _curResp = "";
+      _canInteract = true;
     });
+
+    if (_isDayCycle) {
+      widget._notifier.dayNotification();
+      // Cancel all non-day/night timers
+      _timers.cancelTimers();
+    } else {
+      widget._notifier.nightNotification();
+    }
   }
 
+  /// Update's the user's energy
   void _updateEnergy() {
     setState(() {
       _energy = Energy.energy;
     });
   }
 
-/*  void _cancelTimer() {
-    setState(() {
-      _stopTimer = true;
-    });
-  }*/
-
   @override
   Widget build(BuildContext context) {
     var view = <Widget>[];
 
-    //view.add(EnergyBar(widget._ghostReleased, widget._ghost)); //Energy bar
-    view.add(
-        CycleTimer(_setDayCycle, _stopTimer, _updateEnergy, widget._notifier));
+    view.add(CycleTimer(_switchDayNightCycle, _isDayCycle, _timers));
 
     if (!_isDayCycle) {
       var col = <Widget>[];
 
       // The widget for Energy donation.
-      col.add(EnergyBar(
-          widget._ghostReleased, widget._ghost, _energy, _updateEnergy));
+      col.add(EnergyWell(_canInteract, widget._ghost, _updateEnergy, _timers));
       // The current progress + health
       col.add(Progress(widget._ghost.progress, widget._ghost.level));
       // The candle to be lit, or not
-      col.add(Candle(widget._ghost, _setInteract));
+      col.add(Candle(widget._ghost, _setInteract, _timers));
       var row = <Widget>[
         widget._ghost.image,
         Column(

@@ -133,6 +133,66 @@ class DB {
     );
   }
 
+  /// Gets the user's current amount of energy
+  getCurrentEnergy() async {
+    return await _pool.query(Constants.GAME_TABLE,
+        columns: [Constants.GAME_ENERGY],
+        where: '${Constants.GAME_TABLE_ID} = ?',
+        whereArgs: [1]
+    );
+  }
+
+  setCurrentEnergy(int energy) async {
+    if (energy < 0 || energy > 100) {
+      throw ArgumentError('The `energy` passed is likely invalid.');
+    }
+
+    Map<String, dynamic> row = {
+      Constants.GAME_ENERGY: energy,
+    };
+
+    dev.log("Saving user's energy: $energy", name: "db.db");
+    // Return the ID that was updated.
+    int cols;
+    await _pool.update(
+        Constants.GAME_TABLE,
+        row,
+        where: '${Constants.GAME_TABLE_ID} = ?',
+        whereArgs: [1]
+    ).then((updatedCols) => cols = updatedCols);
+
+    return cols;
+  }
+
+  getStoredTimers() async {
+    return await _pool.query(Constants.GAME_TABLE,
+        columns: [
+          Constants.GAME_CYCLE_TIMER,
+          Constants.GAME_ENERGY_TIMER,
+          Constants.GAME_CANDLE_TIMER,
+        ],
+        where: '${Constants.GAME_TABLE_ID} = ?',
+        whereArgs: [1]
+    );
+  }
+
+  storeTimers(int cycle, int energy, int candle) async {
+    Map<String, dynamic> row = {
+      Constants.GAME_CYCLE_TIMER: cycle,
+      Constants.GAME_ENERGY_TIMER: energy,
+      Constants.GAME_CANDLE_TIMER: candle,
+    };
+
+    dev.log("Storing timer values: Day/Night: $cycle, "
+        "Energy: $energy, Candle: $candle", name: "db.db");
+    await _pool.update(
+        Constants.GAME_TABLE,
+        row,
+        where: '${Constants.GAME_TABLE_ID} = ?',
+        whereArgs: [1]
+    );
+  }
+
   /// Closes the database connection. Should only be called when app is killed.
   close() async {
     dev.log("Closed DB Connection", name: "db.db");
@@ -152,7 +212,20 @@ class DB {
   /// Creates the database tables and initializes the data.
   _seed(Database db, int version) async {
     dev.log("Seeding DB", name: "db.db");
-    await db.execute(
+    var batch = db.batch();
+
+    // Create Game State table
+    batch.execute(
+        "CREATE TABLE ${Constants.GAME_TABLE} ("
+            "${Constants.GAME_TABLE_ID} INTEGER PRIMARY KEY AUTOINCREMENT,"
+            "${Constants.GAME_ENERGY} INTEGER DEFAULT 100,"
+            "${Constants.GAME_ENERGY_TIMER} INTEGER DEFAULT 0,"
+            "${Constants.GAME_CYCLE_TIMER} INTEGER DEFAULT 0,"
+            "${Constants.GAME_CANDLE_TIMER} INTEGER DEFAULT 0"
+            ")"
+    );
+    // Create ghost state table
+    batch.execute(
         "CREATE TABLE ${Constants.GHOST_TABLE} ("
           "${Constants.GHOST_ID} INTEGER PRIMARY KEY AUTOINCREMENT,"
           "${Constants.GHOST_TEMPERAMENT} INTEGER DEFAULT 1,"
@@ -163,8 +236,8 @@ class DB {
           "${Constants.GHOST_CANDLE_LIT} BOOLEAN DEFAULT false"
         ")"
     );
-    
-    await db.execute(
+    // Create standard interactions table
+    batch.execute(
         "CREATE TABLE ${Constants.DEFAULT_RESP_TABLE} ("
           "${Constants.DEFAULT_RESP_ID} INTEGER PRIMARY KEY AUTOINCREMENT,"
           "${Constants.DEFAULT_RESP_GHOST_ID} INTEGER NOT NULL,"
@@ -174,8 +247,8 @@ class DB {
           "${Constants.DEFAULT_RESP_POINTS} INTEGER NOT NULL"
         ")"
     );
-
-    await db.execute(
+    // Create LEVEL-UP ghost response table
+    batch.execute(
         "CREATE TABLE ${Constants.GHOST_RESP_TABLE} ("
             "${Constants.GHOST_RESP_ID} INTEGER PRIMARY KEY AUTOINCREMENT,"
             "${Constants.GHOST_RESP_GHOST_ID} INTEGER NOT NULL,"
@@ -185,8 +258,8 @@ class DB {
             "${Constants.GHOST_RESP_TEXT} STRING NOT NULL"
             ")"
     );
-
-    await db.execute(
+    // Create LEVEL-UP user response table
+    batch.execute(
         "CREATE TABLE ${Constants.USER_RESP_TABLE} ("
           "${Constants.USER_RESP_ID} INTEGER PRIMARY KEY AUTOINCREMENT,"
           "${Constants.USER_RESP_GHOST_ID} INTEGER NOT NULL,"
@@ -199,9 +272,14 @@ class DB {
           "${Constants.USER_RESP_TEXT} STRING NOT NULL"
         ")"
     );
+    await batch.commit(noResult: true);
+
+    Map<String, dynamic> game = { Constants.GAME_ENERGY: 100};
+    dev.log("Inserting single game state row", name:"db.db");
+    await db.insert(Constants.GAME_TABLE, game);
 
     // Insert a default row for each ghost
-    for (var i = 0; i < 9; i++) {
+    for (var i = 0; i < 3; i++) {
       Map<String, dynamic> row = { Constants.GHOST_DIFFICULTY: i ~/ 3 };
       dev.log("Inserted ghost id ${i + 1}", name: "db.db");
       await db.insert(Constants.GHOST_TABLE, row);
@@ -246,4 +324,3 @@ class DB {
     Ghost1.seed(db);
   }
 }
-
