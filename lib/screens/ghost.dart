@@ -1,5 +1,6 @@
 import 'dart:developer' as dev;
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -64,7 +65,7 @@ class _GhostMainState extends State<GhostMain> {
   bool _isDayCycle = false;
 
   /// The ghost's current response to the user
-  String _curResp = "";
+  String _curResp = "...";
 
   @override
   initState() {
@@ -148,17 +149,19 @@ class _GhostMainState extends State<GhostMain> {
       // The candle to be lit, or not
       col.add(Candle(widget._ghost, _setInteract, _timers, widget._energy));
       var row = <Widget>[
+        // The ghost image
         widget._ghost.image,
         Column(
           children: col,
           crossAxisAlignment: CrossAxisAlignment.center,
         )
       ];
-      // The ghost image
+
       view.add(Row(
         children: row,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       ));
+
       // The ghost's response to the user
       view.add(GhostResponse(_curResp, _canInteract));
 
@@ -181,8 +184,7 @@ class _GhostMainState extends State<GhostMain> {
       // The main elements of the view
       Column(
           children: view,
-          mainAxisAlignment:
-              _isDayCycle ? MainAxisAlignment.center : MainAxisAlignment.end),
+          mainAxisAlignment: MainAxisAlignment.center),
     ]);
   }
 }

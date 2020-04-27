@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ghost_app/db/db.dart';
-//import 'package:ghost_app/screens/ghost.dart';
 import 'package:ghost_app/db/constants.dart' as Constants;
+import 'package:ghost_app/db/db.dart';
 import 'package:ghost_app/models/energy.dart';
 import 'package:ghost_app/models/ghost_model.dart';
 
@@ -148,8 +147,13 @@ class _UserResponsesState extends State<UserResponses> {
           textColor: Theme.of(context).textTheme.body1.color,
           color: Theme.of(context).buttonColor,
           splashColor: Theme.of(context).accentColor.withOpacity(0.5),
-          shape: ContinuousRectangleBorder(
-              borderRadius: BorderRadius.circular(32.0)),
+          shape: BeveledRectangleBorder(
+              borderRadius: new BorderRadius.only(
+                  topLeft: Radius.circular(16.0),
+                  topRight: Radius.circular(16.0)),
+              side: BorderSide(color: Theme
+                  .of(context)
+                  .backgroundColor)),
           onPressed: widget._canInteract
               ? _loadingResponses
                   ? null
@@ -157,7 +161,11 @@ class _UserResponsesState extends State<UserResponses> {
               : null,
           child: Text(
             userResp,
-            style: TextStyle(fontSize: 20.0),
+            style: Theme
+                .of(context)
+                .textTheme
+                .body1
+                .copyWith(fontSize: 20.0),
           ),
         ));
   }
@@ -173,7 +181,12 @@ class _UserResponsesState extends State<UserResponses> {
           shape: ContinuousRectangleBorder(
               borderRadius: BorderRadius.circular(32.0)),
           onPressed: null,
-          child: Text("", style: TextStyle(fontSize: 20.0)),
+          child: Text("",
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .body1
+                  .copyWith(fontSize: 20.0)),
         ));
   }
 
@@ -205,7 +218,7 @@ class _UserResponsesState extends State<UserResponses> {
     buttons.shuffle();
     // The button responses
     return GridView.count(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.all(10),
         childAspectRatio: 2,
         shrinkWrap: true,
         crossAxisCount: 2,

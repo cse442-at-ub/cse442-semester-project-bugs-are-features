@@ -18,7 +18,7 @@ class GhostResponse extends StatelessWidget {
           _canInteract ? _curResp : "The ghost doesn't like the candle",
           style: Theme.of(context).textTheme.body1.copyWith(
             fontSize: 20,
-            fontWeight: FontWeight.bold,
+//            fontWeight: FontWeight.bold,
             fontStyle: _canInteract ? FontStyle.normal : FontStyle.italic,
           ),
           textAlign: TextAlign.center,

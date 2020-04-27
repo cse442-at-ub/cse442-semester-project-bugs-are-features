@@ -1,9 +1,7 @@
-import 'dart:developer' as dev;
-
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ghost_app/db/db.dart';
 import 'package:ghost_app/models/notification.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// The Dev Settings modal that fades in when the Dev Settings button is pressed.
 ///
@@ -70,7 +68,11 @@ class DevSettings extends StatelessWidget {
                     _setState(pressAttention);
                     _showAlertOnRelease(context);
                   },
-                  child: Text("Release ghost"),
+                  child: Text("Release ghost",
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .body1),
                 ),
               ),
 
@@ -81,7 +83,11 @@ class DevSettings extends StatelessWidget {
                 onPressed: () {
                   _database.debug.printGhostTable();
                 },
-                child: Text("Print `ghost` table."),
+                child: Text("Print `ghost` table.",
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .body1),
               ),
 
               // Print Game State Table
@@ -91,7 +97,11 @@ class DevSettings extends StatelessWidget {
                 onPressed: () {
                   _database.debug.printGameTable();
                 },
-                child: Text("Print game state table."),
+                child: Text("Print game state table.",
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .body1),
               ),
 
               // Reset Database
@@ -102,21 +112,33 @@ class DevSettings extends StatelessWidget {
                   _ghostReleased();
                   _database.delete();
                 },
-                child: Text("!! Reset database !!"),
+                child: Text("!! Reset database !!",
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .body1),
               ),
 
               FlatButton(
                 color: Theme.of(context).buttonColor,
                 textColor: Theme.of(context).textTheme.body1.color,
                 onPressed: () => _notifier.testNotification(),
-                child: Text("Show Notification"),
+                child: Text("Show Notification",
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .body1),
               ),
 
               FlatButton(
                 color: Theme.of(context).buttonColor,
                 textColor: Theme.of(context).textTheme.body1.color,
                 onPressed: () => null,
-                child: Text("Stop Day/Night Cycle"),
+                child: Text("Stop Day/Night Cycle",
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .body1),
               )
             ]));
   }
@@ -125,18 +147,26 @@ class DevSettings extends StatelessWidget {
   void _showAlertOnRelease(BuildContext context) {
     // set up the buttons
     Widget noButton = FlatButton(
-      color: Colors.deepPurple,
-      textColor: Colors.white,
-      child: Text("No, I miss the ghost."),
+      color: Theme
+          .of(context)
+          .buttonColor,
+      child: Text("No, I miss the ghost.",
+          style: Theme
+              .of(context)
+              .textTheme
+              .body1),
       onPressed: () {
         _closeDialog(context);
       },
     );
 
     Widget yesButton = FlatButton(
-      color: Colors.deepPurple,
-      textColor: Colors.white,
-      child: Text("Yes, Release the ghost"),
+      color: Colors.red,
+      child: Text("Yes, Release the ghost",
+          style: Theme
+              .of(context)
+              .textTheme
+              .body1),
       onPressed: () {
         _ghostReleased();
         _closeDialog(context);
@@ -145,9 +175,19 @@ class DevSettings extends StatelessWidget {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("AlertDialog"),
-      backgroundColor: Colors.purple,
-      content: Text("Are you sure you wanna release the ghost?"),
+      title: Text("AlertDialog",
+          style: Theme
+              .of(context)
+              .textTheme
+              .body1),
+      backgroundColor: Theme
+          .of(context)
+          .backgroundColor,
+      content: Text("Are you sure you wanna release the ghost?",
+          style: Theme
+              .of(context)
+              .textTheme
+              .body1),
       actions: [
         noButton,
         yesButton,

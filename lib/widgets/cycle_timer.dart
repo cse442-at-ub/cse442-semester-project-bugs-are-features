@@ -96,10 +96,19 @@ class _CycleTimerState extends State<CycleTimer> {
     String remainingTime = format(_cycle);
 
     if (widget._isDayCycle) {
-      return Text("Sunset in $remainingTime.\nPress sun to skip to night",
-          style: TextStyle(fontSize: 30), textAlign: TextAlign.center);
+      return Text(
+          "Sunset in $remainingTime.\nPress sun to skip to night",
+          style: Theme
+              .of(context)
+              .textTheme
+              .body1
+              .copyWith(fontSize: 30), textAlign: TextAlign.center);
     } else {
-      return Text("Sun rises in $remainingTime");
+      return Text("Sun rises in $remainingTime",
+          style: Theme
+              .of(context)
+              .textTheme
+              .body1);
     }
   }
 
@@ -108,8 +117,8 @@ class _CycleTimerState extends State<CycleTimer> {
   Widget build(BuildContext context) {
     return Container(
         alignment: Alignment.topCenter,
-        margin:
-            EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 25),
+//        margin: EdgeInsets.only(
+//            bottom: MediaQuery.of(context).padding.bottom + 25),
         child: Column(
           mainAxisAlignment: widget._isDayCycle
               ? MainAxisAlignment.center
