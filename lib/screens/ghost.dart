@@ -106,7 +106,6 @@ class _GhostMainState extends State<GhostMain> {
   /// Sets whether it's day or not
   void _switchDayNightCycle() {
     setState(() {
-      //_energy = _energy.energy;        UPDATESDDDDD
       _isDayCycle = !_isDayCycle;
       _curResp = "";
       _canInteract = true;

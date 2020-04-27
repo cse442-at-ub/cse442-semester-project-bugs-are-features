@@ -72,8 +72,8 @@ class _CandleState extends State<Candle> {
   /// Lights the candle, rendering the ghost inaccessible
   _lightCandle() async {
     await widget._ghost.setCandleLit(true);
-    widget._energy
-        .setEnergyCandleLit(true); //Increment energy by 5 on lighting candle
+    // Increment energy by 5 on lighting candle
+    widget._energy.setEnergyCandleLit(true);
     setState(() {
       _isLit = true;
     });

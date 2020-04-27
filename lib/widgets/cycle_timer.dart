@@ -70,7 +70,6 @@ class _CycleTimerState extends State<CycleTimer> {
     setState(() {
       if (_cycle == Duration.zero) {
         widget._switchDayNightCycle();
-        // TODO: Update with class setter
         if (widget._isDayCycle) {
           widget._energy.energy = 100;
         }
@@ -83,11 +82,7 @@ class _CycleTimerState extends State<CycleTimer> {
 
   void _skipDay() {
     // Add only 50 energy for skipping day cycle
-    // TODO: Update with class setter
     widget._energy.energy += 50;
-    if (widget._energy.energy > 100) {
-      widget._energy.energy = 100;
-    }
     widget._switchDayNightCycle();
 
     setState(() {
