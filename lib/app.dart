@@ -3,7 +3,7 @@ import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
 import 'package:ghost_app/db/db.dart';
-import 'package:ghost_app/models/ghostModel.dart';
+import 'package:ghost_app/models/ghost_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'models/notification.dart';
@@ -97,6 +97,7 @@ class _RootPageState extends State<RootPage> {
     return SafeArea(child: Stack(children: view));
   }
 
+  /// Sets the current ghost via id
   _setGhost(int gid) async {
     _ghost = GhostModel(gid, _db);
     await _ghost.init();

@@ -6,11 +6,12 @@ bool donateEnergy;
 
 ///Increases energy by 5 when the candle is lit
 void setEnergyCandleLit(bool isLit) {
-  if (isLit && ((energyInit + 5) <= 100)) {
+  if (((energyInit + 5) <= 100)) {
     energyInit += 5;
     debugPrint("Candle lit: Energy set to $energyInit");
+  } else {
+    debugPrint("Donation Aborted. Energy < 40");
   }
-  debugPrint("Donation Aborted. Energy < 40");
 }
 
 void resetEnergy() {

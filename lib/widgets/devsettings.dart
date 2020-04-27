@@ -1,3 +1,5 @@
+import 'dart:developer' as dev;
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ghost_app/db/db.dart';
@@ -18,13 +20,14 @@ class DevSettings extends StatelessWidget {
   /// Called as a function when a ghost is released.
   final VoidCallback _ghostReleased;
 
+  /// The Notifier instance
   final Notifier _notifier;
 
   DevSettings(
-    this._prefs,
-    this._ghostReleased,
-    this._database,
-    this._notifier,
+      this._prefs,
+      this._ghostReleased,
+      this._database,
+      this._notifier,
   );
 
   @override
@@ -34,7 +37,7 @@ class DevSettings extends StatelessWidget {
 
     return Container(
         constraints: BoxConstraints(
-            maxHeight: 300.0,
+            maxHeight: 350.0,
             maxWidth: 250.0,
             minWidth: 250.0,
             minHeight: 150.0),
@@ -79,6 +82,16 @@ class DevSettings extends StatelessWidget {
                   _database.debug.printGhostTable();
                 },
                 child: Text("Print `ghost` table."),
+              ),
+
+              // Print Game State Table
+              FlatButton(
+                color: Theme.of(context).buttonColor,
+                textColor: Theme.of(context).textTheme.body1.color,
+                onPressed: () {
+                  _database.debug.printGameTable();
+                },
+                child: Text("Print game state table."),
               ),
 
               // Reset Database
