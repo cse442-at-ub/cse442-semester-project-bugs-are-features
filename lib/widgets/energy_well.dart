@@ -21,7 +21,10 @@ class EnergyWell extends StatefulWidget {
   /// The Timers model containing all timers
   final Timers _timers;
 
-  EnergyWell(this._canInteract, this._ghost, this._updateEnergy, this._timers);
+  final GlobalKey _key;
+
+  EnergyWell(this._canInteract, this._ghost, this._updateEnergy, this._timers,
+      this._key);
 
   @override
   _EnergyWellState createState() => _EnergyWellState();
@@ -38,8 +41,8 @@ class _EnergyWellState extends State<EnergyWell> {
   initState() {
     super.initState();
 
-    if (widget._timers.energyWellTimer != null
-        && widget._timers.energyWellTimer.isActive) {
+    if (widget._timers.energyWellTimer != null &&
+        widget._timers.energyWellTimer.isActive) {
       _active = true;
       // TODO: Get time left stored in db
     } else {
@@ -127,6 +130,7 @@ class _EnergyWellState extends State<EnergyWell> {
   @override
   Widget build(BuildContext context) {
     return Container(
+        key: widget._key,
         alignment: Alignment.centerRight,
         margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 60),
         child: Column(
@@ -134,10 +138,8 @@ class _EnergyWellState extends State<EnergyWell> {
           children: <Widget>[
             GestureDetector(
                 onTap: _active && widget._canInteract ? _donateEnergy : null,
-                child: _loadImage()
-            ),
+                child: _loadImage()),
           ],
-        )
-    );
+        ));
   }
 }

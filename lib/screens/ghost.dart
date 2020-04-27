@@ -14,6 +14,10 @@ import 'package:ghost_app/widgets/energy_well.dart';
 import 'package:ghost_app/widgets/ghost_response.dart';
 import 'package:ghost_app/widgets/progress.dart';
 import 'package:ghost_app/widgets/user_responses.dart';
+import 'package:tutorial_coach_mark/animated_focus_light.dart';
+import 'package:tutorial_coach_mark/content_target.dart';
+import 'package:tutorial_coach_mark/target_focus.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class GhostMain extends StatefulWidget {
   /// Called as a function when a ghost is released.
@@ -66,10 +70,15 @@ class _GhostMainState extends State<GhostMain> {
   /// The current energy
   int _energy = Energy.energyInit;
 
+  List<TargetFocus> targets = List();
+  GlobalKey energyWellKey = GlobalKey();
+
   @override
   initState() {
     super.initState();
     _timers = Timers(widget._db);
+    initTargets();
+    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
   }
 
   @override
@@ -140,7 +149,8 @@ class _GhostMainState extends State<GhostMain> {
       var col = <Widget>[];
 
       // The widget for Energy donation.
-      col.add(EnergyWell(_canInteract, widget._ghost, _updateEnergy, _timers));
+      col.add(EnergyWell(
+          _canInteract, widget._ghost, _updateEnergy, _timers, energyWellKey));
       // The current progress + health
       col.add(Progress(widget._ghost.progress, widget._ghost.level));
       // The candle to be lit, or not
@@ -182,5 +192,60 @@ class _GhostMainState extends State<GhostMain> {
           mainAxisAlignment:
               _isDayCycle ? MainAxisAlignment.center : MainAxisAlignment.end),
     ]);
+  }
+
+  void initTargets() {
+    targets.add(TargetFocus(
+        identify: "Target 1",
+        keyTarget: energyWellKey,
+        contents: [
+          ContentTarget(
+              align: AlignContent.bottom,
+              child: Container(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "Titulo lorem ipsum",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 20.0),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Text(
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
+                  ],
+                ),
+              ))
+        ],
+        shape: ShapeLightFocus.Circle));
+  }
+
+  void showTutorial() {
+    TutorialCoachMark(context,
+        targets: targets,
+        colorShadow: Colors.red,
+        textSkip: "Skip",
+        paddingFocus: 10,
+        opacityShadow: 0.8, finish: () {
+      print("finish");
+    }, clickTarget: (target) {
+      print("target");
+    }, clickSkip: () {
+      print("skip");
+    })
+      ..show();
+  }
+
+  void _afterLayout(_) {
+    Future.delayed(Duration(milliseconds: 100), () {
+      showTutorial();
+    });
   }
 }
