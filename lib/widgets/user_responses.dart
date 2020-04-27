@@ -144,8 +144,13 @@ class _UserResponsesState extends State<UserResponses> {
           textColor: Theme.of(context).textTheme.body1.color,
           color: Theme.of(context).buttonColor,
           splashColor: Theme.of(context).accentColor.withOpacity(0.5),
-          shape: ContinuousRectangleBorder(
-              borderRadius: BorderRadius.circular(32.0)),
+          shape: BeveledRectangleBorder(
+              borderRadius: new BorderRadius.only(
+                  topLeft: Radius.circular(16.0),
+                  topRight: Radius.circular(16.0)),
+              side: BorderSide(color: Theme
+                  .of(context)
+                  .backgroundColor)),
           onPressed: widget._canInteract
               ? _loadingResponses
                   ? null
