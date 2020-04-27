@@ -215,7 +215,7 @@ class _UserResponsesState extends State<UserResponses> {
     buttons.shuffle();
     // The button responses
     return GridView.count(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.all(10),
         childAspectRatio: 2,
         shrinkWrap: true,
         crossAxisCount: 2,

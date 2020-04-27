@@ -119,8 +119,8 @@ class _CycleTimerState extends State<CycleTimer> {
   Widget build(BuildContext context) {
     return Container(
         alignment: Alignment.topCenter,
-        margin: EdgeInsets.only(
-            bottom: MediaQuery.of(context).padding.bottom + 25),
+//        margin: EdgeInsets.only(
+//            bottom: MediaQuery.of(context).padding.bottom + 25),
         child: Column(
           mainAxisAlignment: widget._isDayCycle
                   ? MainAxisAlignment.center

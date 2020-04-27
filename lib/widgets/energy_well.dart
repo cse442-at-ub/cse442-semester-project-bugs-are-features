@@ -130,7 +130,7 @@ class _EnergyWellState extends State<EnergyWell> {
   Widget build(BuildContext context) {
     return Container(
         alignment: Alignment.centerRight,
-        margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 60),
+//        margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 60),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
