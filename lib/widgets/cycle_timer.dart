@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:ghost_app/models/energy.dart' as Energy;
+import 'package:ghost_app/models/energy.dart';
 import 'package:ghost_app/models/game.dart' as Game;
 import 'package:ghost_app/models/timers.dart';
 
@@ -15,7 +15,10 @@ class CycleTimer extends StatefulWidget {
   /// The Timers instance containing all timers
   final Timers _timers;
 
-  CycleTimer(this._switchDayNightCycle, this._isDayCycle, this._timers);
+  final Energy _energy;
+
+  CycleTimer(
+      this._switchDayNightCycle, this._isDayCycle, this._timers, this._energy);
 
   @override
   _CycleTimerState createState() => _CycleTimerState();
@@ -40,8 +43,8 @@ class _CycleTimerState extends State<CycleTimer> {
     }());
 
     _cycle = Duration(seconds: _cycleLength);
-    widget._timers.dayNightTimer = Timer.periodic(
-        Game.ONE_SECOND, _switchCycle);
+    widget._timers.dayNightTimer =
+        Timer.periodic(Game.ONE_SECOND, _switchCycle);
   }
 
   /// The image widget to be displayed on the UI
@@ -67,9 +70,8 @@ class _CycleTimerState extends State<CycleTimer> {
     setState(() {
       if (_cycle == Duration.zero) {
         widget._switchDayNightCycle();
-        // TODO: Update with class setter
         if (widget._isDayCycle) {
-          Energy.energy = 100;
+          widget._energy.energy = 100;
         }
         _cycle = Duration(seconds: _cycleLength);
       } else {
@@ -80,11 +82,7 @@ class _CycleTimerState extends State<CycleTimer> {
 
   void _skipDay() {
     // Add only 50 energy for skipping day cycle
-    // TODO: Update with class setter
-    Energy.energy += 50;
-    if (Energy.energy > 100) {
-      Energy.energy = 100;
-    }
+    widget._energy.energy += 50;
     widget._switchDayNightCycle();
 
     setState(() {
@@ -123,15 +121,13 @@ class _CycleTimerState extends State<CycleTimer> {
 //            bottom: MediaQuery.of(context).padding.bottom + 25),
         child: Column(
           mainAxisAlignment: widget._isDayCycle
-                  ? MainAxisAlignment.center
-                  : MainAxisAlignment.start,
+              ? MainAxisAlignment.center
+              : MainAxisAlignment.start,
           children: <Widget>[
             GestureDetector(
-                onTap: widget._isDayCycle ? _skipDay : null,
-                child: _getIcon()),
+                onTap: widget._isDayCycle ? _skipDay : null, child: _getIcon()),
             _makeText()
           ],
-        )
-    );
+        ));
   }
 }

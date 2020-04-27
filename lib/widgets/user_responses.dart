@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ghost_app/db/constants.dart' as Constants;
 import 'package:ghost_app/db/db.dart';
+import 'package:ghost_app/models/energy.dart';
 import 'package:ghost_app/models/ghost_model.dart';
 
 /// The Candle class that sets the ghost away to be away, or not
@@ -16,10 +17,11 @@ class UserResponses extends StatefulWidget {
 
   final ValueSetter<String> _setResponse;
 
-  final VoidCallback _updateEnergyBar;
+  final Energy _energy;
 
+  final VoidCallback _refresh;
   UserResponses(this._db, this._ghost, this._canInteract, this._setResponse,
-      this._updateEnergyBar);
+      this._energy, this._refresh);
 
   @override
   _UserResponsesState createState() => _UserResponsesState();
@@ -102,8 +104,9 @@ class _UserResponsesState extends State<UserResponses> {
     bool didLevel = await widget._ghost.addScore(points);
     if (!didLevel) {
       // If Chose wrong
+      this.widget._energy.badResponse();
       debugPrint("Called UPDATE ENERGY BAR");
-      widget._updateEnergyBar();
+      widget._refresh();
     }
     if (didLevel) {
       _getLevelingInteraction(1);
