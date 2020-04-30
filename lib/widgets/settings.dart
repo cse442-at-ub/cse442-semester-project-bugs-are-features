@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ghost_app/models/game.dart';
 
 /// The Settings modal that fades in when the Settings button is pressed.
 ///
@@ -7,17 +7,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// This may need to be updated to a StatefulWidget in the future to reflect
 /// any settings that a user has changed right away.
 class Settings extends StatelessWidget {
-  /// The app wide preferences.
-  final SharedPreferences _prefs;
+  /// The game instances
+  final Game _game;
 
-  final VoidCallback _ghostReleased;
-
-  Settings(this._prefs, this._ghostReleased);
+  Settings(this._game);
 
   @override
   Widget build(BuildContext context) {
     bool pressAttention = false; //toggled when release ghost is pressed
-    int ghostId = _prefs.getInt('ghost_id');
+    int ghostId = _game.prefs.getInt('ghost_id');
 
     return Container(
         constraints: BoxConstraints(
@@ -88,7 +86,7 @@ class Settings extends StatelessWidget {
               .textTheme
               .body1),
       onPressed: () {
-        _ghostReleased();
+        _game.ghostReleased();
         _closeDialog(context);
       },
     );

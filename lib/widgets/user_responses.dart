@@ -1,30 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:ghost_app/db/constants.dart' as Constants;
-import 'package:ghost_app/db/db.dart';
-import 'package:ghost_app/models/energy.dart';
-import 'package:ghost_app/models/ghost_model.dart';
+import 'package:ghost_app/models/game.dart';
 
 /// The Candle class that sets the ghost away to be away, or not
 class UserResponses extends StatefulWidget {
-  /// The database instance.
-  final DB _db;
-
   /// The current ghost instance
-  final GhostModel _ghost;
+  final Game _game;
 
   /// Whether or not the user can currently interact with the ghost
   final bool _canInteract;
 
   final ValueSetter<String> _setResponse;
 
-  final Energy _energy;
-
   final GlobalKey _userResponseKey;
 
   final VoidCallback _refresh;
 
-  UserResponses(this._db, this._ghost, this._canInteract, this._setResponse,
-      this._energy, this._refresh, this._userResponseKey);
+  UserResponses(this._game, this._canInteract, this._setResponse,
+      this._refresh, this._userResponseKey);
 
   @override
   _UserResponsesState createState() => _UserResponsesState();
@@ -63,8 +56,8 @@ class _UserResponsesState extends State<UserResponses> {
       _loadingResponses = true;
     });
 
-    List<Map> ghostResp = await widget._db
-        .getLevelingGhostResp(widget._ghost.id, widget._ghost.level, rid);
+    List<Map> ghostResp = await widget._game.db.getLevelingGhostResp(
+        widget._game.ghost.id, widget._game.ghost.level, rid);
 
     if (!_leveling) {
       setState(() {
@@ -86,9 +79,9 @@ class _UserResponsesState extends State<UserResponses> {
     // Get the user responses attached to this ghost statement
     var map = <Map>[];
     for (String urid in rids) {
-      await widget._db
+      await widget._game.db
           .getLevelingUserResp(
-              widget._ghost.id, widget._ghost.level, int.parse(urid))
+              widget._game.ghost.id, widget._game.ghost.level, int.parse(urid))
           .then((row) => map.add(row[0]));
     }
     _responses = map;
@@ -101,13 +94,13 @@ class _UserResponsesState extends State<UserResponses> {
   _onPress(int points, String resp, int rid, int effect) async {
     // Add negative ghost effect if one is present.
     if (effect < 0) {
-      widget._ghost.addEffect(effect);
+      widget._game.ghost.addEffect(effect);
     }
 
-    bool didLevel = await widget._ghost.addScore(points);
+    bool didLevel = await widget._game.ghost.addScore(points);
     if (!didLevel) {
       // If Chose wrong
-      this.widget._energy.badResponse();
+      this.widget._game.energy.badResponse();
       debugPrint("Called UPDATE ENERGY BAR");
       widget._refresh();
     }
@@ -129,8 +122,8 @@ class _UserResponsesState extends State<UserResponses> {
       _loadingResponses = true;
     });
 
-    await widget._db
-        .getDefaultInteraction(widget._ghost.id, 2, 4)
+    await widget._game.db
+        .getDefaultInteraction(widget._game.ghost.id, 2, 4)
         .then((map) => _responses = map);
     // TODO: Change this when default stuff is added
     //await widget._db.getDefaultInteraction(widget._ghost.id,

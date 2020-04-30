@@ -14,9 +14,7 @@ class GhostResponse extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.all(10),
-        child: Text(
+    return Flexible(child: Text(
           _canInteract ? _curResp : "The ghost doesn't like the candle",
           key: _ghostResponseKey,
           style: Theme.of(context).textTheme.body1.copyWith(
@@ -24,6 +22,9 @@ class GhostResponse extends StatelessWidget {
                 fontStyle: _canInteract ? FontStyle.normal : FontStyle.italic,
               ),
           textAlign: TextAlign.center,
-        ));
+          maxLines: 4,
+        ),
+      flex: 1,
+    );
   }
 }

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ghost_app/models/game.dart';
 
 import 'settings.dart';
 
 class SettingsButton extends StatelessWidget {
   /// The app wide preferences.
-  final SharedPreferences _prefs;
-  final VoidCallback _ghostReleased;
+  final Game _game;
 
-  SettingsButton(this._prefs, this._ghostReleased);
+  SettingsButton(this._game);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,7 @@ class SettingsButton extends StatelessWidget {
                     opacity: a1.value,
                     child: Center(
                       child: Material(
-                        child: Settings(_prefs, _ghostReleased),
+                        child: Settings(_game),
                       ),
                     ),
                   ),

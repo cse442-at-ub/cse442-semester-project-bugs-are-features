@@ -2,25 +2,23 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:ghost_app/models/energy.dart';
-import 'package:ghost_app/models/game.dart' as Game;
-import 'package:ghost_app/models/timers.dart';
+import 'package:ghost_app/models/game.dart';
+import 'package:ghost_app/settings.dart' as Settings;
 
 class CycleTimer extends StatefulWidget {
+  /// The Game model instance
+  final Game _game;
+
   /// Sets the Day and Night cycle
   final VoidCallback _switchDayNightCycle;
 
   /// The current cycle state, from the Ghost screen
   final bool _isDayCycle;
 
-  /// The Timers instance containing all timers
-  final Timers _timers;
-
   final GlobalKey _timerKey;
 
-  final Energy _energy;
-
-  CycleTimer(this._switchDayNightCycle, this._isDayCycle, this._timers,
-      this._energy, this._timerKey);
+  CycleTimer(this._game, this._switchDayNightCycle, this._isDayCycle,
+      this._timerKey);
 
   @override
   _CycleTimerState createState() => _CycleTimerState();
@@ -36,17 +34,17 @@ class _CycleTimerState extends State<CycleTimer> {
   @override
   void initState() {
     super.initState();
-    _cycleLength = Game.DAY_NIGHT_LENGTH;
+    _cycleLength = Settings.DAY_NIGHT_LENGTH;
 
     // Set cycle to 30 seconds if in debug
     assert(() {
-      _cycleLength = Game.DAY_NIGHT_LENGTH_DEV;
+      _cycleLength = Settings.DAY_NIGHT_LENGTH_DEV;
       return true;
     }());
 
     _cycle = Duration(seconds: _cycleLength);
-    widget._timers.dayNightTimer =
-        Timer.periodic(Game.ONE_SECOND, _switchCycle);
+    widget._game.timers.dayNightTimer =
+        Timer.periodic(Settings.ONE_SECOND, _switchCycle);
   }
 
   /// The image widget to be displayed on the UI
@@ -73,7 +71,7 @@ class _CycleTimerState extends State<CycleTimer> {
       if (_cycle == Duration.zero) {
         widget._switchDayNightCycle();
         if (widget._isDayCycle) {
-          widget._energy.energy = 100;
+          widget._game.energy.energy = 100;
         }
         _cycle = Duration(seconds: _cycleLength);
       } else {
@@ -84,7 +82,7 @@ class _CycleTimerState extends State<CycleTimer> {
 
   void _skipDay() {
     // Add only 50 energy for skipping day cycle
-    widget._energy.energy += 50;
+    widget._game.energy.energy += 50;
     widget._switchDayNightCycle();
 
     setState(() {

@@ -1,30 +1,20 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:ghost_app/db/db.dart';
-import 'package:ghost_app/models/energy.dart';
-import 'package:ghost_app/models/game.dart' as Game;
-import 'package:ghost_app/models/ghost_model.dart';
-import 'package:ghost_app/models/timers.dart';
+import 'package:ghost_app/models/game.dart';
+import 'package:ghost_app/settings.dart' as Settings;
 
 class EnergyWell extends StatefulWidget {
+  /// The Game model instance
+  final Game _game;
+
   /// Whether or not the user can interact with the ghost
   final bool _canInteract;
 
-  /// The current Ghost instances
-  final GhostModel _ghost;
+  /// Refresh the UI
+  final VoidCallback _updateEnergy;
 
-  /// The Timers model containing all timers
-  final Timers _timers;
-
-  final DB _db;
-
-  final Energy _energy;
-
-  final VoidCallback _refresh;
-
-  EnergyWell(this._canInteract, this._ghost, this._energy, this._timers,
-      this._db, this._refresh);
+  EnergyWell(this._game, this._canInteract, this._updateEnergy);
 
   @override
   _EnergyWellState createState() => _EnergyWellState();
@@ -41,11 +31,11 @@ class _EnergyWellState extends State<EnergyWell> {
   initState() {
     super.initState();
 
-    if (widget._timers.energyWellTimer != null &&
-        widget._timers.energyWellTimer.isActive) {
+    if (widget._game.timers.energyWellTimer != null &&
+        widget._game.timers.energyWellTimer.isActive) {
       _active = true;
       // TODO: Get time left stored in db
-      this.widget._energy.energy = widget._db.getCurrentEnergy();
+      this.widget._game.energy.energy = widget._game.db.getCurrentEnergy();
     } else {
       _reset();
     }
@@ -55,39 +45,39 @@ class _EnergyWellState extends State<EnergyWell> {
   ///Player energy: -40
   ///Player score: +75
   _donateEnergy() async {
-    int newEnergy = widget._energy.energy - 40;
+    int newEnergy = widget._game.energy.energy - 40;
     if (newEnergy < 0) {
       return;
     }
 
-    widget._energy.energy = newEnergy;
+    widget._game.energy.energy = newEnergy;
     if (_scoreIncrease == 0) {
-      widget._energy.energy -= 10;
+      widget._game.energy.energy -= 10;
     }
-    await widget._ghost.addScore(_scoreIncrease);
+    await widget._game.ghost.addScore(_scoreIncrease);
 
     setState(() {
       _active = !_active;
-      debugPrint("-40 Energy donated. Energy set to ${widget._energy.energy}");
+      debugPrint("-40 Energy donated. Energy: ${widget._game.energy.energy}");
       _startTimer();
     });
-    widget._refresh();
+    widget._updateEnergy();
   }
 
   /// Resets states allowing user to hit button again
   _reset() {
     setState(() {
       _active = true;
-      widget._timers.resetEnergyWellRemaining();
+      widget._game.timers.resetEnergyWellRemaining();
     });
   }
 
   /// Called on every tick second of the countdown
   _tick(Timer timer) {
     setState(() {
-      widget._timers.energyWellRemaining -= 1;
-      if (widget._timers.energyWellRemaining == 0) {
-        widget._timers.cancelEnergyWellTimer();
+      widget._game.timers.energyWellRemaining -= 1;
+      if (widget._game.timers.energyWellRemaining == 0) {
+        widget._game.timers.cancelEnergyWellTimer();
         _reset();
       }
     });
@@ -95,7 +85,8 @@ class _EnergyWellState extends State<EnergyWell> {
 
   /// Start the countdown timer for the energy well
   _startTimer() {
-    widget._timers.energyWellTimer = Timer.periodic(Game.ONE_SECOND, _tick);
+    widget._game.timers.energyWellTimer =
+        Timer.periodic(Settings.ONE_SECOND, _tick);
     setState(() {
       _active = false;
     });
@@ -121,7 +112,7 @@ class _EnergyWellState extends State<EnergyWell> {
             child: Column(
               children: <Widget>[
                 Text(
-                  widget._timers.energyWellRemaining.toString(),
+                  widget._game.timers.energyWellRemaining.toString(),
                   style: Theme
                       .of(context)
                       .textTheme
