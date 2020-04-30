@@ -122,8 +122,8 @@ class _UserResponsesState extends State<UserResponses> {
       _loadingResponses = true;
     });
 
-    await widget._game.db
-        .getDefaultInteraction(widget._game.ghost.id, 2, 4)
+    await widget._game.db.getDefaultInteraction(widget._game.ghost.id,
+          widget._game.ghost.level, 4)
         .then((map) => _responses = map);
     // TODO: Change this when default stuff is added
     //await widget._db.getDefaultInteraction(widget._ghost.id,

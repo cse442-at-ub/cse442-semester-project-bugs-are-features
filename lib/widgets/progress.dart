@@ -17,7 +17,7 @@ class Progress extends StatelessWidget {
             child: Row(children: <Widget>[
               Padding(
                 padding: EdgeInsets.only(right: 20),
-                child: Text("Level ${_game.ghost.level}",
+                child: Text("Level ${_game.ghost.level - 1}",
                     style: Theme
                         .of(context)
                         .textTheme
