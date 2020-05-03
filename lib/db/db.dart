@@ -1,6 +1,6 @@
 import 'dart:developer' as dev;
 
-import 'package:flutter/cupertino.dart';
+import 'dart:math';
 import 'package:ghost_app/db/debug.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -115,8 +115,26 @@ class DB {
   }
 
   getDefaultInteraction(int gid, int level, int qty) async {
+    var rng = Random();
+    // Random number of lvl 0 responses
+    int defaultResps = rng.nextInt(2);
+    // Number of responses relevant to this level. Always at least 1
+    int lvlResps = 4 - defaultResps;
+
     // TODO: Make it select 2-4 random ones
-    return await _pool.query(Constants.DEFAULT_RESP_TABLE,
+    var defaultRows = await _pool.query(Constants.DEFAULT_RESP_TABLE,
+        columns: [
+          Constants.DEFAULT_RESP_USER,
+          Constants.DEFAULT_RESP_GHOST,
+          Constants.DEFAULT_RESP_POINTS
+        ],
+        where: '${Constants.DEFAULT_RESP_GHOST_ID} = ? AND '
+            '${Constants.DEFAULT_RESP_LEVEL} = ?',
+        whereArgs: [gid, 0],
+        orderBy: 'RANDOM()',
+        limit: defaultResps);
+
+    var lvlRows = await _pool.query(Constants.DEFAULT_RESP_TABLE,
         columns: [
           Constants.DEFAULT_RESP_USER,
           Constants.DEFAULT_RESP_GHOST,
@@ -125,7 +143,10 @@ class DB {
         where: '${Constants.DEFAULT_RESP_GHOST_ID} = ? AND '
             '${Constants.DEFAULT_RESP_LEVEL} = ?',
         whereArgs: [gid, level],
-        limit: 4);
+        orderBy: 'RANDOM()',
+        limit: lvlResps);
+
+    return defaultRows + lvlRows;
   }
 
   /// Gets the user's current amount of energy
@@ -263,41 +284,6 @@ class DB {
       dev.log("Inserted ghost id ${i + 1}", name: "db.db");
       await db.insert(Constants.GHOST_TABLE, row);
     }
-
-    // TODO: Remove these! they are temporary
-    Map<String, dynamic> row1 = {
-      Constants.DEFAULT_RESP_GHOST_ID: 1,
-      Constants.DEFAULT_RESP_LEVEL: 2,
-      Constants.DEFAULT_RESP_USER: "Best choice",
-      Constants.DEFAULT_RESP_GHOST: "Me like",
-      Constants.DEFAULT_RESP_POINTS: 5
-    };
-    Map<String, dynamic> row2 = {
-      Constants.DEFAULT_RESP_GHOST_ID: 1,
-      Constants.DEFAULT_RESP_LEVEL: 2,
-      Constants.DEFAULT_RESP_USER: "Medium choice",
-      Constants.DEFAULT_RESP_GHOST: "Me sorta like",
-      Constants.DEFAULT_RESP_POINTS: 3
-    };
-    Map<String, dynamic> row3 = {
-      Constants.DEFAULT_RESP_GHOST_ID: 1,
-      Constants.DEFAULT_RESP_LEVEL: 2,
-      Constants.DEFAULT_RESP_USER: "Ehh choice",
-      Constants.DEFAULT_RESP_GHOST: "Me don't really like",
-      Constants.DEFAULT_RESP_POINTS: 2
-    };
-    Map<String, dynamic> row4 = {
-      Constants.DEFAULT_RESP_GHOST_ID: 1,
-      Constants.DEFAULT_RESP_LEVEL: 2,
-      Constants.DEFAULT_RESP_USER: "Worst choice",
-      Constants.DEFAULT_RESP_GHOST: "Me dislike",
-      Constants.DEFAULT_RESP_POINTS: 0
-    };
-
-    await db.insert(Constants.DEFAULT_RESP_TABLE, row1);
-    await db.insert(Constants.DEFAULT_RESP_TABLE, row2);
-    await db.insert(Constants.DEFAULT_RESP_TABLE, row3);
-    await db.insert(Constants.DEFAULT_RESP_TABLE, row4);
 
     // Seed ghost 1's story
     Ghost1.seed(db);
