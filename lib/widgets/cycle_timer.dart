@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:ghost_app/models/energy.dart';
 import 'package:ghost_app/models/game.dart';
 import 'package:ghost_app/settings.dart' as Settings;
 
