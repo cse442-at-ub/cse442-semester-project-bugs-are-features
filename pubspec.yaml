@@ -29,6 +29,7 @@ dependencies:
   flutter_local_notifications: ^1.3.0
   introduction_screen: ^1.0.7
   tutorial_coach_mark: ^0.3.0
+  google_fonts: ^1.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
