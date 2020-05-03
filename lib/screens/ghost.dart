@@ -3,11 +3,9 @@ import 'dart:developer' as dev;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ghost_app/db/db.dart';
-import 'package:ghost_app/models/energy.dart';
-import 'package:ghost_app/models/ghost_model.dart';
-import 'package:ghost_app/models/notification.dart';
+import 'package:ghost_app/models/game.dart';
 import 'package:ghost_app/models/timers.dart';
 import 'package:ghost_app/widgets/candle.dart';
 import 'package:ghost_app/widgets/cycle_timer.dart';
@@ -15,7 +13,6 @@ import 'package:ghost_app/widgets/energy_well.dart';
 import 'package:ghost_app/widgets/ghost_response.dart';
 import 'package:ghost_app/widgets/progress.dart';
 import 'package:ghost_app/widgets/user_responses.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/animated_focus_light.dart';
 import 'package:tutorial_coach_mark/content_target.dart';
 import 'package:tutorial_coach_mark/target_focus.dart';
@@ -23,48 +20,17 @@ import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:ghost_app/models/values.dart';
 
 class GhostMain extends StatefulWidget {
-  /// Called as a function when a ghost is released.
-  /// Will only be needed in this widget at the end of the game.
-  final VoidCallback _ghostReleased;
 
-  /// The current ghost instance
-  final GhostModel _ghost;
+  /// The game instances
+  final Game _game;
 
-  /// The database instance.
-  final DB _db;
-
-  /// The Notifier notifications instances
-  final Notifier _notifier;
-
-  final SharedPreferences _prefs;
-  final Energy _energy;
-
-  GhostMain(this._db, this._ghostReleased, this._ghost, this._notifier,
-      this._energy, this._prefs);
+  GhostMain(this._game);
 
   @override
   _GhostMainState createState() => _GhostMainState();
-
-  /*
-   * below is temp code for getting rid the unused
-   * _ghostReleased analysis error
-   * TODO delete the debugFillProperties method after using _ghostReleased
-   */
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(
-        ObjectFlagProperty<VoidCallback>.has('_ghostReleased', _ghostReleased));
-  }
-
-//delete above
 }
 
 class _GhostMainState extends State<GhostMain> {
-  /// The Timers instance
-  Timers _timers;
-
   /// Whether or not the user can interact with the ghost
   bool _canInteract = true;
 
@@ -83,16 +49,16 @@ class _GhostMainState extends State<GhostMain> {
   @override
   initState() {
     super.initState();
-    _timers = Timers(widget._db);
+    widget._game.timers = Timers(widget._game.db);
     initTargets();
-    if (widget._prefs.get("ghost_first_select") ?? true) {
+    if (widget._game.prefs.get("ghost_first_select") ?? true) {
       WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     }
   }
 
   @override
   dispose() {
-    _timers.storeTimers();
+    widget._game.timers.storeTimers();
     super.dispose();
   }
 
@@ -101,12 +67,12 @@ class _GhostMainState extends State<GhostMain> {
     dev.log("Setting canInteract to $value", name: "screens.ghost");
     // If setting to CAN'T interact
     if (!value) {
-      widget._notifier.disable();
+      widget._game.notifier.disable();
     } else {
       // Once candle lights off
-      widget._energy.turnOffCandle();
+      widget._game.energy.turnOffCandle();
       this._updateEnergy();
-      widget._notifier.enable();
+      widget._game.notifier.enable();
     }
 
     setState(() {
@@ -115,14 +81,14 @@ class _GhostMainState extends State<GhostMain> {
   }
 
   /// Sets the ghost's response to the user
-  void _setResponse(String resp) async {
+  _setResponse(String resp) {
     setState(() {
       _curResp = resp;
     });
   }
 
   /// Sets whether it's day or not
-  void _switchDayNightCycle() {
+  _switchDayNightCycle() {
     setState(() {
       _isDayCycle = !_isDayCycle;
       _curResp = "";
@@ -130,20 +96,21 @@ class _GhostMainState extends State<GhostMain> {
     });
 
     if (_isDayCycle) {
-      widget._notifier.dayNotification();
+      widget._game.notifier.dayNotification();
       // Cancel all non-day/night timers
-      _timers.cancelTimers();
+      widget._game.timers.cancelTimers();
     } else {
-      widget._notifier.nightNotification();
+      widget._game.notifier.nightNotification();
     }
   }
 
   /// Update's the user's energy
-  void _updateEnergy() {
+  _updateEnergy() {
     setState(() {
-      if (widget._energy.energy <= 0) {
-        widget._energy.resetEnergy();
-        widget._ghostReleased();
+      _curResp = "Oh, thank you!";
+      if (widget._game.energy.energy <= 0) {
+        widget._game.energy.resetEnergy();
+        widget._game.ghostReleased();
       }
     });
   }
@@ -152,23 +119,22 @@ class _GhostMainState extends State<GhostMain> {
   Widget build(BuildContext context) {
     var view = <Widget>[];
 
-    view.add(CycleTimer(
-        _switchDayNightCycle, _isDayCycle, _timers, widget._energy, timerKey));
+    view.add(
+        CycleTimer(widget._game, _switchDayNightCycle, _isDayCycle, timerKey));
 
     if (!_isDayCycle) {
       var col = <Widget>[];
 
       // The widget for Energy donation.
-      col.add(EnergyWell(_canInteract, widget._ghost, widget._energy, _timers,
-          widget._db, _updateEnergy));
+      col.add(EnergyWell(widget._game, _canInteract, _updateEnergy));
       // The current progress + health
-      col.add(Progress(
-          widget._ghost.progress, widget._ghost.level, widget._energy));
+      col.add(Progress(widget._game));
       // The candle to be lit, or not
-      col.add(Candle(widget._ghost, _setInteract, _timers, widget._energy));
+      col.add(Candle(widget._game, _setInteract));
+
       var row = <Widget>[
         // The ghost image
-        widget._ghost.image,
+        widget._game.ghost.image,
         Column(
           key: uiElementsKey,
           children: col,
@@ -185,8 +151,8 @@ class _GhostMainState extends State<GhostMain> {
       view.add(GhostResponse(_curResp, _canInteract, ghostResponseKey));
 
       // The user response buttons
-      view.add(UserResponses(widget._db, widget._ghost, _canInteract,
-          _setResponse, widget._energy, _updateEnergy, userResponseKey));
+      view.add(UserResponses(widget._game, _canInteract, _setResponse,
+          _updateEnergy, userResponseKey));
     }
 
     return Stack(children: <Widget>[
@@ -336,7 +302,7 @@ class _GhostMainState extends State<GhostMain> {
         paddingFocus: 10,
         opacityShadow: 0.9, finish: () {
       print("finished");
-      widget._prefs.setBool("ghost_first_select", false);
+      widget._game.prefs.setBool("ghost_first_select", false);
     })
       ..show();
   }

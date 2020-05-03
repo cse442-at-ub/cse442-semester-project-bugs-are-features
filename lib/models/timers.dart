@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:ghost_app/db/db.dart';
 import 'package:ghost_app/db/constants.dart' as Constants;
-import 'package:ghost_app/models/game.dart' as Game;
+import 'package:ghost_app/settings.dart' as Game;
 
 class Timers {
 

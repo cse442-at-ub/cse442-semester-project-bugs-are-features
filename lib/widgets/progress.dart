@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:ghost_app/models/energy.dart';
+import 'package:ghost_app/models/game.dart';
 
 /// Displays the user's progress on the main ghost screen.
 class Progress extends StatelessWidget {
-  /// The current progress through the ghost's level
-  final double _progress;
+  /// The Game model instance
+  final Game _game;
 
-  /// The ghost's current level
-  final int _level;
-
-  final Energy _energy;
-
-  Progress(this._progress, this._level, this._energy);
+  Progress(this._game);
 
   Widget _storyProgress(BuildContext context) {
     return Row(
@@ -22,7 +17,7 @@ class Progress extends StatelessWidget {
             child: Row(children: <Widget>[
               Padding(
                 padding: EdgeInsets.only(right: 20),
-                child: Text("Level $_level",
+                child: Text("Level ${_game.ghost.level}",
                     style: Theme
                         .of(context)
                         .textTheme
@@ -32,7 +27,7 @@ class Progress extends StatelessWidget {
               Flexible(
                   child: LinearProgressIndicator(
                       backgroundColor: Colors.blueGrey,
-                      value: _progress,
+                      value: _game.ghost.progress,
                       valueColor: AlwaysStoppedAnimation<Color>(
                         Theme.of(context).accentColor,
                       )))
@@ -60,7 +55,7 @@ class Progress extends StatelessWidget {
               Flexible(
                   child: LinearProgressIndicator(
                       backgroundColor: Color.fromRGBO(110, 0, 0, 1),
-                      value: (_energy.energy / 100).toDouble(),
+                      value: (_game.energy.energy / 100).toDouble(),
                       valueColor: AlwaysStoppedAnimation<Color>(
                           Color.fromRGBO(255, 0, 0, 1))))
             ]))
