@@ -9,6 +9,8 @@ import 'screens/graveyard.dart';
 import 'screens/splash.dart';
 import 'widgets/devsettings_button.dart';
 import 'widgets/settings_button.dart';
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 /// RootPage is the "actual" root widget of the app. See also [_RootPageState].
 ///
@@ -34,6 +36,10 @@ class _RootPageState extends State<RootPage> {
 
   /// The game instance containing most of our important models/classes
   Game _game;
+
+  // Create Audio PLayer
+  static AudioPlayer player = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
+  static AudioCache cache = AudioCache(fixedPlayer: player);
 
   @override
   initState() {
@@ -76,6 +82,7 @@ class _RootPageState extends State<RootPage> {
     if (ghostChosen) {
       screen = GhostMain(_game);
     } else {
+      cache.loop("soundeffects/GraveYard.mp3"); // Plays Background music
       screen = GraveyardMain(_ghostChosen);
     }
     view.add(screen);
@@ -123,6 +130,7 @@ class _RootPageState extends State<RootPage> {
 
   /// Call from [GraveyardMain] when a ghost is selected to render [GhostMain].
   _ghostChosen(int id) async {
+    player.stop(); // Stops playing Sound Effects when choosen a ghost
     // Returns the amount of rows updated
     int updated = await _game.db.setGhost(id);
     if (updated != 1) {

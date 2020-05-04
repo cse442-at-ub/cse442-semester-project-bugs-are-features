@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:Inspectre/models/game.dart';
 import 'package:Inspectre/settings.dart' as Settings;
 import 'package:flutter/material.dart';
@@ -27,9 +29,13 @@ class _EnergyWellState extends State<EnergyWell> {
   /// How much score is added from giving energy
   int _scoreIncrease = 15;
 
+  // Create Audio PLayer
+  static AudioPlayer player = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
+  static AudioCache cache = AudioCache(fixedPlayer: player);
   @override
   initState() {
     super.initState();
+    cache.load("soundeffects/EnergyWell.mp3");
 
     if (widget._game.timers.energyWellTimer != null &&
         widget._game.timers.energyWellTimer.isActive) {
@@ -49,6 +55,7 @@ class _EnergyWellState extends State<EnergyWell> {
     if (newEnergy < 0) {
       return;
     }
+    await cache.play("soundeffects/EnergyWell.mp3");
 
     widget._game.energy.energy = newEnergy;
     if (_scoreIncrease == 0) {

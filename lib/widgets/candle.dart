@@ -4,6 +4,9 @@ import 'package:Inspectre/models/game.dart';
 import 'package:Inspectre/settings.dart' as Settings;
 import 'package:flutter/material.dart';
 
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
+
 /// The Candle class that sets the ghost away to be away, or not
 class Candle extends StatefulWidget {
   /// The Game model instance
@@ -24,10 +27,15 @@ class _CandleState extends State<Candle> {
   /// The duration remaining
   int _maxDuration;
 
+  // Create Audio PLayer
+  static AudioPlayer player = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
+  static AudioCache cache = AudioCache(fixedPlayer: player);
+
   @override
   initState() {
     super.initState();
 
+    cache.load("soundeffects/Candle.mp3");
     _maxDuration = Settings.CANDLE_LENGTH;
 
     assert(() {
@@ -47,6 +55,13 @@ class _CandleState extends State<Candle> {
   /// Called on every tick second of the countdown
   _tick(Timer timer) {
     setState(() {
+      /*
+      if (widget._timers.dayNightRemaining == 0) {
+        player.stop();
+      }
+
+      DOESNT WORK,I will have to extract this and make a global audio player if I want this to work.
+      */
       widget._game.timers.candleRemaining -= 1;
 
       if (widget._game.timers.candleRemaining == 0) {
@@ -63,6 +78,7 @@ class _CandleState extends State<Candle> {
 
   /// Lights the candle, rendering the ghost inaccessible
   _lightCandle() async {
+    cache.loop("soundeffects/Candle.mp3");
     await widget._game.ghost.setCandleLit(true);
     // Increment energy by 5 on lighting candle
     widget._game.energy.setEnergyCandleLit(true);
@@ -74,6 +90,7 @@ class _CandleState extends State<Candle> {
 
   /// Extinguishes the candle, allowing the ghost back
   _extinguishCandle() {
+    player.stop();
     widget._game.timers.cancelCandleTimer();
     widget._game.timers.resetCandleRemaining();
 
