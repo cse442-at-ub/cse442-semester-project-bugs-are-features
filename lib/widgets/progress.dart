@@ -1,5 +1,5 @@
+import 'package:Inspectre/models/game.dart';
 import 'package:flutter/material.dart';
-import 'package:ghost_app/models/game.dart';
 
 /// Displays the user's progress on the main ghost screen.
 class Progress extends StatelessWidget {

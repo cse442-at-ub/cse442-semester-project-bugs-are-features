@@ -1,4 +1,4 @@
-package baf.ghost_app
+package cse442.baf.inspectre
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

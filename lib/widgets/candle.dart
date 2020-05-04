@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:Inspectre/models/game.dart';
+import 'package:Inspectre/settings.dart' as Settings;
 import 'package:flutter/material.dart';
-import 'package:ghost_app/models/game.dart';
-import 'package:ghost_app/settings.dart' as Settings;
 
 /// The Candle class that sets the ghost away to be away, or not
 class Candle extends StatefulWidget {

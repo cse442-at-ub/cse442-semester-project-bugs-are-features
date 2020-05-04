@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:Inspectre/models/game.dart';
+import 'package:Inspectre/screens/tutorial.dart';
 import 'package:flutter/material.dart';
-import 'package:ghost_app/screens/tutorial.dart';
-import 'package:ghost_app/models/game.dart';
 
 import 'screens/ghost.dart';
 import 'screens/graveyard.dart';

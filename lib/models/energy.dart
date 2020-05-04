@@ -1,5 +1,5 @@
+import 'package:Inspectre/db/db.dart';
 import 'package:flutter/material.dart';
-import 'package:ghost_app/db/db.dart';
 
 class Energy {
   ///Initialize to 100. Is 90 for debugging

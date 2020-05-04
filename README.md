@@ -1,4 +1,4 @@
-# ghost_app [![Build Status](https://travis-ci.org/cse442-spring-2020-offering/cse442-semester-project-bugs-are-features.svg?branch=development)](https://travis-ci.org/cse442-spring-2020-offering/cse442-semester-project-bugs-are-features)
+# Inspectre [![Build Status](https://travis-ci.org/cse442-spring-2020-offering/cse442-semester-project-bugs-are-features.svg?branch=development)](https://travis-ci.org/cse442-spring-2020-offering/cse442-semester-project-bugs-are-features)
 
 A spooky ghost game
 

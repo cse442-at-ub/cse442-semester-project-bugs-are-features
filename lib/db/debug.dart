@@ -1,4 +1,4 @@
-import 'package:ghost_app/db/db.dart';
+import 'package:Inspectre/db/db.dart';
 
 import 'constants.dart' as Constants;
 
