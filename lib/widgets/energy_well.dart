@@ -40,7 +40,6 @@ class _EnergyWellState extends State<EnergyWell> {
     if (widget._game.timers.energyWellTimer != null &&
         widget._game.timers.energyWellTimer.isActive) {
       _active = true;
-      // TODO: Get time left stored in db
       this.widget._game.energy.energy = widget._game.db.getCurrentEnergy();
     } else {
       _reset();
@@ -120,8 +119,7 @@ class _EnergyWellState extends State<EnergyWell> {
               children: <Widget>[
                 Text(
                   widget._game.timers.energyWellRemaining.toString(),
-                  style: Theme
-                      .of(context)
+                  style: Theme.of(context)
                       .textTheme
                       .body1
                       .copyWith(fontSize: 15.0),

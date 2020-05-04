@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  // TODO: Make these tests work. Requires learning Flutter testing...
   testWidgets('App mounts RootPage() widget', (WidgetTester tester) async {
     await tester.pumpWidget(App());
     Material root = Material(

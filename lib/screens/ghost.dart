@@ -17,9 +17,9 @@ import 'package:tutorial_coach_mark/animated_focus_light.dart';
 import 'package:tutorial_coach_mark/content_target.dart';
 import 'package:tutorial_coach_mark/target_focus.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+import 'package:flare_flutter/flare_actor.dart';
 
 class GhostMain extends StatefulWidget {
-
   /// The game instances
   final Game _game;
 
@@ -133,7 +133,14 @@ class _GhostMainState extends State<GhostMain> {
 
       var row = <Widget>[
         // The ghost image
-        widget._game.ghost.image,
+        Container(
+          child: FlareActor("assets/ghosts/ghost.flr",
+              alignment: Alignment.center,
+              fit: BoxFit.contain,
+              animation: "float"),
+          width: 150,
+          height: 150,
+        ),
         Column(
           key: uiElementsKey,
           children: col,

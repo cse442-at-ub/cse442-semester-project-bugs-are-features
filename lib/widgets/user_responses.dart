@@ -16,8 +16,8 @@ class UserResponses extends StatefulWidget {
 
   final VoidCallback _refresh;
 
-  UserResponses(this._game, this._canInteract, this._setResponse,
-      this._refresh, this._userResponseKey);
+  UserResponses(this._game, this._canInteract, this._setResponse, this._refresh,
+      this._userResponseKey);
 
   @override
   _UserResponsesState createState() => _UserResponsesState();
@@ -81,7 +81,7 @@ class _UserResponsesState extends State<UserResponses> {
     for (String urid in rids) {
       await widget._game.db
           .getLevelingUserResp(
-          widget._game.ghost.id, widget._game.ghost.level, int.parse(urid))
+              widget._game.ghost.id, widget._game.ghost.level, int.parse(urid))
           .then((row) => map.add(row[0]));
     }
     _responses = map;
@@ -122,10 +122,10 @@ class _UserResponsesState extends State<UserResponses> {
       _loadingResponses = true;
     });
 
-    await widget._game.db.getDefaultInteraction(widget._game.ghost.id,
-        widget._game.ghost.level, 4)
+    await widget._game.db
+        .getDefaultInteraction(
+            widget._game.ghost.id, widget._game.ghost.level, 4)
         .then((map) => _responses = map);
-    // TODO: Change this when default stuff is added
     //await widget._db.getDefaultInteraction(widget._ghost.id,
     //    widget._ghost.level, 4).then((map) => _responses = map);
 
@@ -135,7 +135,8 @@ class _UserResponsesState extends State<UserResponses> {
   }
 
   /// Returns a response button
-  createRespButton(String userResp, String ghostResp, int points, int rid, int effect) {
+  createRespButton(
+      String userResp, String ghostResp, int points, int rid, int effect) {
     return Container(
         padding: EdgeInsets.all(4.0),
         child: RaisedButton(
@@ -149,8 +150,8 @@ class _UserResponsesState extends State<UserResponses> {
               side: BorderSide(color: Theme.of(context).backgroundColor)),
           onPressed: widget._canInteract
               ? _loadingResponses
-              ? null
-              : () => _onPress(points, ghostResp, rid, effect)
+                  ? null
+                  : () => _onPress(points, ghostResp, rid, effect)
               : null,
           child: Text(
             userResp,
@@ -172,7 +173,7 @@ class _UserResponsesState extends State<UserResponses> {
           onPressed: null,
           child: Text("",
               style:
-              Theme.of(context).textTheme.body1.copyWith(fontSize: 20.0)),
+                  Theme.of(context).textTheme.body1.copyWith(fontSize: 20.0)),
         ));
   }
 
