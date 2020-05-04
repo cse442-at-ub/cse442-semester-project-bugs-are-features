@@ -30,6 +30,7 @@ dependencies:
   introduction_screen: ^1.0.7
   tutorial_coach_mark: ^0.3.0
   flare_flutter: ^2.0.3
+  google_fonts: ^1.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
