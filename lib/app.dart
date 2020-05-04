@@ -31,7 +31,6 @@ class _RootPageState extends State<RootPage> {
   /// Displays splash screen when false. True when assets are loaded.
   bool _assetsLoaded = false;
 
-
   /// The game instance containing most of our important models/classes
   Game _game;
 

@@ -16,8 +16,8 @@ class UserResponses extends StatefulWidget {
 
   final VoidCallback _refresh;
 
-  UserResponses(this._game, this._canInteract, this._setResponse,
-      this._refresh, this._userResponseKey);
+  UserResponses(this._game, this._canInteract, this._setResponse, this._refresh,
+      this._userResponseKey);
 
   @override
   _UserResponsesState createState() => _UserResponsesState();
@@ -122,8 +122,9 @@ class _UserResponsesState extends State<UserResponses> {
       _loadingResponses = true;
     });
 
-    await widget._game.db.getDefaultInteraction(widget._game.ghost.id,
-          widget._game.ghost.level, 4)
+    await widget._game.db
+        .getDefaultInteraction(
+            widget._game.ghost.id, widget._game.ghost.level, 4)
         .then((map) => _responses = map);
     // TODO: Change this when default stuff is added
     //await widget._db.getDefaultInteraction(widget._ghost.id,
