@@ -1,8 +1,7 @@
+import 'package:Inspectre/app.dart';
+import 'package:Inspectre/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:ghost_app/main.dart';
-import 'package:ghost_app/app.dart';
 
 void main() {
   testWidgets('App mounts RootPage() widget', (WidgetTester tester) async {

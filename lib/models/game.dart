@@ -1,10 +1,11 @@
 import 'dart:developer' as dev;
+
+import 'package:Inspectre/db/db.dart';
+import 'package:Inspectre/models/energy.dart';
+import 'package:Inspectre/models/ghost_model.dart';
+import 'package:Inspectre/models/notification.dart';
+import 'package:Inspectre/models/timers.dart';
 import 'package:flutter/material.dart';
-import 'package:ghost_app/db/db.dart';
-import 'package:ghost_app/models/energy.dart';
-import 'package:ghost_app/models/ghost_model.dart';
-import 'package:ghost_app/models/timers.dart';
-import 'package:ghost_app/models/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Contains numerous instances of classes used throughout the app.

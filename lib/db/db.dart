@@ -1,7 +1,7 @@
 import 'dart:developer' as dev;
-
 import 'dart:math';
-import 'package:ghost_app/db/debug.dart';
+
+import 'package:Inspectre/db/debug.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 

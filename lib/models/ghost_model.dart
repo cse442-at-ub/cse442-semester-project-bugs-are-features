@@ -1,9 +1,9 @@
 import 'dart:developer' as dev;
 
+import 'package:Inspectre/db/constants.dart' as Constants;
+import 'package:Inspectre/db/db.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ghost_app/db/constants.dart' as Constants;
-import 'package:ghost_app/db/db.dart';
 
 const List<int> LEVEL_POINTS = [
   0,

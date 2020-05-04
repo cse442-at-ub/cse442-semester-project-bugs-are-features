@@ -1,6 +1,6 @@
+import 'package:Inspectre/db/constants.dart' as Constants;
+import 'package:Inspectre/models/game.dart';
 import 'package:flutter/material.dart';
-import 'package:ghost_app/db/constants.dart' as Constants;
-import 'package:ghost_app/models/game.dart';
 
 /// The Candle class that sets the ghost away to be away, or not
 class UserResponses extends StatefulWidget {

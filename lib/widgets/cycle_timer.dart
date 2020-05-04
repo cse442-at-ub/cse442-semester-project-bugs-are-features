@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:Inspectre/models/game.dart';
+import 'package:Inspectre/settings.dart' as Settings;
 import 'package:flutter/material.dart';
-import 'package:ghost_app/models/game.dart';
-import 'package:ghost_app/settings.dart' as Settings;
 
 class CycleTimer extends StatefulWidget {
   /// The Game model instance

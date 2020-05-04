@@ -1,5 +1,5 @@
+import 'package:Inspectre/models/game.dart';
 import 'package:flutter/material.dart';
-import 'package:ghost_app/models/game.dart';
 
 import 'devsettings.dart';
 
@@ -33,7 +33,7 @@ class DevButton extends StatelessWidget {
           onPressed: () {
             showGeneralDialog(
                 barrierColor:
-                    Theme.of(context).backgroundColor.withOpacity(0.5),
+                Theme.of(context).backgroundColor.withOpacity(0.5),
                 transitionBuilder: (context, a1, a2, widget) {
                   return AnimatedOpacity(
                     opacity: 1.0,
