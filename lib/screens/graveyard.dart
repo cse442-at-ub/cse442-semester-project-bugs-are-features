@@ -46,7 +46,11 @@ class GraveyardMain extends StatelessWidget {
           },
           child: Text(
             "Ghost ${id.toString()}",
-            style: TextStyle(fontSize: 20.0),
+            style: Theme
+                .of(context)
+                .textTheme
+                .body1
+                .copyWith(fontSize: 20.0),
           ),
         ));
   }

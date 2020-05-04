@@ -6,22 +6,14 @@ import 'package:flutter/material.dart';
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        // TODO: Replace with an image/set style in theme.
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Ghost App',
-              textAlign: TextAlign.center,
-              textDirection: TextDirection.ltr,
-              style: Theme.of(context).textTheme.body1.copyWith(fontSize: 60.0),
-            ),
-          ],
-        ),
-      ),
-    );
+    return Container(
+        alignment: Alignment.center,
+        color: Colors.black,
+        child: Text(
+          'Ghost App',
+          textAlign: TextAlign.center,
+          textDirection: TextDirection.ltr,
+          style: Theme.of(context).textTheme.body1.copyWith(fontSize: 60.0),
+        ));
   }
 }

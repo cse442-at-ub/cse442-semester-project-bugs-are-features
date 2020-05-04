@@ -1,8 +1,5 @@
+import 'package:Inspectre/models/game.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:ghost_app/db/db.dart';
-import 'package:ghost_app/models/notification.dart';
 
 import 'devsettings.dart';
 
@@ -12,19 +9,10 @@ import 'devsettings.dart';
 /// upper left hand corner of the screen. As you might expect, it opens the
 /// [DevSettings] widget in a modal.
 class DevButton extends StatelessWidget {
-  /// The app wide preferences.
-  final SharedPreferences _prefs;
+  /// The Notifier instance
+  final Game _game;
 
-  /// The DB instance.
-  final DB _database;
-
-  /// Called as a function when a ghost is released.`
-  final VoidCallback _ghostReleased;
-
-  final Notifier _notifier;
-
-  DevButton(
-      this._prefs, this._ghostReleased, this._database, this._notifier);
+  DevButton(this._game);
 
   @override
   Widget build(BuildContext context) {
@@ -36,15 +24,16 @@ class DevButton extends StatelessWidget {
           textColor: Theme.of(context).textTheme.body1.color,
           child: Text(
             "Dev Settings",
-            style: TextStyle(
-              color: Colors.red,
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme
+                .of(context)
+                .textTheme
+                .body1
+                .copyWith(color: Colors.red, fontWeight: FontWeight.bold),
           ),
           onPressed: () {
             showGeneralDialog(
                 barrierColor:
-                    Theme.of(context).backgroundColor.withOpacity(0.5),
+                Theme.of(context).backgroundColor.withOpacity(0.5),
                 transitionBuilder: (context, a1, a2, widget) {
                   return AnimatedOpacity(
                     opacity: 1.0,
@@ -53,8 +42,7 @@ class DevButton extends StatelessWidget {
                       opacity: a1.value,
                       child: Center(
                         child: Material(
-                          child: DevSettings(_prefs, _ghostReleased, _database,
-                              _notifier),
+                          child: DevSettings(_game),
                         ),
                       ),
                     ),

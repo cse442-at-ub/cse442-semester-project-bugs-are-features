@@ -1,30 +1,52 @@
+import 'package:Inspectre/db/db.dart';
 import 'package:flutter/material.dart';
 
-///Initialize to 100. Is 90 for debugging
-int energyInit = 90;
-bool donateEnergy;
+class Energy {
+  ///Initialize to 100. Is 90 for debugging
+  DB _db;
+  int _energy;
 
-///Increases energy by 5 when the candle is lit
-void setEnergyCandleLit(bool isLit) {
-  if (isLit && ((energyInit + 5) <= 100)) {
-    energyInit += 5;
-    debugPrint("Candle lit: Energy set to $energyInit");
+  set energy(int e) {
+    if (e > 100) {
+      e = 100;
+    } else if (e < 0) {
+      e = 0;
+    }
+    _energy = e;
+    _db.setCurrentEnergy(_energy);
   }
-  debugPrint("Donation Aborted. Energy < 40");
-}
 
-void resetEnergy() {
-  energyInit = 5; // 5 for debugging
-}
+  int get energy {
+    return _energy;
+  }
 
-///Getters and setters
-set energy(int e) {
-  energyInit = e;
-}
+  Energy(this._db);
 
-set donate(bool d) {
-  donateEnergy = d;
-}
+  init() async {
+    _energy = await _db.getCurrentEnergy();
+    debugPrint("Energy received from DB " + _energy.toString());
+  }
 
-int get energy => energyInit;
-bool get donate => donateEnergy;
+  void setEnergyCandleLit(bool isLit) async {
+    if (((_energy + 5) <= 100)) {
+      _energy += 5;
+      _db.setCurrentEnergy(_energy);
+      debugPrint("Candle lit: Energy set to $_energy");
+    }
+  }
+
+  void turnOffCandle() async {
+    _energy += _energy >= 100 ? 0 : 5;
+    _db.setCurrentEnergy(_energy);
+  }
+
+  void resetEnergy() {
+    _energy = 100; // 90 for debugging
+    _db.setCurrentEnergy(_energy);
+  }
+
+  void badResponse() {
+    _energy -= 1;
+    _db.setCurrentEnergy(_energy);
+  }
+}

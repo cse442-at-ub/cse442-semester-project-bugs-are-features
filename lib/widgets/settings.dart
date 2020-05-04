@@ -1,5 +1,5 @@
+import 'package:Inspectre/models/game.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 /// The Settings modal that fades in when the Settings button is pressed.
 ///
@@ -7,17 +7,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// This may need to be updated to a StatefulWidget in the future to reflect
 /// any settings that a user has changed right away.
 class Settings extends StatelessWidget {
-  /// The app wide preferences.
-  final SharedPreferences _prefs;
+  /// The game instances
+  final Game _game;
 
-  final VoidCallback _ghostReleased;
-
-  Settings(this._prefs, this._ghostReleased);
+  Settings(this._game);
 
   @override
   Widget build(BuildContext context) {
     bool pressAttention = false; //toggled when release ghost is pressed
-    int ghostId = _prefs.getInt('ghost_id');
+    int ghostId = _game.prefs.getInt('ghost_id');
 
     return Container(
         constraints: BoxConstraints(
@@ -30,7 +28,6 @@ class Settings extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              // TODO: Add settings!
               Padding(
                 padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
                 child: Text("Settings",
@@ -41,7 +38,6 @@ class Settings extends StatelessWidget {
                         .body1
                         .copyWith(fontSize: 35.0)),
               ),
-
               Visibility(
                 visible: ghostId == 0 ? false : true,
                 child: FlatButton(
@@ -53,7 +49,8 @@ class Settings extends StatelessWidget {
                     _setState(pressAttention);
                     _showAlertOnRelease(context);
                   },
-                  child: Text("Release ghost"),
+                  child: Text("Release ghost",
+                      style: Theme.of(context).textTheme.body1),
                 ),
               ),
             ]));
@@ -63,29 +60,30 @@ class Settings extends StatelessWidget {
   void _showAlertOnRelease(BuildContext context) {
     // set up the buttons
     Widget noButton = FlatButton(
-      color: Colors.deepPurple,
-      textColor: Colors.white,
-      child: Text("No, I miss the ghost."),
+      color: Theme.of(context).buttonColor,
+      child: Text("No, I miss the ghost.",
+          style: Theme.of(context).textTheme.body1),
       onPressed: () {
         _closeDialog(context);
       },
     );
 
     Widget yesButton = FlatButton(
-      color: Colors.deepPurple,
-      textColor: Colors.white,
-      child: Text("Yes, Release the ghost"),
+      color: Colors.red,
+      child: Text("Yes, Release the ghost",
+          style: Theme.of(context).textTheme.body1),
       onPressed: () {
-        _ghostReleased();
+        _game.ghostReleased();
         _closeDialog(context);
       },
     );
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("AlertDialog"),
-      backgroundColor: Colors.purple,
-      content: Text("Are you sure you wanna release the ghost?"),
+      title: Text("AlertDialog", style: Theme.of(context).textTheme.body1),
+      backgroundColor: Theme.of(context).backgroundColor,
+      content: Text("Are you sure you wanna release the ghost?",
+          style: Theme.of(context).textTheme.body1),
       actions: [
         noButton,
         yesButton,

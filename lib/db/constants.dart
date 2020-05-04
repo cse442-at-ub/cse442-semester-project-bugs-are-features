@@ -3,6 +3,28 @@ library constants;
 /// Database filename
 const String DB_NAME = 'data.db';
 
+
+/* GAME STATE TABLE */
+
+/// Game State Table Name
+const String GAME_TABLE = 'game';
+
+/// Game state table id (will only be one)
+const String GAME_TABLE_ID = 'id';
+
+/// Current user energy
+const String GAME_ENERGY = 'energy';
+
+/// Saved candle timer amount
+const String GAME_CANDLE_TIMER = 'candle_timer';
+
+/// Saved day/night cycle timer amount
+const String GAME_CYCLE_TIMER = 'cycle_timer';
+
+/// Saved energy timer amount
+const String GAME_ENERGY_TIMER = 'energy_timer';
+
+
 /* GHOST TABLE */
 
 /// Ghost Table Name
@@ -28,6 +50,8 @@ const String GHOST_ACTIVE = 'active';
 
 /// If the candle is lit the ghost is incommunicado
 const String GHOST_CANDLE_LIT = 'candle_lit';
+
+
 
 /* GHOST RESPONSE TABLE */
 
@@ -86,6 +110,7 @@ const String USER_RESP_POINTS = 'points';
 
 /// The text of this response
 const String USER_RESP_TEXT = 'text';
+
 
 
 /* Default Interaction Table */
