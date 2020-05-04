@@ -6,6 +6,9 @@ import 'package:ghost_app/models/energy.dart' as Energy;
 import 'package:ghost_app/models/game.dart' as Game;
 import 'package:ghost_app/models/timers.dart';
 
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
+
 /// The Candle class that sets the ghost away to be away, or not
 class Candle extends StatefulWidget {
   /// The current ghost instance
@@ -30,19 +33,23 @@ class _CandleState extends State<Candle> {
   /// The duration remaining
   int _maxDuration;
 
+  // Create Audio PLayer
+  static AudioPlayer player = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
+  static AudioCache cache = AudioCache(fixedPlayer: player);
+
   @override
   initState() {
     super.initState();
 
     _maxDuration = Game.CANDLE_LENGTH;
-
+    cache.load("soundeffects/Candle.mp3");
     assert(() {
       _maxDuration = Game.CANDLE_LENGTH_DEV;
       return true;
     }());
 
-    if (widget._timers.candleTimer != null
-        && widget._timers.candleTimer.isActive) {
+    if (widget._timers.candleTimer != null &&
+        widget._timers.candleTimer.isActive) {
       _isLit = true;
     } else {
       _isLit = false;
@@ -54,7 +61,13 @@ class _CandleState extends State<Candle> {
   _tick(Timer timer) {
     setState(() {
       widget._timers.candleRemaining -= 1;
+      /*
+      if (widget._timers.dayNightRemaining == 0) {
+        player.stop();
+      }
 
+      DOESNT WORK,I will have to extract this and make a global audio player if I want this to work.
+      */
       if (widget._timers.candleRemaining == 0) {
         _extinguishCandle();
       }
@@ -69,6 +82,7 @@ class _CandleState extends State<Candle> {
 
   /// Lights the candle, rendering the ghost inaccessible
   _lightCandle() async {
+    cache.loop("soundeffects/Candle.mp3");
     await widget._ghost.setCandleLit(true);
     Energy.setEnergyCandleLit(true); //Increment energy by 5 on lighting candle
     setState(() {
@@ -79,6 +93,7 @@ class _CandleState extends State<Candle> {
 
   /// Extinguishes the candle, allowing the ghost back
   _extinguishCandle() {
+    player.stop();
     widget._timers.cancelCandleTimer();
     widget._timers.resetCandleRemaining();
 
@@ -101,9 +116,7 @@ class _CandleState extends State<Candle> {
               width: 80,
               height: 80,
               child: CircularProgressIndicator(
-                  value: widget._timers.candleRemaining / _maxDuration
-              )
-          )
+                  value: widget._timers.candleRemaining / _maxDuration))
         ],
       );
     } else {

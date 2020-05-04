@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:ghost_app/models/ghost_model.dart';
 import 'package:ghost_app/models/timers.dart';
 import 'package:quiver/async.dart';
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 import 'package:flutter/material.dart';
 import 'package:ghost_app/models/energy.dart' as Energy;
@@ -34,12 +36,15 @@ class _EnergyWellState extends State<EnergyWell> {
   /// How much score is added from giving energy
   int _scoreIncrease = 15;
 
+  // Create Audio PLayer
+  static AudioPlayer player = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
+  static AudioCache cache = AudioCache(fixedPlayer: player);
   @override
   initState() {
     super.initState();
-
-    if (widget._timers.energyWellTimer != null
-        && widget._timers.energyWellTimer.isActive) {
+    cache.load("soundeffects/EnergyWell.mp3");
+    if (widget._timers.energyWellTimer != null &&
+        widget._timers.energyWellTimer.isActive) {
       _active = true;
       // TODO: Get time left stored in db
     } else {
@@ -55,6 +60,7 @@ class _EnergyWellState extends State<EnergyWell> {
     if (newEnergy < 0) {
       return;
     }
+    await cache.play("soundeffects/EnergyWell.mp3");
 
     Energy.energy = newEnergy;
     widget._updateEnergy();
@@ -134,10 +140,8 @@ class _EnergyWellState extends State<EnergyWell> {
           children: <Widget>[
             GestureDetector(
                 onTap: _active && widget._canInteract ? _donateEnergy : null,
-                child: _loadImage()
-            ),
+                child: _loadImage()),
           ],
-        )
-    );
+        ));
   }
 }
