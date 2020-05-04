@@ -1,18 +1,18 @@
 import 'dart:developer' as dev;
 
+import 'package:Inspectre/models/game.dart';
+import 'package:Inspectre/models/timers.dart';
+import 'package:Inspectre/models/values.dart';
+import 'package:Inspectre/widgets/candle.dart';
+import 'package:Inspectre/widgets/cycle_timer.dart';
+import 'package:Inspectre/widgets/energy_well.dart';
+import 'package:Inspectre/widgets/ghost_response.dart';
+import 'package:Inspectre/widgets/progress.dart';
+import 'package:Inspectre/widgets/user_responses.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ghost_app/models/game.dart';
-import 'package:ghost_app/models/timers.dart';
-import 'package:ghost_app/models/values.dart';
-import 'package:ghost_app/widgets/candle.dart';
-import 'package:ghost_app/widgets/cycle_timer.dart';
-import 'package:ghost_app/widgets/energy_well.dart';
-import 'package:ghost_app/widgets/ghost_response.dart';
-import 'package:ghost_app/widgets/progress.dart';
-import 'package:ghost_app/widgets/user_responses.dart';
 import 'package:tutorial_coach_mark/animated_focus_light.dart';
 import 'package:tutorial_coach_mark/content_target.dart';
 import 'package:tutorial_coach_mark/target_focus.dart';

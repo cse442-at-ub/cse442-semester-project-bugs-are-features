@@ -1,18 +1,20 @@
+import 'package:Inspectre/models/values.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ghost_app/models/values.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 class Tutorial extends StatefulWidget {
   final VoidCallback _showHome;
 
   Tutorial(this._showHome);
+
   @override
   _TutorialState createState() => _TutorialState();
 }
 
 class _TutorialState extends State<Tutorial> {
   final introKey = GlobalKey<IntroductionScreenState>();
+
   @override
   Widget build(BuildContext context) {
     const bodyStyle = TextStyle(fontSize: 19.0);
@@ -27,7 +29,7 @@ class _TutorialState extends State<Tutorial> {
         key: introKey,
         pages: [
           PageViewModel(
-            title: "Cool App Name here",
+            title: "Inspectre",
             body: welcomeIntro,
             image: _buildImage('assets/misc/Candle.png'),
             decoration: pageDecoration,

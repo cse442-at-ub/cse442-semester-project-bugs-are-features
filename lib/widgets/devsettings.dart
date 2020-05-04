@@ -1,5 +1,5 @@
+import 'package:Inspectre/models/game.dart';
 import 'package:flutter/material.dart';
-import 'package:ghost_app/models/game.dart';
 
 /// The Dev Settings modal that fades in when the Dev Settings button is pressed.
 ///
