@@ -45,7 +45,6 @@ class DB {
     }
 
     Map<String, dynamic> row = {
-      // TODO: Change this later when starting from level 0 for tutortial
       Constants.GHOST_LEVEL: 2,
       Constants.GHOST_SCORE: 20,
       Constants.GHOST_ACTIVE: 'true'
@@ -121,7 +120,6 @@ class DB {
     // Number of responses relevant to this level. Always at least 1
     int lvlResps = 4 - defaultResps;
 
-    // TODO: Make it select 2-4 random ones
     var defaultRows = await _pool.query(Constants.DEFAULT_RESP_TABLE,
         columns: [
           Constants.DEFAULT_RESP_USER,

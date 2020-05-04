@@ -28,7 +28,6 @@ class Settings extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              // TODO: Add settings!
               Padding(
                 padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
                 child: Text("Settings",
@@ -39,7 +38,6 @@ class Settings extends StatelessWidget {
                         .body1
                         .copyWith(fontSize: 35.0)),
               ),
-
               Visibility(
                 visible: ghostId == 0 ? false : true,
                 child: FlatButton(
@@ -52,10 +50,7 @@ class Settings extends StatelessWidget {
                     _showAlertOnRelease(context);
                   },
                   child: Text("Release ghost",
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .body1),
+                      style: Theme.of(context).textTheme.body1),
                 ),
               ),
             ]));
@@ -65,14 +60,9 @@ class Settings extends StatelessWidget {
   void _showAlertOnRelease(BuildContext context) {
     // set up the buttons
     Widget noButton = FlatButton(
-      color: Theme
-          .of(context)
-          .buttonColor,
+      color: Theme.of(context).buttonColor,
       child: Text("No, I miss the ghost.",
-          style: Theme
-              .of(context)
-              .textTheme
-              .body1),
+          style: Theme.of(context).textTheme.body1),
       onPressed: () {
         _closeDialog(context);
       },
@@ -81,10 +71,7 @@ class Settings extends StatelessWidget {
     Widget yesButton = FlatButton(
       color: Colors.red,
       child: Text("Yes, Release the ghost",
-          style: Theme
-              .of(context)
-              .textTheme
-              .body1),
+          style: Theme.of(context).textTheme.body1),
       onPressed: () {
         _game.ghostReleased();
         _closeDialog(context);
@@ -93,19 +80,10 @@ class Settings extends StatelessWidget {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("AlertDialog",
-          style: Theme
-              .of(context)
-              .textTheme
-              .body1),
-      backgroundColor: Theme
-          .of(context)
-          .backgroundColor,
+      title: Text("AlertDialog", style: Theme.of(context).textTheme.body1),
+      backgroundColor: Theme.of(context).backgroundColor,
       content: Text("Are you sure you wanna release the ghost?",
-          style: Theme
-              .of(context)
-              .textTheme
-              .body1),
+          style: Theme.of(context).textTheme.body1),
       actions: [
         noButton,
         yesButton,
