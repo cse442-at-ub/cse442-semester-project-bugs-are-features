@@ -1,12 +1,12 @@
 import 'dart:developer' as dev;
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ghost_app/models/game.dart';
 import 'package:ghost_app/models/timers.dart';
+import 'package:ghost_app/models/values.dart';
 import 'package:ghost_app/widgets/candle.dart';
 import 'package:ghost_app/widgets/cycle_timer.dart';
 import 'package:ghost_app/widgets/energy_well.dart';
@@ -17,7 +17,6 @@ import 'package:tutorial_coach_mark/animated_focus_light.dart';
 import 'package:tutorial_coach_mark/content_target.dart';
 import 'package:tutorial_coach_mark/target_focus.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
-import 'package:ghost_app/models/values.dart';
 
 class GhostMain extends StatefulWidget {
 

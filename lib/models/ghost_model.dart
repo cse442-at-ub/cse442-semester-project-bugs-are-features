@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ghost_app/db/constants.dart' as Constants;
 import 'package:ghost_app/db/db.dart';
-import 'package:ghost_app/models/energy.dart';
 
 const List<int> LEVEL_POINTS = [
   0,
