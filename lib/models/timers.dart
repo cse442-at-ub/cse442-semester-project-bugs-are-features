@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:ghost_app/db/db.dart';
-import 'package:ghost_app/db/constants.dart' as Constants;
-import 'package:ghost_app/models/game.dart' as Game;
+import 'package:Inspectre/db/constants.dart' as Constants;
+import 'package:Inspectre/db/db.dart';
+import 'package:Inspectre/settings.dart' as Game;
 
 class Timers {
 

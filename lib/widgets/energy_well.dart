@@ -1,29 +1,22 @@
 import 'dart:async';
 
-import 'package:ghost_app/models/ghost_model.dart';
-import 'package:ghost_app/models/timers.dart';
-import 'package:quiver/async.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
-
+import 'package:Inspectre/models/game.dart';
+import 'package:Inspectre/settings.dart' as Settings;
 import 'package:flutter/material.dart';
-import 'package:ghost_app/models/energy.dart' as Energy;
-import 'package:ghost_app/models/game.dart' as Game;
 
 class EnergyWell extends StatefulWidget {
+  /// The Game model instance
+  final Game _game;
+
   /// Whether or not the user can interact with the ghost
   final bool _canInteract;
 
-  /// Updates the energy on the main screen
+  /// Refresh the UI
   final VoidCallback _updateEnergy;
 
-  /// The current Ghost instances
-  final GhostModel _ghost;
-
-  /// The Timers model containing all timers
-  final Timers _timers;
-
-  EnergyWell(this._canInteract, this._ghost, this._updateEnergy, this._timers);
+  EnergyWell(this._game, this._canInteract, this._updateEnergy);
 
   @override
   _EnergyWellState createState() => _EnergyWellState();
@@ -43,10 +36,12 @@ class _EnergyWellState extends State<EnergyWell> {
   initState() {
     super.initState();
     cache.load("soundeffects/EnergyWell.mp3");
-    if (widget._timers.energyWellTimer != null &&
-        widget._timers.energyWellTimer.isActive) {
+
+    if (widget._game.timers.energyWellTimer != null &&
+        widget._game.timers.energyWellTimer.isActive) {
       _active = true;
       // TODO: Get time left stored in db
+      this.widget._game.energy.energy = widget._game.db.getCurrentEnergy();
     } else {
       _reset();
     }
@@ -56,37 +51,40 @@ class _EnergyWellState extends State<EnergyWell> {
   ///Player energy: -40
   ///Player score: +75
   _donateEnergy() async {
-    int newEnergy = Energy.energy - 40;
+    int newEnergy = widget._game.energy.energy - 40;
     if (newEnergy < 0) {
       return;
     }
     await cache.play("soundeffects/EnergyWell.mp3");
 
-    Energy.energy = newEnergy;
-    widget._updateEnergy();
-    await widget._ghost.addScore(_scoreIncrease);
+    widget._game.energy.energy = newEnergy;
+    if (_scoreIncrease == 0) {
+      widget._game.energy.energy -= 10;
+    }
+    await widget._game.ghost.addScore(_scoreIncrease);
 
     setState(() {
       _active = !_active;
-      debugPrint("-40 Energy donated. Energy set to ${Energy.energyInit}");
+      debugPrint("-40 Energy donated. Energy: ${widget._game.energy.energy}");
       _startTimer();
     });
+    widget._updateEnergy();
   }
 
   /// Resets states allowing user to hit button again
   _reset() {
     setState(() {
       _active = true;
-      widget._timers.resetEnergyWellRemaining();
+      widget._game.timers.resetEnergyWellRemaining();
     });
   }
 
   /// Called on every tick second of the countdown
   _tick(Timer timer) {
     setState(() {
-      widget._timers.energyWellRemaining -= 1;
-      if (widget._timers.energyWellRemaining == 0) {
-        widget._timers.cancelEnergyWellTimer();
+      widget._game.timers.energyWellRemaining -= 1;
+      if (widget._game.timers.energyWellRemaining == 0) {
+        widget._game.timers.cancelEnergyWellTimer();
         _reset();
       }
     });
@@ -94,7 +92,8 @@ class _EnergyWellState extends State<EnergyWell> {
 
   /// Start the countdown timer for the energy well
   _startTimer() {
-    widget._timers.energyWellTimer = Timer.periodic(Game.ONE_SECOND, _tick);
+    widget._game.timers.energyWellTimer =
+        Timer.periodic(Settings.ONE_SECOND, _tick);
     setState(() {
       _active = false;
     });
@@ -120,8 +119,12 @@ class _EnergyWellState extends State<EnergyWell> {
             child: Column(
               children: <Widget>[
                 Text(
-                  widget._timers.energyWellRemaining.toString(),
-                  style: TextStyle(color: Colors.white, fontSize: 15.0),
+                  widget._game.timers.energyWellRemaining.toString(),
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .body1
+                      .copyWith(fontSize: 15.0),
                 )
               ],
             ))
@@ -134,7 +137,7 @@ class _EnergyWellState extends State<EnergyWell> {
   Widget build(BuildContext context) {
     return Container(
         alignment: Alignment.centerRight,
-        margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 60),
+//        margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 60),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[

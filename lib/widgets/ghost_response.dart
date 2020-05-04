@@ -8,21 +8,23 @@ class GhostResponse extends StatelessWidget {
   /// If the ghost is currently able to interact with the human
   final bool _canInteract;
 
-  GhostResponse(this._curResp, this._canInteract);
+  final GlobalKey _ghostResponseKey;
+
+  GhostResponse(this._curResp, this._canInteract, this._ghostResponseKey);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.all(10),
-        child: Text(
+    return Flexible(child: Text(
           _canInteract ? _curResp : "The ghost doesn't like the candle",
+          key: _ghostResponseKey,
           style: Theme.of(context).textTheme.body1.copyWith(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            fontStyle: _canInteract ? FontStyle.normal : FontStyle.italic,
-          ),
+                fontSize: 20,
+                fontStyle: _canInteract ? FontStyle.normal : FontStyle.italic,
+              ),
           textAlign: TextAlign.center,
-        )
+          maxLines: 4,
+        ),
+      flex: 1,
     );
   }
 }

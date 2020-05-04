@@ -1,4 +1,4 @@
-name: ghost_app
+name: Inspectre
 description: A spooky ghost game
 
 # The following defines the version and build number for your application.
@@ -11,7 +11,7 @@ description: A spooky ghost game
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 1.0.0+4
 
 environment:
   sdk: ">=2.2.0 <3.0.0"
@@ -28,7 +28,9 @@ dependencies:
   path: ^1.6.4
   flutter_local_notifications: ^1.3.0
   audioplayers: ^0.15.1
-
+  introduction_screen: ^1.0.7
+  tutorial_coach_mark: ^0.3.0
+  google_fonts: ^1.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

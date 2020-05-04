@@ -1,26 +1,20 @@
 import 'dart:async';
 
+import 'package:Inspectre/models/game.dart';
+import 'package:Inspectre/settings.dart' as Settings;
 import 'package:flutter/material.dart';
-import 'package:ghost_app/models/ghost_model.dart';
-import 'package:ghost_app/models/energy.dart' as Energy;
-import 'package:ghost_app/models/game.dart' as Game;
-import 'package:ghost_app/models/timers.dart';
 
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 /// The Candle class that sets the ghost away to be away, or not
 class Candle extends StatefulWidget {
-  /// The current ghost instance
-  final GhostModel _ghost;
-
+  /// The Game model instance
+  final Game _game;
   /// Sets whether or not we can use things on the interface
   final ValueSetter<bool> _setInteract;
 
-  /// The Timers class instances
-  final Timers _timers;
-
-  Candle(this._ghost, this._setInteract, this._timers);
+  Candle(this._game, this._setInteract);
 
   @override
   _CandleState createState() => _CandleState();
@@ -41,26 +35,26 @@ class _CandleState extends State<Candle> {
   initState() {
     super.initState();
 
-    _maxDuration = Game.CANDLE_LENGTH;
     cache.load("soundeffects/Candle.mp3");
+    _maxDuration = Settings.CANDLE_LENGTH;
+
     assert(() {
-      _maxDuration = Game.CANDLE_LENGTH_DEV;
+      _maxDuration = Settings.CANDLE_LENGTH_DEV;
       return true;
     }());
 
-    if (widget._timers.candleTimer != null &&
-        widget._timers.candleTimer.isActive) {
+    if (widget._game.timers.candleTimer != null &&
+        widget._game.timers.candleTimer.isActive) {
       _isLit = true;
     } else {
       _isLit = false;
-      widget._timers.resetCandleRemaining();
+      widget._game.timers.resetCandleRemaining();
     }
   }
 
   /// Called on every tick second of the countdown
   _tick(Timer timer) {
     setState(() {
-      widget._timers.candleRemaining -= 1;
       /*
       if (widget._timers.dayNightRemaining == 0) {
         player.stop();
@@ -68,7 +62,9 @@ class _CandleState extends State<Candle> {
 
       DOESNT WORK,I will have to extract this and make a global audio player if I want this to work.
       */
-      if (widget._timers.candleRemaining == 0) {
+      widget._game.timers.candleRemaining -= 1;
+
+      if (widget._game.timers.candleRemaining == 0) {
         _extinguishCandle();
       }
     });
@@ -76,15 +72,16 @@ class _CandleState extends State<Candle> {
 
   /// Start the countdown timer for the energy well
   _startTimer() {
-    widget._timers.candleTimer = Timer.periodic(Game.ONE_SECOND, _tick);
+    widget._game.timers.candleTimer = Timer.periodic(Settings.ONE_SECOND, _tick);
     _lightCandle();
   }
 
   /// Lights the candle, rendering the ghost inaccessible
   _lightCandle() async {
     cache.loop("soundeffects/Candle.mp3");
-    await widget._ghost.setCandleLit(true);
-    Energy.setEnergyCandleLit(true); //Increment energy by 5 on lighting candle
+    await widget._game.ghost.setCandleLit(true);
+    // Increment energy by 5 on lighting candle
+    widget._game.energy.setEnergyCandleLit(true);
     setState(() {
       _isLit = true;
     });
@@ -94,14 +91,14 @@ class _CandleState extends State<Candle> {
   /// Extinguishes the candle, allowing the ghost back
   _extinguishCandle() {
     player.stop();
-    widget._timers.cancelCandleTimer();
-    widget._timers.resetCandleRemaining();
+    widget._game.timers.cancelCandleTimer();
+    widget._game.timers.resetCandleRemaining();
 
     setState(() {
       _isLit = false;
     });
 
-    widget._ghost.setCandleLit(false);
+    widget._game.ghost.setCandleLit(false);
     widget._setInteract(true);
   }
 
@@ -116,7 +113,9 @@ class _CandleState extends State<Candle> {
               width: 80,
               height: 80,
               child: CircularProgressIndicator(
-                  value: widget._timers.candleRemaining / _maxDuration))
+                  value: widget._game.timers.candleRemaining / _maxDuration
+              )
+          )
         ],
       );
     } else {
